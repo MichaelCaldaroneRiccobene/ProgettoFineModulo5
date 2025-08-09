@@ -4,24 +4,29 @@ using UnityEngine.AI;
 
 public class EnemyBrain : MonoBehaviour, I_Team
 {
-    public enum StateAI { None, GoOnRandomMove, GoOnTarget }
-
-    [SerializeField] private Transform target;
+    public enum StateAI { None, GoOnRandomMove, GoOnTarget, GoOnSerchTarget, GoOnStayOnPlaceAndLookAround }   
     [SerializeField] private StateAI stateAI = StateAI.None;
+    [SerializeField] private bool canSeeDebug;
+    [SerializeField] private float timeUpdateRoutine = 1;
+    [SerializeField] private float timeUpdateSightRoutine = 0.4f;
+
+    public Transform targetToLook;
 
     [SerializeField] private float radiusRandomPosition = 15;
+    [SerializeField] private float radiusSerchPosition = 5;
     [SerializeField] private int teamNumber = 2;
 
-    [SerializeField] private float viewAngle = 90;
+    [SerializeField] private float timeForLostSightEnemy = 10;
+    [SerializeField] private float viewAngleForward = 90;
+    [SerializeField] private float viewAngleBack = 90;
     [SerializeField] private float hight = 1;
 
-    [SerializeField] private int pointSightDistance = 50;
+    [SerializeField] private int raySightToAdd = 50;
     [SerializeField] private int sightDistance = 40;
+    [SerializeField] private float stopDistanceToDestination = 2;
 
-    [SerializeField] private int pointSenseDistance = 50;
+    [SerializeField] private int raySenseToAdd = 50;
     [SerializeField] private int sightSenseDistance = 5;
-
-    [SerializeField] private LayerMask layertTarget;
 
     private NavMeshAgent agent;
     private NavMeshPath pathToFollw;
@@ -30,18 +35,20 @@ public class EnemyBrain : MonoBehaviour, I_Team
 
     private Vector3 pointToGo;
 
+    private float timerForLostSightEnemy;
+
+    public Transform target;
+    private Transform lastSeeTarget;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         pathToFollw = new NavMeshPath();
-
-        curretState = stateAI;
-
-        StartCoroutine(OnSeePotenzialTarget());
     }
 
     private void Update()
     {
+        if(canSeeDebug) Debug.Log(stateAI,transform);
         if (curretState == stateAI) return;
 
         curretState = stateAI;
@@ -50,13 +57,25 @@ public class EnemyBrain : MonoBehaviour, I_Team
         switch (curretState)
         {
             default:
-                Debug.LogError("StateAI ERRRRORRRRR");
+                Debug.LogError("StateAI ERRRRORRRRR", transform);
+                stateAI = StateAI.GoOnRandomMove;
+                break;
+            case StateAI.None:
                 break;
             case StateAI.GoOnRandomMove:
+                StartCoroutine(OnSeePotenzialTargetRoutin());
                 StartCoroutine(GoOnRandomPointRoutin());
                 break;
             case StateAI.GoOnTarget:
                 StartCoroutine(GoOnTargetRoutin());
+                break;
+            case StateAI.GoOnSerchTarget:
+                StartCoroutine(OnSeePotenzialTargetRoutin());
+                StartCoroutine(GoOnSerchTargetRoutin());
+                break;
+            case StateAI.GoOnStayOnPlaceAndLookAround:
+                StartCoroutine(OnSeePotenzialTargetRoutin());
+                StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine()); 
                 break;
         }
     }
@@ -64,6 +83,8 @@ public class EnemyBrain : MonoBehaviour, I_Team
     #region RandomMovement
     private IEnumerator GoOnRandomPointRoutin()
     {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
+
         while (true)
         {
             bool isOnGoRandomPoint = false;
@@ -72,13 +93,13 @@ public class EnemyBrain : MonoBehaviour, I_Team
             while (agent.pathPending) yield return null;
 
             isOnGoRandomPoint = true;
+            agent.SetDestination(pointToGo);
 
             while (isOnGoRandomPoint)
             {
-                agent.SetDestination(pointToGo);
-                if (agent.remainingDistance < 1) isOnGoRandomPoint = false;
+                if (agent.remainingDistance < stopDistanceToDestination) isOnGoRandomPoint = false;
 
-                yield return null;
+                yield return waitForSeconds;
             }
         }
     }
@@ -88,111 +109,207 @@ public class EnemyBrain : MonoBehaviour, I_Team
         Vector3 randomPosition = Random.insideUnitSphere * range + startPosition;
         randomPosition.y = agent.transform.position.y;
 
-        if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas)) result = hit.position;
-        else result = Vector3.zero;
+        int numberOfTentativ = 100;
+
+        for (int i = 0; i < numberOfTentativ; i++)
+        {
+            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return;
+            }
+        }        
+        result = Vector3.zero;
     }
     #endregion
-
 
     #region FollowTarget
     private IEnumerator GoOnTargetRoutin()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
-        agent.ResetPath();
-
-        while (target != null)
+        if (target != null)
         {
-            if (agent.CalculatePath(target.position, pathToFollw)) agent.destination = target.position;
+            StartCoroutine(ComunicatePositionTargetRoutin());
+            WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
 
-            yield return waitForSeconds;
+            timerForLostSightEnemy = timeForLostSightEnemy;
+            agent.ResetPath();
+
+            while (target != null)
+            {
+                SeeTarget();
+                if (agent.CalculatePath(target.position, pathToFollw))
+                {
+                    float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                    if (distanceToTarget > stopDistanceToDestination) agent.destination = target.position;
+                    else agent.ResetPath();
+                }
+                yield return waitForSeconds;
+            }
+        }
+        else stateAI = StateAI.GoOnRandomMove;
+
+    }
+
+    private void SeeTarget()
+    {
+        Vector3 originCast = transform.position + new Vector3(0, hight, 0);
+        Vector3 targetOriginCast = target.position + new Vector3(0, hight, 0);
+        Vector3 direction = targetOriginCast - originCast;
+
+        if (Physics.Raycast(originCast, direction, out RaycastHit hit, sightDistance))
+        {
+            if (hit.transform == lastSeeTarget)
+            {
+                if (canSeeDebug) Debug.DrawLine(originCast, hit.point, Color.red, 1);
+                timerForLostSightEnemy = timeForLostSightEnemy;              
+            }
+            else TimerLostSightTarget();
+        }
+        else TimerLostSightTarget();
+    }
+
+    private void TimerLostSightTarget()
+    {
+        timerForLostSightEnemy--;
+
+        if (timerForLostSightEnemy <= 0)
+        {
+            Debug.Log("I Lost Target");
+            stateAI = StateAI.GoOnSerchTarget;
         }
     }
     #endregion
 
-
     #region OnSeePotezialTarget
-    private IEnumerator OnSeePotenzialTarget()
+    private IEnumerator OnSeePotenzialTargetRoutin()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(1);
-        StartCoroutine(OnSenseTargetClose());
-
+        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
         while (true)
         {
-            Vector3 originCast = transform.position + new Vector3(0, hight, 0);
-
-            float deltaAngle = (2 * viewAngle / pointSightDistance);
-
-            for(int i = 0; i < pointSightDistance; i++)
-            {
-                float curretAngle = -viewAngle + deltaAngle * i;
-                Vector3 direction = Quaternion.Euler(0,curretAngle, 0) * transform.forward;
-
-                Vector3 point = originCast + direction * sightDistance;
-
-                if(Physics.Raycast(originCast,direction,out RaycastHit hit,sightDistance, layertTarget))
-                {
-                    if (hit.collider != null)
-                    {
-                        Debug.Log("Colpito");
-                        if (hit.collider.TryGetComponent(out I_Team team))
-                        {
-                            Debug.Log("Team Number " + team);
-
-                            if (team.GetTeamNumber() == teamNumber)
-                            {
-                                Debug.Log("On my Team");
-                            }
-                            else Debug.Log("Enemy Team");
-                        }
-                    }
-                }
-            }
+            OnSeeOrSenseTarget(raySightToAdd, sightDistance, viewAngleForward, transform.forward, Color.yellow);
+            OnSeeOrSenseTarget(raySenseToAdd, sightSenseDistance, viewAngleBack, -transform.forward, Color.green);
 
             yield return waitForSeconds;
         }
     }
 
-    private IEnumerator OnSenseTargetClose()
+    #endregion
+
+    #region OnSerchTarget
+    private IEnumerator GoOnSerchTargetRoutin()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(1);
-        while (true)
+        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
+
+        if (target != null)
         {
-            Vector3 originCast = transform.position + new Vector3(0, hight, 0);
+            bool isOnGoPoint = false;
 
-            float deltaAngle = (2 * 360 / pointSenseDistance);
+            RandomPoint(agent, target.position, radiusSerchPosition, out pointToGo);
+            while (agent.pathPending) yield return null;
 
-            for (int i = 0; i < pointSenseDistance; i++)
+            agent.SetDestination(pointToGo);
+            while (!isOnGoPoint)
             {
-                float curretAngle = -360 + deltaAngle * i;
-                Vector3 direction = Quaternion.Euler(0, curretAngle, 0) * transform.forward;
+                if (agent.remainingDistance < stopDistanceToDestination) isOnGoPoint = true;
 
-                Vector3 point = originCast + direction * sightSenseDistance;
+                yield return waitForSeconds;
+            }
 
-                if (Physics.Raycast(originCast, direction, out RaycastHit hit, sightSenseDistance, layertTarget))
+            target = null;
+            stateAI = StateAI.GoOnRandomMove;
+        }
+        else stateAI = StateAI.GoOnRandomMove;
+    }
+    #endregion
+
+    #region OnStayInPlaceAndLoockAround
+    private IEnumerator GoOnStayInPlaceAndLoockAroundRoutine()
+    {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(2.5f);
+        while(true)
+        {
+            Quaternion startRotation = agent.transform.rotation;
+            Quaternion targetRotation = Quaternion.LookRotation(transform.forward * sightDistance * -1);
+
+            float progress = 0;
+
+            while (progress < 1)
+            {
+                progress += Time.deltaTime;
+                agent.transform.rotation = Quaternion.Lerp(startRotation, targetRotation, progress);
+
+                yield return null;
+            }
+
+            yield return waitForSeconds;
+        }       
+    }
+    #endregion
+
+    #region Utility
+
+    private IEnumerator ComunicatePositionTargetRoutin()
+    {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(2.5f);
+
+        if (target != null)
+        {
+            while(true)
+            {
+                OnSeeOrSenseTarget(raySightToAdd, sightDistance, 180, transform.forward, Color.cyan);
+                yield return waitForSeconds;
+            }
+        }
+    }
+
+    private void OnSeeOrSenseTarget(int rayToAdd, float sightDistance, float viewAngle, Vector3 forward, Color color)
+    {
+        Vector3 originCast = transform.position + new Vector3(0, hight, 0);
+        float deltaAngle = (2 * viewAngle) / (rayToAdd - 1);
+
+        for (int i = 0; i < rayToAdd; i++)
+        {
+            float curretAngle = -viewAngle + deltaAngle * i;
+            Vector3 direction = Quaternion.Euler(0, curretAngle, 0) * forward;
+
+            if (Physics.Raycast(originCast, direction, out RaycastHit hit, sightDistance))
+            {
+                if(canSeeDebug) Debug.DrawLine(originCast, hit.point, Color.red, 0.1f);
+                if (hit.collider != null)
                 {
-                    if (hit.collider != null)
+                    if (hit.collider.TryGetComponent(out I_Team team))
                     {
-                        Debug.Log("Colpito");
-                        if (hit.collider.TryGetComponent(out I_Team team))
+                        if (team.GetTeamNumber() == teamNumber)
                         {
-                            Debug.Log("Team Number " + team);
-
-                            if (team.GetTeamNumber() == teamNumber)
-                            {
-                                Debug.Log("On my Team");
-                            }
-                            else Debug.Log("Enemy Team");
+                            if(target != null) team.SetTArget(target);
+                        }
+                        else
+                        {
+                            lastSeeTarget = hit.transform;
+                            target = lastSeeTarget;
+                            stateAI = StateAI.GoOnTarget;
                         }
                     }
                 }
             }
-
-            yield return waitForSeconds;
+            else { if (canSeeDebug) Debug.DrawRay(originCast, direction * sightDistance, color, 0.1f); }
         }
     }
 
     public int GetTeamNumber() => teamNumber;
 
+    public void SetTArget(Transform target)
+    {
+        this.target = target;
+
+        if(lastSeeTarget ==  null)
+        {
+            lastSeeTarget = this.target;
+            stateAI = StateAI.GoOnTarget;
+        }
+    }
     #endregion
+
 }
 
