@@ -5,6 +5,6 @@ public interface I_Team
 {
     public int GetTeamNumber();
 
-    public void SetTArget(Transform target);
+    public void SetTarget(Transform target);
 }
         

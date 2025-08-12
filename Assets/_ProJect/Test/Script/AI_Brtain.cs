@@ -14,7 +14,7 @@ public class AI_Brtain : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        //AI_ControlSingelton.Instance.GoOnTarget(agent);
+        //AI_ControlSingelton.Instance.IsOnTarget(agent);
     }
 
     private void Update()
