@@ -474,13 +474,24 @@ public class EnemyBrain : MonoBehaviour, I_Team
 
     public void SetTarget(Transform target)
     {
-        this.target = target;
-
-        if(lastSeeTarget ==  null)
+        Debug.Log("colpito");
+        if(target.gameObject.TryGetComponent(out I_Team team))
         {
-            lastSeeTarget = this.target;
-            stateAI = StateAI.IsOnTarget;
+            Debug.Log("Ha Team");
+
+            if (team.GetTeamNumber() != teamNumber)
+            {
+                Debug.Log("No Mio Team");
+                if (lastSeeTarget == null)
+                {
+                    Debug.Log("NSetto target");
+                    lastSeeTarget = target;
+                    this.target = lastSeeTarget;
+                    stateAI = StateAI.IsOnTarget;
+                }
+            }
         }
+        else Debug.Log("NO Team");
     }
 
     public void OnDead() => Destroy(gameObject);

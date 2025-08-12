@@ -176,10 +176,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6469465730603489951}
+  - component: {fileID: 4257833800463737026}
   - component: {fileID: 2408944725681230857}
   - component: {fileID: 1860271040693078240}
   - component: {fileID: 1557084022436472461}
-  - component: {fileID: 4257833800463737026}
   - component: {fileID: 2226760943233376600}
   - component: {fileID: 2329158329946631441}
   m_Layer: 6
@@ -205,6 +205,54 @@ Transform:
   - {fileID: 203752390659563030}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &4257833800463737026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6763108796087075792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5dd4e188628ad74496e694ea591bfba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateAI: 1
+  target: {fileID: 0}
+  canSeeDebug: 1
+  normalState: 0
+  timeUpdateRoutine: 1
+  timeUpdateSightRoutine: 0.4
+  stopDistanceToDestination: 2.5
+  teamNumber: 2
+  viewAngleForward: 60
+  viewAngleBack: 120
+  hight: 1
+  sightDistance: 40
+  sightSenseDistance: 5
+  callTeamMateDistance: 25
+  raySightToAdd: 90
+  raySenseToAdd: 50
+  timeForStayOnPlaceAndLookAround: 5
+  pointsForPatrol: []
+  radiusRandomPosition: 15
+  radiusSerchPosition: 5
+  timeForLostSightEnemy: 2
+  OnAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2329158329946631441}
+        m_TargetAssemblyTypeName: EnemyAttack, Assembly-CSharp
+        m_MethodName: OnAttackMelee
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!195 &2408944725681230857
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -277,53 +325,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4257833800463737026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6763108796087075792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5dd4e188628ad74496e694ea591bfba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stateAI: 1
-  target: {fileID: 0}
-  canSeeDebug: 1
-  normalState: 0
-  timeUpdateRoutine: 1
-  timeUpdateSightRoutine: 0.4
-  stopDistanceToDestination: 2.5
-  teamNumber: 2
-  viewAngleForward: 60
-  viewAngleBack: 120
-  hight: 1
-  sightDistance: 40
-  sightSenseDistance: 5
-  raySightToAdd: 90
-  raySenseToAdd: 50
-  timeForStayOnPlaceAndLookAround: 5
-  pointsForPatrol: []
-  radiusRandomPosition: 15
-  radiusSerchPosition: 5
-  timeForLostSightEnemy: 2
-  OnAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2329158329946631441}
-        m_TargetAssemblyTypeName: EnemyAttack, Assembly-CSharp
-        m_MethodName: OnAttackMelee
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2226760943233376600
 MonoBehaviour:
   m_ObjectHideFlags: 0

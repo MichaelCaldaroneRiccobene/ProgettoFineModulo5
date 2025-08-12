@@ -11,11 +11,6 @@ public class LifeSistem : MonoBehaviour
 
     private void Awake() =>  hp = stats.Hp;
 
-    private void Update()
-    {
-        Debug.Log(gameObject.name + " " + hp);
-    }
-
     public void UpdateHp(int damage)
     {
         hp += damage;

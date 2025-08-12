@@ -1,7 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Player_Input : MonoBehaviour, I_Team
 {
@@ -11,11 +11,16 @@ public class Player_Input : MonoBehaviour, I_Team
     [SerializeField] private Transform head;
     [SerializeField] private float distanceShoot = 15;
 
+    [SerializeField] private FireBall fireBall;
+    [SerializeField] private Transform pointFireBall;
+
     private NavMeshAgent agent;
 
     private float horizontal;
     private float vertical;
     private Vector3 direction;
+
+    private bool isDashing;
 
 
     private void Start()
@@ -38,6 +43,7 @@ public class Player_Input : MonoBehaviour, I_Team
         if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1;
         if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 0;
 
+        if (Input.GetKeyDown(KeyCode.Space)) StartCoroutine(Dash());
     }
 
     private void FixedUpdate()
@@ -76,19 +82,54 @@ public class Player_Input : MonoBehaviour, I_Team
 
     private void OnRangeAttack()
     {
-        if (Physics.Raycast(head.position, transform.forward, out RaycastHit hit, distanceShoot))
-        {
-            Debug.DrawRay(head.position, hit.point - head.position, Color.black, 1);
+        GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.FireBallObjForPool);
 
-            if (hit.collider.TryGetComponent(out LifeSistem lifeSistem))
-            {
-                lifeSistem.UpdateHp(-stats.DamageMelee);
-            }
+        if (obj.gameObject.TryGetComponent(out FireBall fireball))
+        {
+            float shooterSpeed = 0;
+            if (agent.velocity.magnitude > 0 && vertical > 0) shooterSpeed = agent.velocity.magnitude;
+
+
+            fireball.transform.position = pointFireBall.position;
+            fireball.OnShoot(transform.forward, shooterSpeed, stats.DamageRange, transform);
+            CameraShake.Instance.OnCameraShake(0.5f, 0.5f);
         }
-        else Debug.DrawRay(head.position, transform.forward * distanceShoot, Color.black, 1);
     }
 
     public void Movement() => agent.velocity = direction.normalized * agent.speed;
+
+    public IEnumerator Dash()
+    {
+        if(isDashing)yield break;
+
+        isDashing = true;
+        Vector3 currentPosition = agent.transform.position;
+        Vector3 newPosition = currentPosition + direction.normalized * 5;
+        agent.updatePosition = false;
+
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, direction.normalized, out hit, 5))
+        {
+            Debug.Log(hit.collider.name);
+            newPosition = hit.point - direction.normalized * 1f;
+        }
+
+        float distanceDash = Vector3.Distance(currentPosition, newPosition);
+        float progress = 0;
+
+        while (progress < 1)
+        {
+            progress += Time.deltaTime * 20/ distanceDash;
+            agent.transform.position = Vector3.Lerp(currentPosition, newPosition, progress);
+
+            yield return null;
+        }
+
+        agent.updatePosition = true;
+        agent.Warp(newPosition);
+        isDashing = false;
+        Debug.DrawRay(transform.position, newPosition, Color.red, 1);
+    }
 
     public int GetTeamNumber() => teamNumber;
 

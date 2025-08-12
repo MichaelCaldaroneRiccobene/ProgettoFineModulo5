@@ -16,4 +16,4 @@ MonoBehaviour:
   Hp: 100
   MaxHp: 150
   DamageMelee: 25
-  DamageRange: 50
+  DamageRange: 1
