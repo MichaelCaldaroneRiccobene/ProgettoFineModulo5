@@ -51,6 +51,8 @@ public class EnemyBrain : MonoBehaviour, I_Team
     [Header("SettingForSerchTarget")]
     [SerializeField] private float timeForLostSightEnemy = 10;
 
+    public UnityEvent OnTryMeleeAttack;
+
     private StateAI currentState;
 
     private NavMeshAgent agent;
@@ -240,10 +242,10 @@ public class EnemyBrain : MonoBehaviour, I_Team
                 {
                     float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                    if (distanceToTarget > stopDistanceToDestination && !isAttackMelee) agent.destination = target.position;
+                    if (distanceToTarget > stopDistanceToDestination) agent.destination = target.position;
                     else
                     {
-                        StartCoroutine(OnAttackMelee());
+                        OnTryMeleeAttack?.Invoke();
                         agent.ResetPath();
                     }
                 }
@@ -251,21 +253,6 @@ public class EnemyBrain : MonoBehaviour, I_Team
             }
         }
         else SelectStateNormal();
-
-    }
-
-    // Temporaneo
-
-    public UnityEvent OnAttack;
-    private bool isAttackMelee = false;
-    public IEnumerator OnAttackMelee()
-    {
-        if(isAttackMelee) yield break;
-        isAttackMelee = true;
-        yield return new WaitForSeconds(1f);
-        OnAttack?.Invoke();
-        yield return new WaitForSeconds(0.5f);
-        isAttackMelee = false;
     }
 
     private void LookOnTarget() { if (target != null && iSeeTarget) agent.transform.LookAt(target.position); }

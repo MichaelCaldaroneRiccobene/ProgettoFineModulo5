@@ -15,5 +15,5 @@ MonoBehaviour:
   EntityName: Enemy 1
   Hp: 75
   MaxHp: 75
-  DamageMelee: 5
+  DamageMelee: 10
   DamageRange: 0

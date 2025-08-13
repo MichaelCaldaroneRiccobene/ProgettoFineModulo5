@@ -26,7 +26,6 @@ public class FireBall : MonoBehaviour
         rb.velocity = direction * (speed + shooterVelocity);
     }
 
-
     private void OnEnable()
     {
         rb.isKinematic = false;
