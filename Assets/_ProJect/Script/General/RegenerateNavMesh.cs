@@ -15,5 +15,9 @@ public class RegenerateNavMesh : MonoBehaviour
         UpdateNaveMeshSurface();
     }
 
-    public void UpdateNaveMeshSurface() => meshSurface.UpdateNavMesh(meshSurface.navMeshData);
+    public void UpdateNaveMeshSurface()
+    {
+        if (meshSurface == null) return; 
+        meshSurface.UpdateNavMesh(meshSurface.navMeshData);
+    }
 }

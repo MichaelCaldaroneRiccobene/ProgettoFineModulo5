@@ -462,6 +462,8 @@ public class EnemyBrain : MonoBehaviour, I_Team
     public void SetTarget(Transform target)
     {
         Debug.Log("colpito");
+        if(target == null) return;
+
         if(target.gameObject.TryGetComponent(out I_Team team))
         {
             Debug.Log("Ha Team");

@@ -3,7 +3,8 @@ using UnityEngine.Events;
 
 public class Player_Input : MonoBehaviour
 {
-    public UnityEvent OnTryRangeAttack;
+    public UnityEvent OnTryFirstAttack;
+    public UnityEvent OnTrySecondAttack;
     public UnityEvent OnInteraction;
 
     public UnityEvent OnRotation;
@@ -31,7 +32,9 @@ public class Player_Input : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E)) OnInteraction?.Invoke();
 
-        if (Input.GetMouseButtonDown(0)) OnTryRangeAttack?.Invoke();
+        if (Input.GetMouseButtonDown(0)) OnTryFirstAttack?.Invoke();
+
+        if (Input.GetMouseButtonDown(1)) OnTrySecondAttack?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1;
         if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 0;

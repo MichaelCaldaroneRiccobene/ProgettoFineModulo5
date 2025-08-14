@@ -26,7 +26,6 @@ public class InterectionOpenAndClose : MonoBehaviour, I_Interection
         StartCoroutine(OpenAndCloseRountine(isOpen ? targetRotation : startRotation));
     }
 
-
     private IEnumerator OpenAndCloseRountine(Quaternion targetRotation)
     {
         Quaternion startRotation = mesh.rotation;

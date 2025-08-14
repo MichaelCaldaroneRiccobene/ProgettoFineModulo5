@@ -31,6 +31,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection
         StopAllCoroutines();
         isOpen = !isOpen;
         StartCoroutine(OpenCloseGateRoutine());
+        CameraShake.Instance.OnCameraShake(0.2f, 0.2f);
     }
 
     private IEnumerator OpenCloseGateRoutine()

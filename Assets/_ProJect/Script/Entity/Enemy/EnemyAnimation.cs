@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class EnemyAnimation : MonoBehaviour
 {
     [SerializeField] private string parameterFloatSpeed = "Speed";
-    [SerializeField] private string parametetTriggerAttack = "Attack";
+    [SerializeField] private string parametetTriggerAttack = "SecondAttack";
     [SerializeField] private float smoothAnimation = 0.1f;
 
     public UnityEvent OnAttackMelee;
