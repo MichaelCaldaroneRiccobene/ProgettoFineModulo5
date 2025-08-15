@@ -41,11 +41,8 @@ public class Player_Movement : MonoBehaviour
         agent.updatePosition = false;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, direction.normalized, out hit, 5))
-        {
-            Debug.Log(hit.collider.name);
-            newPosition = hit.point - direction.normalized * 1f;
-        }
+        if (Physics.Raycast(transform.position, direction.normalized, out hit, 5)) newPosition = hit.point - direction.normalized * 1f;
+
 
         float distanceDash = Vector3.Distance(currentPosition, newPosition);
         float progress = 0;

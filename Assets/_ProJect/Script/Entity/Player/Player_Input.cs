@@ -6,6 +6,7 @@ public class Player_Input : MonoBehaviour
     public UnityEvent OnTryFirstAttack;
     public UnityEvent OnTrySecondAttack;
     public UnityEvent OnInteraction;
+    public UnityEvent OnSitUp;
 
     public UnityEvent OnRotation;
     public UnityEvent<Vector3> OnMovement;
@@ -13,13 +14,26 @@ public class Player_Input : MonoBehaviour
 
     public UnityEvent<float, float> OnSetHorizontalAndVertical;
 
+    public static bool CanInput;
+
     private float horizontal;
     private float vertical;
     private Vector3 direction;
 
+    private void Awake()
+    {
+        CanInput = false;
+    }
 
     private void Update()
     {
+        if (Input.anyKeyDown && !CanInput)
+        {
+            GameManager.Instance.OnStart();
+            OnSitUp?.Invoke();
+        }
+        if (!CanInput) return;
+
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         OnSetHorizontalAndVertical?.Invoke(horizontal, vertical);
@@ -28,7 +42,7 @@ public class Player_Input : MonoBehaviour
         OnMovement?.Invoke(direction);
         OnRotation?.Invoke();
 
-        if(Input.GetKeyDown(KeyCode.Q))  RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        if (Input.GetKeyDown(KeyCode.Q)) Player_Inventory.Instance.UseItem();
 
         if (Input.GetKeyDown(KeyCode.E)) OnInteraction?.Invoke();
 

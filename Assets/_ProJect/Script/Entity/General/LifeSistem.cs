@@ -7,6 +7,7 @@ public class LifeSistem : MonoBehaviour
 
     public UnityEvent <float> OnUpdateHp;
     public UnityEvent OnDead;
+    public UnityEvent OnHit;
 
     private int hp;
 
@@ -17,9 +18,13 @@ public class LifeSistem : MonoBehaviour
         OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
     }
 
-    public void UpdateHp(int damage)
+    public void UpdateHp(int amount)
     {
-        hp += damage;
+        float tempHp = hp;
+        tempHp += amount;
+        if (hp > tempHp) OnHit?.Invoke();
+
+        hp += amount;
 
         OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
         if (IsDead()) OnDead?.Invoke();

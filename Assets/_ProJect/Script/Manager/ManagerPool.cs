@@ -19,7 +19,12 @@ public class ManagerPool : MonoBehaviour
 
     private Dictionary<string, Queue<GameObject>> poolDictionaryObj;
 
-    private void Awake() => Instace = this;
+    private void Awake()
+    {
+        Instace = this;
+
+
+    }
 
     private void Start()
     {
@@ -31,9 +36,9 @@ public class ManagerPool : MonoBehaviour
 
             for (int i = 0; i < pool.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab,transform);
-                obj.SetActive(false);
+                GameObject obj = Instantiate(pool.prefab, transform);
                 objectPool.Enqueue(obj);
+                obj.SetActive(false);
             }
 
             poolDictionaryObj.Add(pool.tag, objectPool);

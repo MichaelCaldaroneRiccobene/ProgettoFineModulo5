@@ -16,7 +16,7 @@ public class Player_Attack : MonoBehaviour
 
     public UnityEvent<int> OnUseMana;
 
-    private bool canUseMagic = false;
+    public static bool canUseMagic = false;
 
     public void OnFirstAttack()
     {
@@ -37,7 +37,6 @@ public class Player_Attack : MonoBehaviour
     }
 
     public void CanUseMagic() => canUseMagic = true;
-
 
 
     private IEnumerator OnFirstAttackRoutine()

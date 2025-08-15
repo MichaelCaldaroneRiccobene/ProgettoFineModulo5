@@ -6,6 +6,8 @@ public class EnemyAnimation : MonoBehaviour
 {
     [SerializeField] private string parameterFloatSpeed = "Speed";
     [SerializeField] private string parametetTriggerAttack = "SecondAttack";
+    [SerializeField] private string parameterTriggerOnHit = "OnHit";
+
     [SerializeField] private float smoothAnimation = 0.1f;
 
     public UnityEvent OnAttackMelee;
@@ -32,6 +34,13 @@ public class EnemyAnimation : MonoBehaviour
     public void OnAttackFinish() => isAttack = false;
 
     public void OnAttack() => OnAttackMelee?.Invoke();
+
+    public void TriggerHit()
+    {
+        animator.SetTrigger(parameterTriggerOnHit);
+
+        isAttack = false;
+    }
 
     private void Update()
     {

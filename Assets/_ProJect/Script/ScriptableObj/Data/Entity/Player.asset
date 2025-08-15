@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   EntityName: Player
-  Hp: 100
+  Hp: 130
   MaxHp: 150
   Mana: 100
   MaxMana: 100
