@@ -9,6 +9,10 @@ public class BaseWepon : MonoBehaviour
 
     protected Transform shoter;
 
+    private void Start() => transform.gameObject.SetActive(false);
+
+    public virtual void OnEnable() => StartCoroutine(LifeTimeRoutione());
+
     public virtual IEnumerator LifeTimeRoutione()
     {
         yield return new WaitForSeconds(timeLife);
@@ -16,20 +20,20 @@ public class BaseWepon : MonoBehaviour
         objToDisable.gameObject.SetActive(false);
     }
 
-    public virtual void OnEnable() => StartCoroutine(LifeTimeRoutione());
-
-    public virtual void OnDisable() => StopAllCoroutines();
-
     public virtual void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        OnCollisionLife(other);
-        OnCollisionInteract(other);
+        OnTriggerCollisionLife(other);
+        OnTriggerCollisionInteract(other);
 
         objToDisable.gameObject.SetActive(false);
     }
 
-    public virtual void OnCollisionLife(Collider other)
+    public virtual void OnTriggerCollisionInteract(Collider other)
+    {
+        if (other.TryGetComponent(out I_Interection interection)) interection.Interact();
+    }
+
+    public virtual void OnTriggerCollisionLife(Collider other)
     {
         if (other.TryGetComponent(out EnemyBrain enemy))
         {
@@ -39,5 +43,5 @@ public class BaseWepon : MonoBehaviour
         }
     }
 
-    public virtual void OnCollisionInteract(Collider other) { if (other.TryGetComponent(out I_Interection interection)) interection.Interact(); }
+    public virtual void OnDisable() => StopAllCoroutines();
 }

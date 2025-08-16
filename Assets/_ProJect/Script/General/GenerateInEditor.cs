@@ -10,16 +10,13 @@ public class GenerateInEditorInspector : Editor
         DrawDefaultInspector();
 
         GenerateInEditor script = (GenerateInEditor)target;
-        if (GUILayout.Button("Regenerate Obj"))
-        {
-            script.GenerateObjs();
-        }
+
+        if (GUILayout.Button("Regenerate Obj")) script.GenerateObjs();
     }
 }
-#endif
 
 
-[ExecuteAlways]
+[ExecuteInEditMode]
 public class GenerateInEditor : MonoBehaviour
 {
     [Header("General Setting")]
@@ -94,4 +91,6 @@ public class GenerateInEditor : MonoBehaviour
 
         obj.transform.rotation = Quaternion.Euler(finalRotation);
     }
+
+    #endif
 }

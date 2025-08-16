@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player_Animation : MonoBehaviour
 {
@@ -15,14 +15,28 @@ public class Player_Animation : MonoBehaviour
 
     [SerializeField] private float smoothAnimation = 0.1f;
 
-    public UnityEvent OnFirstAttack;
-    public UnityEvent OnSecondAttack;
-
+    private Player_Attack player_Attack;
+    private Player_Input player_Input;
     private Animator animator;
 
     private bool isAttack = false;
 
-    private void Start() => animator = GetComponent<Animator>();
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+
+        player_Attack = GetComponentInParent<Player_Attack>();
+
+        SetUpAction();
+    }
+
+    private void SetUpAction()
+    {
+        player_Input = GetComponentInParent<Player_Input>();
+        player_Input.OnTakeHorizontalAndVertical += TakeHorizontalAndVertical;
+        player_Input.OnTriggerSitUp += TriggerSitUp;
+    }
+
     public void FirstAttack()
     {
         if (isAttack) return;
@@ -37,12 +51,16 @@ public class Player_Animation : MonoBehaviour
         if (animator != null) animator.SetTrigger(parameterTriggerSecondAttack);
     }
 
-
     public void OnFinishAttack() => isAttack = false;
 
-    public void ShootFirstAttack() => OnFirstAttack?.Invoke();
 
-    public void ShootSecondAttack() => OnSecondAttack?.Invoke();
+
+    public void DoFirstAttack() => player_Attack.OnFirstAttack();
+
+    public void DoSecondAttack() => player_Attack.OnSecondAttack();
+
+
+
 
     public void TriggerHit()
     {
@@ -51,12 +69,23 @@ public class Player_Animation : MonoBehaviour
         isAttack = false;
     }
 
+
+
     public void TriggerSitUp() => animator.SetTrigger(parameterTriggerSitUp);
-    public void OnSitUp() => Player_Input.CanInput = true;
+    public void OnSitUp() => Player_Input.CanPlayerUseInput = true;
+
+
+
 
     public void TakeHorizontalAndVertical(float horizontal, float vertical)
     {
         if (animator != null) animator.SetFloat(parameterFloatSpeed, vertical, smoothAnimation, Time.deltaTime);
         if (animator != null) animator.SetFloat(parameterFloatDirection, horizontal, smoothAnimation, Time.deltaTime);
+    }
+
+    private void OnDisable()
+    {
+        player_Input.OnTakeHorizontalAndVertical -= TakeHorizontalAndVertical;
+        player_Input.OnTriggerSitUp -= TriggerSitUp;
     }
 }

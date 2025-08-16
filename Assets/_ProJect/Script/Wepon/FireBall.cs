@@ -21,8 +21,20 @@ public class FireBall : BaseWepon
         StartCoroutine(LifeTimeRoutione());
     }
 
+    private void SpawnExsplosion()
+    {
+        GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.ExsplosionFireBallObjForpool);
+        if (obj == null) return;
+
+        obj.transform.position = transform.position;
+        obj.transform.rotation = transform.rotation;
+
+        CameraShake.Instance.OnCameraShake(transform.position,0.25f, 5, 10);
+    }
+
     public override void OnDisable()
     {
+        SpawnExsplosion();
         StopAllCoroutines();
 
         rb.velocity = Vector3.zero;

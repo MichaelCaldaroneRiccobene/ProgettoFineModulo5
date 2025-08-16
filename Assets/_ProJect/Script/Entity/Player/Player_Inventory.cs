@@ -1,18 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player_Inventory : MonoBehaviour
 {
-    public static Player_Inventory Instance;
-
-
-    public UnityEvent<int> HpPotion;
-
     private List<Item_SO> itemlist = new List<Item_SO>();
 
-    private void Awake() => Instance = this;
+    private Player_Input player_Input;
+
+    private void Start()
+    {
+        if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateTextPotionAmountHp(itemlist.Count);
+        SetUpAction();
+    }
+
+    private void SetUpAction()
+    {
+        player_Input = GetComponent<Player_Input>();
+        player_Input.OnUseItem += UseItem;
+    }
 
     public void UseItem()
     {
@@ -21,7 +26,7 @@ public class Player_Inventory : MonoBehaviour
         itemlist[itemlist.Count - 1].OnUse(gameObject);
         itemlist.RemoveAt(itemlist.Count - 1);
 
-        HpPotion?.Invoke(itemlist.Count);
+        if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateTextPotionAmountHp(itemlist.Count);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,9 +34,15 @@ public class Player_Inventory : MonoBehaviour
         if(other.gameObject.TryGetComponent(out Item item))
         {
             itemlist.Add(item.Item_SO);
-            HpPotion?.Invoke(itemlist.Count);
+            if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateTextPotionAmountHp(itemlist.Count);
 
             Destroy(other.gameObject);
         }
+    }
+
+    private void OnDisable()
+    {
+        player_Input.OnUseItem -= UseItem;
+
     }
 }

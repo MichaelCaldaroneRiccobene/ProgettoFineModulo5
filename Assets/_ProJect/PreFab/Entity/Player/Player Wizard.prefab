@@ -40,6 +40,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2413226486308941532}
   - {fileID: 3176505007873861541}
   - {fileID: 6605110141977894947}
   - {fileID: 2890075530799176826}
@@ -107,6 +108,21 @@ MonoBehaviour:
       - m_Target: {fileID: 9173853460446289337}
         m_TargetAssemblyTypeName: Player_Interaction, Assembly-CSharp
         m_MethodName: Interction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnSitUp:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8635128434598549991}
+        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
+        m_MethodName: TriggerSitUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -188,6 +204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d29ea69639431c4eb5c05cfa4cb84a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashEffect: {fileID: 4642206743490456509}
+  hideTargetForDash:
+  - {fileID: 8599092263904558528}
+  - {fileID: 3918204499552889033}
 --- !u!114 &9173853460446289337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +281,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
   firePoint: {fileID: 6605110141977894947}
   manaRequestFirstAttack: 10
-  manaRequestSecondAttack: 25
+  manaRequestSecondAttack: 99
   numberOfCubeOfGrass: 5
   distanceForeachCubeOfGrass: 3
   timeSpawnCubeOfGrass: 0.2
@@ -341,6 +361,21 @@ MonoBehaviour:
       - m_Target: {fileID: 5015501917361526586}
         m_TargetAssemblyTypeName: Player_Controller, Assembly-CSharp
         m_MethodName: OnDead
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8635128434598549991}
+        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
+        m_MethodName: TriggerHit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -567,6 +602,91 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1708680563233092767}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4077083818886419051
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1708680563233092767}
+    m_Modifications:
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8716954924528450006, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_Name
+      value: DashEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8716954924528450006, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 84c02dbe9837cce4994c17bcf49d85cf, type: 3}
+--- !u!4 &2413226486308941532 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1867083537844665527, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+    type: 3}
+  m_PrefabInstance: {fileID: 4077083818886419051}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4642206743490456509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8716954924528450006, guid: 84c02dbe9837cce4994c17bcf49d85cf,
+    type: 3}
+  m_PrefabInstance: {fileID: 4077083818886419051}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5726875534584082974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,6 +790,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5726875534584082974}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &3918204499552889033 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8726200157435960023, guid: 6a3c3c37133b6ae4d9590995c8166d88,
+    type: 3}
+  m_PrefabInstance: {fileID: 5726875534584082974}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3923966555631928998 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8722707484499129528, guid: 6a3c3c37133b6ae4d9590995c8166d88,
@@ -690,8 +816,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameterFloatSpeed: Speed
   parameterFloatDirection: Direction
+  parameterTriggerSitUp: SitUp
   parameterTriggerFirstAttack: FirstAttack
   parameterTriggerSecondAttack: SecondAttack
+  parameterTriggerOnHit: OnHit
   smoothAnimation: 0.1
   OnFirstAttack:
     m_PersistentCalls:
@@ -723,3 +851,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &8599092263904558528 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4048716473296048094, guid: 6a3c3c37133b6ae4d9590995c8166d88,
+    type: 3}
+  m_PrefabInstance: {fileID: 5726875534584082974}
+  m_PrefabAsset: {fileID: 0}

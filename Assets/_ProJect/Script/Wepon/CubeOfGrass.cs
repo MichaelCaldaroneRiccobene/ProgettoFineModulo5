@@ -88,7 +88,7 @@ public class CubeOfGrass : BaseWepon
 
             yield return null;
         }
-        CameraShake.Instance.OnCameraShake(0.5f, 0.5f);
+        CameraShake.Instance.OnCameraShake(transform.position, 1, 1.5f, 15);
 
         objToDisable.gameObject.SetActive(false);
     }
@@ -96,10 +96,8 @@ public class CubeOfGrass : BaseWepon
 
     public override void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        OnCollisionLife(other);
-        OnCollisionInteract(other);
-
+        OnTriggerCollisionLife(other);
+        OnTriggerCollisionInteract(other);
     }
 
     public override void OnDisable()

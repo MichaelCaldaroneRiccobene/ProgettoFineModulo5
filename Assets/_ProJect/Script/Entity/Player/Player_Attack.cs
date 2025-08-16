@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player_Attack : MonoBehaviour
 {
@@ -14,30 +13,48 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private float distanceForeachCubeOfGrass = 3;
     [SerializeField] private float timeSpawnCubeOfGrass = 0.5f;
 
-    public UnityEvent<int> OnUseMana;
 
-    public static bool canUseMagic = false;
+    private Player_Input player_Input;
+
+    private Player_Mana player_Mana;
+    private Player_Animation player_Animation;
+
+    private void Start()
+    {
+        player_Mana = GetComponent<Player_Mana>();
+
+        player_Animation = GetComponentInChildren<Player_Animation>();
+
+        SetUpEventAction();
+    }
+
+    private void SetUpEventAction()
+    {
+        player_Input = GetComponentInChildren<Player_Input>();
+        player_Input.OnTryFirstAttack += TryOnFirstAttack;
+        player_Input.OnTrySecondAttack += TryOnSecondAttack;
+    }
+
+    public void TryOnFirstAttack() => player_Animation.FirstAttack();
+
+    public void TryOnSecondAttack() => player_Animation.SecondAttack();
+
 
     public void OnFirstAttack()
     {
-        OnUseMana?.Invoke(-manaRequestFirstAttack);
-        if(!canUseMagic) return;
+        if(!player_Mana.CanUseMana(manaRequestFirstAttack)) return;
 
-        canUseMagic = false;
+        player_Mana.UpdateMana(-manaRequestFirstAttack);
         StartCoroutine(OnFirstAttackRoutine());
     }
 
     public void OnSecondAttack()
     {
-        OnUseMana?.Invoke(-manaRequestSecondAttack);
-        if (!canUseMagic) return;
+        if (!player_Mana.CanUseMana(manaRequestSecondAttack)) return;
 
-        canUseMagic = false;
+        player_Mana.UpdateMana(-manaRequestSecondAttack);
         StartCoroutine(OnSecondAttackRoutine());
     }
-
-    public void CanUseMagic() => canUseMagic = true;
-
 
     private IEnumerator OnFirstAttackRoutine()
     {
@@ -48,8 +65,9 @@ public class Player_Attack : MonoBehaviour
             float shooterSpeed = 0;
 
             fireball.transform.position = firePoint.position;
+            fireball.transform.rotation = firePoint.rotation;
             fireball.OnShoot(transform.forward, shooterSpeed, stats.DamageRange, transform);
-            CameraShake.Instance.OnCameraShake(0.5f, 0.5f);
+            CameraShake.Instance.OnCameraShake(transform.position,0.5f,1,5);
         }
 
         yield return null;
@@ -72,10 +90,16 @@ public class Player_Attack : MonoBehaviour
             obj.transform.position = positionToSpawn;
             obj.transform.rotation = transform.rotation;
 
-            CameraShake.Instance.OnCameraShake(1.5f, 0.5f);
+            CameraShake.Instance.OnCameraShake(obj.transform.position,1, 1.5f, 15);
             RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
 
             yield return new WaitForSeconds(timeSpawnCubeOfGrass);
         }
+    }
+
+    private void OnDisable()
+    {
+        player_Input.OnTryFirstAttack -= TryOnFirstAttack;
+        player_Input.OnTrySecondAttack -= TryOnSecondAttack;
     }
 }

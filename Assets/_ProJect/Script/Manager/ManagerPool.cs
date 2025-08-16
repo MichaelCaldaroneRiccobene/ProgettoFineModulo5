@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using static ManagerPool;
 
 public class ManagerPool : MonoBehaviour
 {
@@ -19,14 +17,11 @@ public class ManagerPool : MonoBehaviour
 
     private Dictionary<string, Queue<GameObject>> poolDictionaryObj;
 
-    private void Awake()
-    {
-        Instace = this;
+    private void Awake() => Instace = this;
 
+    private void Start() => GeneratePool();
 
-    }
-
-    private void Start()
+    private void GeneratePool()
     {
         poolDictionaryObj = new Dictionary<string, Queue<GameObject>>();
 
@@ -38,15 +33,15 @@ public class ManagerPool : MonoBehaviour
             {
                 GameObject obj = Instantiate(pool.prefab, transform);
                 objectPool.Enqueue(obj);
-                obj.SetActive(false);
             }
-
             poolDictionaryObj.Add(pool.tag, objectPool);
         }
     }
 
     public GameObject GetGameObjFromPool(string tag)
     {
+        if(!poolDictionaryObj.ContainsKey(tag)) return null;
+
         foreach (GameObject obj in poolDictionaryObj[tag])
         {
             if (!obj.activeInHierarchy)
@@ -59,6 +54,8 @@ public class ManagerPool : MonoBehaviour
 
     public GameObject GetAudioFromPool(string tag)
     {
+        if (!poolDictionaryObj.ContainsKey(tag)) return null;
+
         GameObject obj = poolDictionaryObj[tag].Dequeue();
         obj.SetActive(true);
         poolDictionaryObj[tag].Enqueue(obj);

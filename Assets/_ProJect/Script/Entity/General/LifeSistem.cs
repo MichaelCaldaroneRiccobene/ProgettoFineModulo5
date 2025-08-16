@@ -13,10 +13,7 @@ public class LifeSistem : MonoBehaviour
 
     private void Awake() =>  hp = stats.Hp;
 
-    private void Start()
-    {
-        OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
-    }
+    private void Start() => OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
 
     public void UpdateHp(int amount)
     {

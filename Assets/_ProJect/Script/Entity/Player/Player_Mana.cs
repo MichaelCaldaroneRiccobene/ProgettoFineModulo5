@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Player_Mana : MonoBehaviour
 {
+    [SerializeField] private Player_Attack player_Attack;
+
     [SerializeField] private Stats_EntitySO stats;
     [SerializeField] private int regenerateMana = 1;
     [SerializeField] private float timeForRegenerateMana = 1;
-
-    public UnityEvent <float> OnUpdateMana;
-    public UnityEvent OnOkMana;
 
     private int mana;
     private float timerRegenereteMana;
@@ -19,7 +16,7 @@ public class Player_Mana : MonoBehaviour
 
     private void Start()
     {
-        OnUpdateMana?.Invoke((float)mana / stats.MaxMana);
+        if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
         timerRegenereteMana = timeForRegenerateMana;
     }
 
@@ -38,16 +35,9 @@ public class Player_Mana : MonoBehaviour
 
     public void UpdateMana(int ammount)
     {
-        mana += ammount;
-
-        OnUpdateMana?.Invoke((float)mana / stats.MaxMana);
-        if (GetMana()) OnOkMana?.Invoke();
-        else mana = 0;
-
-        if (SetMaxMana()) mana = stats.MaxMana;
+        mana = Mathf.Clamp(mana + ammount,0, stats.MaxMana);
+        if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
     }
 
-    public bool GetMana() => mana > 0;
-
-    private bool SetMaxMana() => mana > stats.MaxMana;
+    public bool CanUseMana(int ammount) => mana > ammount;
 }

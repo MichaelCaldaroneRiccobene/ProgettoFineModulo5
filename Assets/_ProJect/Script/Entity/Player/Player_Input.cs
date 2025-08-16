@@ -1,58 +1,52 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Player_Input : MonoBehaviour
 {
-    public UnityEvent OnTryFirstAttack;
-    public UnityEvent OnTrySecondAttack;
-    public UnityEvent OnInteraction;
-    public UnityEvent OnSitUp;
-
-    public UnityEvent OnRotation;
-    public UnityEvent<Vector3> OnMovement;
-    public UnityEvent<Vector3> OnDash;
-
-    public UnityEvent<float, float> OnSetHorizontalAndVertical;
-
-    public static bool CanInput;
+    public static bool CanPlayerUseInput;
 
     private float horizontal;
     private float vertical;
-    private Vector3 direction;
 
-    private void Awake()
-    {
-        CanInput = false;
-    }
+    public event Action <float,float> OnTakeHorizontalAndVertical;
+
+    public event Action OnTryFirstAttack;
+    public event Action OnTrySecondAttack;
+
+    public event Action OnDash;
+    public event Action OnRotate;
+
+    public event Action OnUseItem;
+    public event Action OnInteract;
+
+    public event Action OnTriggerSitUp;
+
+    private void Awake() => CanPlayerUseInput = false;
 
     private void Update()
     {
-        if (Input.anyKeyDown && !CanInput)
+        if (Input.anyKeyDown && !CanPlayerUseInput)
         {
             GameManager.Instance.OnStart();
-            OnSitUp?.Invoke();
+            OnTriggerSitUp?.Invoke();
         }
-        if (!CanInput) return;
+        if (!CanPlayerUseInput) return;
 
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
-        OnSetHorizontalAndVertical?.Invoke(horizontal, vertical);
+        OnTakeHorizontalAndVertical?.Invoke(horizontal, vertical);
+        OnRotate?.Invoke();
 
-        direction = transform.forward * vertical + transform.right * horizontal;
-        OnMovement?.Invoke(direction);
-        OnRotation?.Invoke();
+        if (Input.GetKeyDown(KeyCode.Q)) OnUseItem?.Invoke();
 
-        if (Input.GetKeyDown(KeyCode.Q)) Player_Inventory.Instance.UseItem();
-
-        if (Input.GetKeyDown(KeyCode.E)) OnInteraction?.Invoke();
-
+        if (Input.GetKeyDown(KeyCode.E)) OnInteract?.Invoke();
         if (Input.GetMouseButtonDown(0)) OnTryFirstAttack?.Invoke();
 
         if (Input.GetMouseButtonDown(1)) OnTrySecondAttack?.Invoke();
 
+        if (Input.GetKeyDown(KeyCode.Space)) OnDash?.Invoke();
+
         if (Input.GetKeyDown(KeyCode.Alpha1)) Time.timeScale = 1;
         if (Input.GetKeyDown(KeyCode.Alpha2)) Time.timeScale = 0;
-
-        if (Input.GetKeyDown(KeyCode.Space)) OnDash?.Invoke(direction);
     }
 }

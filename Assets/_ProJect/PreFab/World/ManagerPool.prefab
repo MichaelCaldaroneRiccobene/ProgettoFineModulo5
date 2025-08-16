@@ -46,10 +46,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolsList:
   - tag: FireBall
-    prefab: {fileID: 1301472566825132753, guid: 3fe745a70e70b1b4f9e8d9c2882cba35,
+    prefab: {fileID: 3390429315513436093, guid: 25689d56ec020774085d7e0d6001aa83,
       type: 3}
     size: 20
-  - tag: CubeOfGrass
+  - tag: CubeOfDirt
     prefab: {fileID: 6979525048630666706, guid: 8872aa18c85e54148ad3e938e8c3a27c,
       type: 3}
     size: 12
+  - tag: ExsplosionFireBall
+    prefab: {fileID: 2079628632273510991, guid: 80b837e4f6e24b647ab79b0d08e2426d,
+      type: 3}
+    size: 10
