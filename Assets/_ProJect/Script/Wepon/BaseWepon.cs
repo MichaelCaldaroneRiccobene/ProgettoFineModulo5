@@ -9,8 +9,6 @@ public class BaseWepon : MonoBehaviour
 
     protected Transform shoter;
 
-    private void Start() => transform.gameObject.SetActive(false);
-
     public virtual void OnEnable() => StartCoroutine(LifeTimeRoutione());
 
     public virtual IEnumerator LifeTimeRoutione()
@@ -35,13 +33,14 @@ public class BaseWepon : MonoBehaviour
 
     public virtual void OnTriggerCollisionLife(Collider other)
     {
-        if (other.TryGetComponent(out EnemyBrain enemy))
-        {
-            enemy.SetTarget(shoter);
+        if (other.TryGetComponent(out I_Team team)) team.SetTarget(shoter);
 
-            if (enemy.gameObject.TryGetComponent(out LifeSistem life)) life.UpdateHp(-damage);
-        }
+        if (other.TryGetComponent(out LifeSistem life)) life.UpdateHp(-damage);
     }
 
-    public virtual void OnDisable() => StopAllCoroutines();
+    public virtual void OnDisable()
+    {
+        StopAllCoroutines();
+        objToDisable.gameObject?.SetActive(false);
+    }
 }

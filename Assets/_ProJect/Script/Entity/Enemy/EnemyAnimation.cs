@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -10,8 +11,9 @@ public class EnemyAnimation : MonoBehaviour
 
     [SerializeField] private float smoothAnimation = 0.1f;
 
-    public UnityEvent OnAttackMelee;
+    public event Action OnDoAttackMelee;
 
+    private EnemyAttack enemyAttack;
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -21,6 +23,14 @@ public class EnemyAnimation : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponentInParent<NavMeshAgent>();
+
+        enemyAttack = GetComponentInParent<EnemyAttack>();
+        enemyAttack.OnTryAnimationAttack += TryAttack;
+    }
+
+    private void Update()
+    {
+        if (animator != null) animator.SetFloat(parameterFloatSpeed, agent.velocity.magnitude, smoothAnimation, Time.deltaTime);
     }
 
     public void TryAttack()
@@ -33,7 +43,7 @@ public class EnemyAnimation : MonoBehaviour
 
     public void OnAttackFinish() => isAttack = false;
 
-    public void OnAttack() => OnAttackMelee?.Invoke();
+    public void OnAttack() => OnDoAttackMelee?.Invoke();
 
     public void TriggerHit()
     {
@@ -42,8 +52,8 @@ public class EnemyAnimation : MonoBehaviour
         isAttack = false;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if (animator != null) animator.SetFloat(parameterFloatSpeed, agent.velocity.magnitude, smoothAnimation, Time.deltaTime);
+        enemyAttack.OnTryAnimationAttack -= TryAttack;
     }
 }

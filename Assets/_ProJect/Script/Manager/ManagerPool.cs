@@ -36,6 +36,8 @@ public class ManagerPool : MonoBehaviour
             }
             poolDictionaryObj.Add(pool.tag, objectPool);
         }
+
+        foreach (PoolObj pool in poolsList) pool.prefab.gameObject.SetActive(false);
     }
 
     public GameObject GetGameObjFromPool(string tag)

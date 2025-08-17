@@ -72,126 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3728ca9a901943f4a92d73e47f813ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnTryFirstAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8635128434598549991}
-        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
-        m_MethodName: FirstAttack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnTrySecondAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8635128434598549991}
-        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
-        m_MethodName: SecondAttack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnInteraction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 9173853460446289337}
-        m_TargetAssemblyTypeName: Player_Interaction, Assembly-CSharp
-        m_MethodName: Interction
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnSitUp:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8635128434598549991}
-        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
-        m_MethodName: TriggerSitUp
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnRotation:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3723816703417618631}
-        m_TargetAssemblyTypeName: Player_Movement, Assembly-CSharp
-        m_MethodName: Rotation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnMovement:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3723816703417618631}
-        m_TargetAssemblyTypeName: Player_Movement, Assembly-CSharp
-        m_MethodName: Movement
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnDash:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3723816703417618631}
-        m_TargetAssemblyTypeName: Player_Movement, Assembly-CSharp
-        m_MethodName: Dash
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnSetHorizontalAndVertical:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8635128434598549991}
-        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
-        m_MethodName: TakeHorizontalAndVertical
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &3723816703417618631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d29ea69639431c4eb5c05cfa4cb84a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashCost: 5
   dashEffect: {fileID: 4642206743490456509}
   hideTargetForDash:
   - {fileID: 8599092263904558528}
@@ -233,39 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c12cb857f6934940be11aba3b943416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player_Attack: {fileID: 0}
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
   regenerateMana: 1
   timeForRegenerateMana: 0.25
-  OnUpdateMana:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Player_Ui, Assembly-CSharp
-        m_MethodName: UpdateMana
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnOkMana:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4708809609181187747}
-        m_TargetAssemblyTypeName: Player_Attack, Assembly-CSharp
-        m_MethodName: CanUseMagic
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &4708809609181187747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,21 +137,6 @@ MonoBehaviour:
   numberOfCubeOfGrass: 5
   distanceForeachCubeOfGrass: 3
   timeSpawnCubeOfGrass: 0.2
-  OnUseMana:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2678740751028730191}
-        m_TargetAssemblyTypeName: Player_Mana, Assembly-CSharp
-        m_MethodName: UpdateMana
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &7294536189540863917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,21 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2e59b01b12310459bae14ceae1f146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HpPotion:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Player_Ui_Inventory, Assembly-CSharp
-        m_MethodName: UpdateTextPotionAmountHp
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2588327056329540278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,9 +165,9 @@ MonoBehaviour:
   OnUpdateHp:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Player_Ui, Assembly-CSharp
-        m_MethodName: UpdateHp
+      - m_Target: {fileID: 5015501917361526586}
+        m_TargetAssemblyTypeName: Player_Controller, Assembly-CSharp
+        m_MethodName: UpDatePlayerUI
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -723,7 +545,7 @@ PrefabInstance:
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88,
         type: 3}
@@ -821,36 +643,6 @@ MonoBehaviour:
   parameterTriggerSecondAttack: SecondAttack
   parameterTriggerOnHit: OnHit
   smoothAnimation: 0.1
-  OnFirstAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4708809609181187747}
-        m_TargetAssemblyTypeName: Player_Attack, Assembly-CSharp
-        m_MethodName: OnFirstAttack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnSecondAttack:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4708809609181187747}
-        m_TargetAssemblyTypeName: Player_Attack, Assembly-CSharp
-        m_MethodName: OnSecondAttack
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &8599092263904558528 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4048716473296048094, guid: 6a3c3c37133b6ae4d9590995c8166d88,

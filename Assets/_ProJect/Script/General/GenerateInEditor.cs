@@ -14,7 +14,7 @@ public class GenerateInEditorInspector : Editor
         if (GUILayout.Button("Regenerate Obj")) script.GenerateObjs();
     }
 }
-
+#endif
 
 [ExecuteInEditMode]
 public class GenerateInEditor : MonoBehaviour
@@ -34,6 +34,16 @@ public class GenerateInEditor : MonoBehaviour
     [SerializeField] private bool isRandomRotationX;
     [SerializeField] private bool isRandomRotationY;
     [SerializeField] private bool isRandomRotationZ;
+
+    [Header("Random Value")]
+    [SerializeField] private float maxRotationX = 360;
+    [SerializeField] private float minRotationX = 0;
+
+    [SerializeField] private float maxRotationY = 360;
+    [SerializeField] private float minRotationY = 0;
+
+    [SerializeField] private float maxRotationZ = 360;
+    [SerializeField] private float minRotationZ = 0;
 
     private Vector3 startPos;
     private Vector3 upDatePos;
@@ -70,9 +80,7 @@ public class GenerateInEditor : MonoBehaviour
         int randomObj = Random.Range(0, objs.Length);
         GameObject obj = Instantiate(objs[randomObj], upDatePos, Quaternion.identity, transform);
 
-        if(isRotationWithObjParent) obj.transform.rotation = transform.rotation;
-        else ObjRotation(obj);
-
+        ObjRotation(obj);
         upDatePos.x += space;
     }
 
@@ -85,12 +93,13 @@ public class GenerateInEditor : MonoBehaviour
         }
         Vector3 finalRotation = obj.transform.eulerAngles;
 
-        if (isRandomRotationX) finalRotation.x = Random.Range(minRot, maxRot);
-        if (isRandomRotationY) finalRotation.y = Random.Range(minRot, maxRot);
-        if (isRandomRotationZ) finalRotation.z = Random.Range(minRot, maxRot);
+        if (isRandomRotationX) finalRotation.x = Random.Range(minRotationX, maxRotationX);
+        if (isRandomRotationY) finalRotation.y = Random.Range(minRotationY, maxRotationY);
+        if (isRandomRotationZ) finalRotation.z = Random.Range(minRotationZ, maxRotationZ);
 
-        obj.transform.rotation = Quaternion.Euler(finalRotation);
+
+        if (isRotationWithObjParent) obj.transform.rotation = Quaternion.Euler(finalRotation) * transform.rotation;
+        else obj.transform.rotation = Quaternion.Euler(finalRotation) * transform.rotation;
+
     }
-
-    #endif
 }

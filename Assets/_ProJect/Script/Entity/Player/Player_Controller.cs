@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,8 +10,9 @@ public class Player_Controller : MonoBehaviour, I_Team
     private void Awake() =>  Instance = this;
 
 
-    public void UpDatePlayerUI(float hp) { if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateHp(hp); } 
+    public void UpDatePlayerUI(float hp) { if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateHp(hp); }
 
+    public void ShakeCameraOnHit() => CameraShake.Instance.OnCameraShake(transform.position, 0.25f, 1, 2);
 
 
     public int GetTeamNumber() => teamNumber;
