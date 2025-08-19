@@ -66,7 +66,10 @@ public class State_FollowEnemyTarget : AbstractState
                         agent.ResetPath();
                     }
                 }
-                Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
+                if(isCheckForAllie)
+                {
+                    Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
+                }
                 yield return waitForSeconds;
             }
         }

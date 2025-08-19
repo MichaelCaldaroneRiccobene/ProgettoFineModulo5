@@ -71,7 +71,6 @@ public static class Utility
                             if (isCheckForTarget)
                             {
                                 // Se vedo Target Sono Felice
-
                                 controller.LastTarget = hit.transform.root;
                                 controller.Target = controller.LastTarget;
 

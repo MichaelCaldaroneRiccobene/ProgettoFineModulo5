@@ -78,7 +78,10 @@ public class FSM_Controller : MonoBehaviour, I_Team
 
     public int GetTeamNumber() => teamNumber;
 
-    public void SetTarget(Transform target) => Target = target;
+    public void SetTarget(Transform target)
+    {
+        if (LastTarget == null) Target = target;
+    }
     public Transform GetAllied() => Allied;
 
     public bool HasTarget() => Target != null;
