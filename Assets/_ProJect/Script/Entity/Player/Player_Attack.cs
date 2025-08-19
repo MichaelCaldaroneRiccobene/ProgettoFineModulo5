@@ -45,19 +45,7 @@ public class Player_Attack : MonoBehaviour
         if(!player_Mana.CanUseMana(manaRequestFirstAttack)) return;
 
         player_Mana.UpdateMana(-manaRequestFirstAttack);
-        StartCoroutine(OnFirstAttackRoutine());
-    }
 
-    public void OnSecondAttack()
-    {
-        if (!player_Mana.CanUseMana(manaRequestSecondAttack)) return;
-
-        player_Mana.UpdateMana(-manaRequestSecondAttack);
-        StartCoroutine(OnSecondAttackRoutine());
-    }
-
-    private IEnumerator OnFirstAttackRoutine()
-    {
         GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.FireBallObjForPool);
 
         if (obj.gameObject.TryGetComponent(out FireBall fireball))
@@ -67,10 +55,16 @@ public class Player_Attack : MonoBehaviour
             fireball.transform.position = firePoint.position;
             fireball.transform.rotation = firePoint.rotation;
             fireball.OnShoot(transform.forward, shooterSpeed, stats.DamageRange, transform);
-            CameraShake.Instance.OnCameraShake(transform.position,0.5f,1,5);
+            CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
         }
+    }
 
-        yield return null;
+    public void OnSecondAttack()
+    {
+        if (!player_Mana.CanUseMana(manaRequestSecondAttack)) return;
+
+        player_Mana.UpdateMana(-manaRequestSecondAttack);
+        StartCoroutine(OnSecondAttackRoutine());
     }
 
     private IEnumerator OnSecondAttackRoutine()

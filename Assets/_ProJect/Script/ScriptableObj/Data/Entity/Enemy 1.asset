@@ -15,5 +15,7 @@ MonoBehaviour:
   EntityName: Enemy 1
   Hp: 75
   MaxHp: 75
+  Mana: 0
+  MaxMana: 0
   DamageMelee: 10
   DamageRange: 0

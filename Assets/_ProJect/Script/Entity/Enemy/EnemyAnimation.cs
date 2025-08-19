@@ -8,11 +8,13 @@ public class EnemyAnimation : MonoBehaviour
     [SerializeField] private string parameterFloatSpeed = "Speed";
     [SerializeField] private string parametetTriggerAttack = "SecondAttack";
     [SerializeField] private string parameterTriggerOnHit = "OnHit";
+    [SerializeField] private string parameterTriggerOnTurn180 = "OnTurn180";
 
     [SerializeField] private float smoothAnimation = 0.1f;
 
     public event Action OnDoAttackMelee;
 
+   [SerializeField] private State_StayInPlaceAndLoockAround state_StayInPlaceAndLoockAround;
     private EnemyAttack enemyAttack;
     private NavMeshAgent agent;
     private Animator animator;
@@ -26,6 +28,8 @@ public class EnemyAnimation : MonoBehaviour
 
         enemyAttack = GetComponentInParent<EnemyAttack>();
         enemyAttack.OnTryAnimationAttack += TryAttack;
+
+        if (state_StayInPlaceAndLoockAround != null) state_StayInPlaceAndLoockAround.OnTurn180 += TriggerTurn180;
     }
 
     private void Update()
@@ -52,8 +56,12 @@ public class EnemyAnimation : MonoBehaviour
         isAttack = false;
     }
 
+    public void TriggerTurn180() => animator.SetTrigger(parameterTriggerOnTurn180);
+
     private void OnDisable()
     {
         enemyAttack.OnTryAnimationAttack -= TryAttack;
+
+        if (state_StayInPlaceAndLoockAround != null) state_StayInPlaceAndLoockAround.OnTurn180 -= TriggerTurn180;
     }
 }

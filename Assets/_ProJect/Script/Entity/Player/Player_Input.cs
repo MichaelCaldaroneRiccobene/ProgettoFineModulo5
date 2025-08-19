@@ -38,6 +38,7 @@ public class Player_Input : MonoBehaviour
         OnRotate?.Invoke();
 
         if (Input.GetKeyDown(KeyCode.Q)) OnUseItem?.Invoke();
+        if (Input.GetKeyDown(KeyCode.Q)) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
 
         if (Input.GetKeyDown(KeyCode.E)) OnInteract?.Invoke();
         if (Input.GetMouseButtonDown(0)) OnTryFirstAttack?.Invoke();

@@ -4887,7 +4887,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43b1c3d13a7d294408102f6c274541f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objToDisable: {fileID: 6776195416312719821}
+  objToDisable: {fileID: 2079628632273510991}
   timeLife: 1
   damage: 0
 --- !u!1 &2576744387593941544

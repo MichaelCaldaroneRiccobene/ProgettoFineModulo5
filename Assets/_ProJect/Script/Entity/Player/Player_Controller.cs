@@ -24,4 +24,10 @@ public class Player_Controller : MonoBehaviour, I_Team
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("I Am Dead");
     }
+
+    public bool HasTarget() => false;
+
+    public bool CanBeFollow() => true;
+
+    public Transform GetAllied() => null;
 }

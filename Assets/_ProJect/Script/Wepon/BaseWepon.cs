@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BaseWepon : MonoBehaviour
 {
-    [SerializeField] protected Transform objToDisable;
+    [SerializeField] protected GameObject objToDisable;
     [SerializeField] protected float timeLife = 5;
     [SerializeField] protected int damage;
 
@@ -15,7 +15,7 @@ public class BaseWepon : MonoBehaviour
     {
         yield return new WaitForSeconds(timeLife);
 
-        objToDisable.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public virtual void OnTriggerEnter(Collider other)
@@ -23,7 +23,7 @@ public class BaseWepon : MonoBehaviour
         OnTriggerCollisionLife(other);
         OnTriggerCollisionInteract(other);
 
-        objToDisable.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public virtual void OnTriggerCollisionInteract(Collider other)
@@ -41,6 +41,6 @@ public class BaseWepon : MonoBehaviour
     public virtual void OnDisable()
     {
         StopAllCoroutines();
-        objToDisable.gameObject?.SetActive(false);
+        objToDisable?.SetActive(false);
     }
 }

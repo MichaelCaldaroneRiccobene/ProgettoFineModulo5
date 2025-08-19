@@ -6,16 +6,17 @@ public class EnemyAttack : MonoBehaviour
     [SerializeField] private Stats_EntitySO stats;
     [SerializeField] private Transform head;
     [SerializeField] private float distanceRayAttackMelee = 2.25f;
+    [SerializeField] private LayerMask shieldLayer;
 
     public event Action OnTryAnimationAttack;
 
     private EnemyAnimation enemyAnimation;
-    private State_FollowTarget state_FollowTarget;
+    private State_FollowEnemyTarget state_FollowTarget;
 
     private void Start()
     {
-        state_FollowTarget = GetComponentInChildren<State_FollowTarget>();
-        state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
+        state_FollowTarget = GetComponentInChildren<State_FollowEnemyTarget>();
+        if(state_FollowTarget != null) state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
 
         enemyAnimation = GetComponentInChildren<EnemyAnimation>();
         enemyAnimation.OnDoAttackMelee += OnAttackMelee;
@@ -25,7 +26,7 @@ public class EnemyAttack : MonoBehaviour
 
     public void OnAttackMelee()
     {
-        if(Physics.Raycast(head.position,transform.forward, out RaycastHit hit,distanceRayAttackMelee))
+        if (Physics.Raycast(head.position,transform.forward, out RaycastHit hit,distanceRayAttackMelee, shieldLayer))
         {
             if (hit.collider.TryGetComponent(out LifeSistem life)) life.UpdateHp(-stats.DamageMelee);
         }
@@ -33,7 +34,7 @@ public class EnemyAttack : MonoBehaviour
 
     private void OnDisable()
     {
-        state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
+        if (state_FollowTarget != null) state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
 
         enemyAnimation.OnDoAttackMelee -= OnAttackMelee;
     }
