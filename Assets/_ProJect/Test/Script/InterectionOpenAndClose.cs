@@ -40,4 +40,14 @@ public class InterectionOpenAndClose : MonoBehaviour, I_Interection
 
         RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
+
+    public void ShowInteractable()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void HideInteractable()
+    {
+        throw new System.NotImplementedException();
+    }
 }

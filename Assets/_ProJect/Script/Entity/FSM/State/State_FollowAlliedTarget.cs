@@ -7,6 +7,13 @@ public class State_FollowAlliedTarget : AbstractState
     [SerializeField] private float timeUpdateSightRoutine = 0.2f;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
+    [SerializeField] private float radiusForPosition;
+    [SerializeField] private bool isOnRandomSpot;
+
+
+    private float timeForChangePosition = 5;
+    private float timerForForChangePosition;
+
     private NavMeshAgent agent;
     private NavMeshPath pathToFollw;
 
@@ -34,22 +41,40 @@ public class State_FollowAlliedTarget : AbstractState
 
     private IEnumerator GoOnTargetRoutin()
     {
-        if (controller.Allied != null)
+        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
+        bool forceExitWhile = false;
+        agent.ResetPath();
+
+        while (controller.Allied != null)
         {
-            WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-            agent.ResetPath();
+            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(agent, controller.Allied.transform.position, radiusForPosition) : controller.Allied.transform.position;
+            timerForForChangePosition = 0;
+            forceExitWhile = false;
 
-            while (controller.Allied != null)
+            if (agent.CalculatePath(positionToFollow, pathToFollw))
             {
-                if (agent.CalculatePath(controller.Allied.position, pathToFollw))
-                {
-                    float distanceToTarget = Vector3.Distance(transform.position, controller.Allied.position);
+                float distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
 
-                    if (distanceToTarget > stopDistanceToDestination) agent.destination = controller.Allied.position;
-                    else agent.ResetPath();
+                if (distanceToTarget >= stopDistanceToDestination)
+                {
+                    agent.destination = positionToFollow;
+
+                    while (!forceExitWhile && distanceToTarget >= stopDistanceToDestination)
+                    {
+                        distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
+                        timerForForChangePosition += timeUpdateSightRoutine;
+
+                        if (timerForForChangePosition >= timeForChangePosition) forceExitWhile = true;
+
+                        yield return waitForSeconds;
+                    }
                 }
-                yield return waitForSeconds;
+                else agent.ResetPath();
             }
+            yield return waitForSeconds;
+
         }
+
+        agent.ResetPath();
     }
 }

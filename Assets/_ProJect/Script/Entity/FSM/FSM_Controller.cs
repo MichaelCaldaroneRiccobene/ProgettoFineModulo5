@@ -82,10 +82,18 @@ public class FSM_Controller : MonoBehaviour, I_Team
     {
         if (LastTarget == null) Target = target;
     }
+
+    public void SetTargetPriority(Transform target)
+    {
+        Target = target;
+        LastTarget = target;
+    }
+
     public Transform GetAllied() => Allied;
 
     public bool HasTarget() => Target != null;
 
     public bool CanBeFollow() => CanBeFollowTarget;
 
+    public void OnDead() => Destroy(gameObject);
 }

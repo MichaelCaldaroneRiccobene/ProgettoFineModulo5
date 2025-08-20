@@ -38,7 +38,11 @@ public class State_FollowPath : AbstractState
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
 
-        if (pointsForPatrol.Length <= 0) yield break;
+        if (pointsForPatrol == null || pointsForPatrol.Length <= 0)
+        {
+            if(controller.CanSeeDebug) Debug.Log("No Path");
+            yield break;
+        }
 
         int destinationForPatrolIndex = 0;
 

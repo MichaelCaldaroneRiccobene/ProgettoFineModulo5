@@ -7,7 +7,15 @@ public class Player_Interaction : MonoBehaviour
     [SerializeField] private Transform head;
 
     private Player_Input player_Input;
+    private I_Interection currentInteraction;
+    private I_Interection lastInteraction;
+
     private void Start() => SetUpAction();
+
+    private void Update()
+    {
+        ISeeAInteraction();
+    }
 
     private void SetUpAction()
     {
@@ -15,19 +23,47 @@ public class Player_Interaction : MonoBehaviour
         player_Input.OnInteract += Interaction;
     }
 
-    public void Interaction()
+    private void ISeeAInteraction()
     {
         if (Physics.Raycast(head.position, transform.forward, out RaycastHit hit, 2))
         {
-            Debug.Log(hit.collider.name);
             Debug.DrawRay(head.position, hit.point, Color.black, 1);
 
             if (hit.collider.TryGetComponent(out I_Interection interection))
             {
-                interection.Interact();
+                if(lastInteraction != interection)
+                {
+                    if (lastInteraction != null)
+                    {
+                        lastInteraction.HideInteractable();
+                        lastInteraction = null;
+                    }
+
+                    currentInteraction = interection;
+                    lastInteraction = interection;
+
+                    currentInteraction.ShowInteractable();
+                }
+            }
+            else if (lastInteraction != null)
+            {
+                lastInteraction.HideInteractable();
+                currentInteraction = null;
+                lastInteraction = null;
             }
         }
-        else Debug.DrawRay(head.position, transform.forward, Color.black, 1);
+        else if (lastInteraction != null)
+        {
+            lastInteraction.HideInteractable();
+            currentInteraction = null;
+            lastInteraction = null;
+        }
+    }
+
+
+    public void Interaction()
+    {
+        if(currentInteraction != null) currentInteraction.Interact();
     }
 
     private void OnDisable()

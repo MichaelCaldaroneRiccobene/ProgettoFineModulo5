@@ -570,8 +570,8 @@ MonoBehaviour:
   OnDead:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EnemyBrain, Assembly-CSharp
+      - m_Target: {fileID: 5870369174538393255}
+        m_TargetAssemblyTypeName: FSM_Controller, Assembly-CSharp
         m_MethodName: OnDead
         m_Mode: 1
         m_Arguments:
@@ -889,13 +889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152a559b10b078c459ef9b0d99846e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointsForPatrol:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  pointsForPatrol: []
   timeUpdateRoutine: 1
   stopDistanceToDestination: 2
 --- !u!114 &5018426705296729
@@ -966,7 +960,7 @@ PrefabInstance:
     - target: {fileID: 6279823610682781954, guid: 970a0e0414fa8be4695cbe8c3d95afd7,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: 6279823610682781954, guid: 970a0e0414fa8be4695cbe8c3d95afd7,
         type: 3}
@@ -1012,6 +1006,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Zombie
+      objectReference: {fileID: 0}
+    - target: {fileID: 6660184903045082040, guid: 970a0e0414fa8be4695cbe8c3d95afd7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

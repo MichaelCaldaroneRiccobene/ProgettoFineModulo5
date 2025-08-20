@@ -8,6 +8,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 249622529814960236, guid: ed473e306ee8278479e46da4448d025c,
+        type: 3}
+      propertyPath: isOnRandomSpot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 249622529814960236, guid: ed473e306ee8278479e46da4448d025c,
+        type: 3}
+      propertyPath: radiusForPosition
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 252384959472444585, guid: ed473e306ee8278479e46da4448d025c,
         type: 3}
       propertyPath: m_Enabled

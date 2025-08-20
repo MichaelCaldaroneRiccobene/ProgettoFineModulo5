@@ -59,7 +59,7 @@ public static class Utility
 
                                 if(hitEntity.CanBeFollow())
                                 {
-                                    controller.Allied = hit.transform.root;
+                                    controller.Allied = hit.transform;
                                     return true;
                                 }
                             }
@@ -71,7 +71,7 @@ public static class Utility
                             if (isCheckForTarget)
                             {
                                 // Se vedo Target Sono Felice
-                                controller.LastTarget = hit.transform.root;
+                                controller.LastTarget = hit.transform;
                                 controller.Target = controller.LastTarget;
 
                                 return true;
@@ -102,6 +102,20 @@ public static class Utility
             }
         }
         result = Vector3.zero;
+    }
+
+    public static Vector3 RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range)
+    {
+        int numberOfTentativ = 100;
+
+        for (int i = 0; i < numberOfTentativ; i++)
+        {
+            Vector3 randomPosition = Random.insideUnitSphere * range + startPosition;
+            randomPosition.y = agent.transform.position.y;
+
+            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas)) return hit.position;
+        }
+        return Vector3.zero;
     }
 
     public static void RandomPoint(NavMeshAgent agent, Vector3 startPosition, float minRange, float maxRange, out Vector3 result)

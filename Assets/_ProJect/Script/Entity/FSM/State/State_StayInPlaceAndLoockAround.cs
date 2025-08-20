@@ -28,8 +28,6 @@ public class State_StayInPlaceAndLoockAround : AbstractState
 
         agent.ResetPath();
         StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine());
-
-
     }
 
     public override void StateExit()

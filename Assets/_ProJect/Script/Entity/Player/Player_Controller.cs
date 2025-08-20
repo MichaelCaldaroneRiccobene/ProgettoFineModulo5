@@ -30,4 +30,8 @@ public class Player_Controller : MonoBehaviour, I_Team
     public bool CanBeFollow() => true;
 
     public Transform GetAllied() => null;
+
+    public void SetTargetPriority(Transform target)
+    {
+    }
 }

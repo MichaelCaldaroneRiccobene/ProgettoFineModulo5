@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Net.NetworkInformation;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class OpenTheGate : MonoBehaviour, I_Interection
 {
     [SerializeField] private Transform button;
+    [SerializeField] private GameObject pannelInputToPress;
 
     [SerializeField] private Transform meshFirstGate;
     [SerializeField] private Transform meshSecondGate;
@@ -12,6 +15,9 @@ public class OpenTheGate : MonoBehaviour, I_Interection
 
     [SerializeField] private Vector3 openRotationFirstGate = new Vector3(-5, 0, 0);
     [SerializeField] private Vector3 openRotationSecondGate = new Vector3(5,0,0);
+
+    private UI_ShowOrHide uI_ShowOrHide;
+    private CanvasGroup canvasGroupInput;
 
     private Vector3 startButtonPosition;
 
@@ -32,6 +38,16 @@ public class OpenTheGate : MonoBehaviour, I_Interection
 
     private void Start()
     {
+        if(pannelInputToPress != null)
+        {
+            canvasGroupInput = pannelInputToPress.GetComponent<CanvasGroup>();
+            if (canvasGroupInput != null)
+            {
+                canvasGroupInput.alpha = 0;
+                uI_ShowOrHide = GetComponent<UI_ShowOrHide>();
+            }
+        }
+
         if (meshFirstGate == null || meshSecondGate == null || button == null) return;
 
         startButtonPosition = button.localPosition;
@@ -47,8 +63,8 @@ public class OpenTheGate : MonoBehaviour, I_Interection
     public void Interact()
     {
         if (meshFirstGate == null || meshSecondGate == null || button == null || isMoving) return;
-
         isOpen = !isOpen;
+        isMoving = true;
 
         StartCoroutine(OpenCloseGateRoutine());
         StartCoroutine(ButtonAnimatioRoutine());
@@ -75,6 +91,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection
             yield return null;
         }
 
+        isMoving = false;
         RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
 
@@ -98,6 +115,23 @@ public class OpenTheGate : MonoBehaviour, I_Interection
 
             button.localPosition = Vector3.Lerp(targetButtonPosition, startButtonPosition, progress);
             yield return null;
+        }
+    }
+
+
+    public void ShowInteractable() 
+    { 
+        if(canvasGroupInput != null)
+        {
+            uI_ShowOrHide.ShowOrHideUI(canvasGroupInput, 3, canvasGroupInput.alpha, 1);
+        }
+    }
+
+    public void HideInteractable()
+    {
+        if (canvasGroupInput != null)
+        {
+            uI_ShowOrHide.ShowOrHideUI(canvasGroupInput, 3, canvasGroupInput.alpha, 0);
         }
     }
 }

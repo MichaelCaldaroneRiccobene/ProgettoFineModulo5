@@ -78,7 +78,9 @@ public class Transition_OnLostSightEntity : AbstractTransition
 
     private bool SeeTarget(FSM_Controller controller)
     {
-        if(controller.Target == null && !onLostTarget) return false;
+        if(!onLostTarget) return false; 
+        if(controller.Target != null && !onLostTarget) return true;
+        if(controller.Target == null) return true;
 
         Vector3 originCast = transform.position + new Vector3(0, hight, 0);
         Vector3 targetOriginCast = controller.Target.position + new Vector3(0, hight, 0);

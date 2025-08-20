@@ -19,7 +19,7 @@ public class EnemyAttack : MonoBehaviour
         if(state_FollowTarget != null) state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
 
         enemyAnimation = GetComponentInChildren<EnemyAnimation>();
-        enemyAnimation.OnDoAttackMelee += OnAttackMelee;
+        if(enemyAnimation != null) enemyAnimation.OnDoAttackMelee += OnAttackMelee;
     }
 
     private void OnTryMeleeAttack() => OnTryAnimationAttack?.Invoke();
@@ -29,6 +29,8 @@ public class EnemyAttack : MonoBehaviour
         if (Physics.Raycast(head.position,transform.forward, out RaycastHit hit,distanceRayAttackMelee, shieldLayer))
         {
             if (hit.collider.TryGetComponent(out LifeSistem life)) life.UpdateHp(-stats.DamageMelee);
+
+            if (hit.collider.TryGetComponent(out I_Team target)) target.SetTargetPriority(transform);
         }
     }
 
@@ -36,6 +38,6 @@ public class EnemyAttack : MonoBehaviour
     {
         if (state_FollowTarget != null) state_FollowTarget.OnTryMeleeAttack += OnTryMeleeAttack;
 
-        enemyAnimation.OnDoAttackMelee -= OnAttackMelee;
+        if (enemyAnimation != null) enemyAnimation.OnDoAttackMelee -= OnAttackMelee;
     }
 }

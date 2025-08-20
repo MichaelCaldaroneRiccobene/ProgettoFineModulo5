@@ -493,6 +493,10 @@ public class EnemyBrain : MonoBehaviour, I_Team
     }
 
     public Transform GetAllied() => null;
+
+    public void SetTargetPriority(Transform target)
+    {
+    }
     #endregion
 }
 
