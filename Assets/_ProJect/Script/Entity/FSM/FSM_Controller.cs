@@ -4,26 +4,26 @@ using UnityEngine;
 public class FSM_Controller : MonoBehaviour, I_Team
 {
     [Header("Setting")]
-    [SerializeField] private AbstractState defualtState;
+    [SerializeField] protected AbstractState defualtState;
 
-    [SerializeField] private float currentStateTime;
-    [SerializeField] private float timeUpdateEvaluateTransition = 0.15f;
+    [SerializeField] protected float currentStateTime;
+    [SerializeField] protected float timeUpdateEvaluateTransition = 0.15f;
 
     [Header("Setting Team")]
-    [SerializeField] private int teamNumber;
+    [SerializeField] protected int teamNumber;
 
-    [SerializeField] private bool canAttackFriend;
-    [SerializeField] private bool canBeFollowTarget;
+    [SerializeField] protected bool canAttackFriend;
+    [SerializeField] protected bool canBeFollowTarget;
 
     [Header("Debug")]
-    [SerializeField] private bool canSeeDebug;
-    [SerializeField] private AbstractState currentState;
+    [SerializeField] protected bool canSeeDebug;
+    [SerializeField] protected AbstractState currentState;
 
     public Transform Allied;
     public Transform Target;
     public Transform LastTarget;
 
-    private AbstractState targetState;
+    protected AbstractState targetState;
 
     public float CurrentStateTime => currentStateTime;
     public float TimeUpdateEvaluateTransition => timeUpdateEvaluateTransition;
@@ -33,7 +33,7 @@ public class FSM_Controller : MonoBehaviour, I_Team
     public bool CanBeFollowTarget { get => canBeFollowTarget; set => value = canBeFollowTarget;}
     public bool CanSeeDebug => canSeeDebug;
 
-    private void Start()
+    public virtual void Start()
     {
         AbstractState[] availableStates = GetComponentsInChildren<AbstractState>(true);
 
@@ -45,7 +45,7 @@ public class FSM_Controller : MonoBehaviour, I_Team
         StartCoroutine(EvaluateTransitionRoutine());
     }
 
-    private void Update()
+    public virtual void Update()
     {
         if (currentState != null)
         {
@@ -54,7 +54,7 @@ public class FSM_Controller : MonoBehaviour, I_Team
         }
     }
 
-    private IEnumerator EvaluateTransitionRoutine()
+    public virtual IEnumerator EvaluateTransitionRoutine()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(0.15f);
 
@@ -67,7 +67,7 @@ public class FSM_Controller : MonoBehaviour, I_Team
         }
     }
 
-    private void SetUpState(AbstractState state)
+    public virtual void SetUpState(AbstractState state)
     {
         if (currentState != null) currentState.StateExit();
 
@@ -77,10 +77,10 @@ public class FSM_Controller : MonoBehaviour, I_Team
     }
 
     #region I_Team
-    public void SetTarget(Transform target) { if (LastTarget == null) SetTargetForMe(target); }
-    public void SetPriorityTarget(Transform target) => SetTargetForMe(target);
+    public virtual void SetTarget(Transform target) { if (LastTarget == null) SetTargetForMe(target); }
+    public virtual void SetPriorityTarget(Transform target) => SetTargetForMe(target);
 
-    private void SetTargetForMe(Transform target)
+    public virtual void SetTargetForMe(Transform target)
     {
         if (target.TryGetComponent(out I_Team entity))
         {
@@ -101,12 +101,12 @@ public class FSM_Controller : MonoBehaviour, I_Team
         }
     }
 
-    public int GetTeamNumber() => teamNumber;
-    public Transform GetAllied() => Allied;
+    public virtual int GetTeamNumber() => teamNumber;
+    public virtual Transform GetAllied() => Allied;
 
-    public bool CanBeFollow() => CanBeFollowTarget;
-    public bool HasTarget() => Target != null;
+    public virtual bool CanBeFollow() => CanBeFollowTarget;
+    public virtual bool HasTarget() => Target != null;
     #endregion
 
-    public void OnDead() => Destroy(gameObject);
+    public virtual void OnDead() => Destroy(gameObject);
 }

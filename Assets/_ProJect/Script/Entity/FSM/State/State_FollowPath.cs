@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class State_FollowPath : AbstractState
 {
+    [Header("Setting FollowPath")]
     [SerializeField] private Transform[] pointsForPatrol;
 
     [SerializeField] private float timeUpdateRoutine = 1f;
@@ -11,6 +12,7 @@ public class State_FollowPath : AbstractState
 
     private NavMeshPath pathToFollw;
     private NavMeshAgent agent;
+
     private Vector3 pointToGo;
 
     public override void StateEnter()
@@ -51,10 +53,11 @@ public class State_FollowPath : AbstractState
             bool isOnGoOnPatrol = false;
 
             if (agent.CalculatePath(pointsForPatrol[destinationForPatrolIndex].position, pathToFollw)) pointToGo = pointsForPatrol[destinationForPatrolIndex].position;
+            agent.SetDestination(pointToGo);
+
             while (agent.pathPending) yield return null;
 
             isOnGoOnPatrol = true;
-            agent.SetDestination(pointToGo);
 
             while (isOnGoOnPatrol)
             {

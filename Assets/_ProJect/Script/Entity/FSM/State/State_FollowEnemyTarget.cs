@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class State_FollowEnemyTarget : AbstractState
 {
+    [Header("Setting FollowEnemyTarget")]
     [SerializeField] private float timeUpdateSightRoutine = 0.2f;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
@@ -18,7 +19,6 @@ public class State_FollowEnemyTarget : AbstractState
     [SerializeField] private bool isCheckForAllie;
 
     private NavMeshAgent agent;
-    private NavMeshPath pathToFollw;
 
     public event Action OnTryMeleeAttack;
 
@@ -27,7 +27,6 @@ public class State_FollowEnemyTarget : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Entrato in State FollowTarget");
 
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
-        if (pathToFollw == null) pathToFollw = new NavMeshPath();
 
         agent.ResetPath();
         agent.updateRotation = false;
@@ -47,30 +46,34 @@ public class State_FollowEnemyTarget : AbstractState
 
     private IEnumerator GoOnTargetRoutin()
     {
-        if (controller.Target != null)
+
+        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
+
+        while (controller.Target != null)
         {
-            WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
+            float distanceToTarget = Vector3.Distance(transform.position, controller.Target.position);
 
-            while (controller.Target != null)
+            if (distanceToTarget >= stopDistanceToDestination)
             {
-                if (agent.CalculatePath(controller.Target.position, pathToFollw))
-                {
-                    float distanceToTarget = Vector3.Distance(transform.position, controller.Target.position);
+                agent.SetDestination(controller.Target.position);
+                while (agent.pathPending) yield return null;
 
-                    if (distanceToTarget > stopDistanceToDestination) agent.destination = controller.Target.position;
-                    else
-                    {
-                        OnTryMeleeAttack?.Invoke();
-                        agent.ResetPath();
-                    }
-                }
-                if(isCheckForAllie)
-                {
-                    Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
-                }
                 yield return waitForSeconds;
             }
+            else
+            {
+                OnTryMeleeAttack?.Invoke();
+                agent.ResetPath();
+            }
+
+
+            if (isCheckForAllie)
+            {
+                Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
+            }
+            yield return null;
         }
+
     }
 
     private void LookOnTarget()
@@ -78,7 +81,6 @@ public class State_FollowEnemyTarget : AbstractState
         if (controller.Target == null) return;
 
         Quaternion lookDirection = Quaternion.LookRotation((controller.Target.position - agent.transform.position).normalized);
-
         agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
     }
 }

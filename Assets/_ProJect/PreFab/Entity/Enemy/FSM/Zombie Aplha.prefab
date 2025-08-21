@@ -49,7 +49,7 @@ MonoBehaviour:
   timeUpdateSightRoutine: 0.2
   stopDistanceToDestination: 2
   radiusForPosition: 0
-  isOnRandomSpot: 0
+  isOnRandomSpot: 1
 --- !u!114 &8215326791372053120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,7 +69,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!114 &2020688891131910978
 MonoBehaviour:
@@ -87,7 +87,7 @@ MonoBehaviour:
   hight: 1
   sightDistance: 12
   timeForLostSightEnemy: 10
-  whatDo: 1
+  whatToDo: 1
 --- !u!1 &993506585865350983
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   hight: 1
   sightDistance: 12
   timeForLostSightEnemy: 5
-  whatDo: 0
+  whatToDo: 0
 --- !u!1 &1712955268245460569
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!114 &252384959472444585
 MonoBehaviour:
@@ -345,7 +345,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 2
+  whatToCheck: 2
   hight: 1
 --- !u!1 &2901338465525005814
 GameObject:
@@ -465,7 +465,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!114 &1312589294769763139
 MonoBehaviour:
@@ -486,7 +486,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 2
+  whatToCheck: 2
   hight: 1
 --- !u!1 &5029770813442289058
 GameObject:
@@ -755,7 +755,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!114 &4023252709557019900
 MonoBehaviour:
@@ -776,7 +776,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 2
+  whatToCheck: 2
   hight: 1
 --- !u!1 &5330652073703310611
 GameObject:
@@ -859,7 +859,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!1 &5579794149837893166
 GameObject:
@@ -929,7 +929,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 1
+  whatToCheck: 1
   hight: 1
 --- !u!114 &325068402079814587
 MonoBehaviour:
@@ -950,7 +950,7 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatCheck: 2
+  whatToCheck: 2
   hight: 1
 --- !u!1001 &5563021649360851597
 PrefabInstance:

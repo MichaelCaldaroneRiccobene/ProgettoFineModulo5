@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Transition_OnSeeEntity : AbstractTransition
 {
     public enum Condition { CheckForAllie, CheckForTarget, FollowAllied }
 
+    [Header("Setting Transition_OnSeeEntity")]
     [SerializeField] private float viewAngleForward = 60;
     [SerializeField] private float viewAngleBack = 120;
 
@@ -15,7 +15,7 @@ public class Transition_OnSeeEntity : AbstractTransition
     [SerializeField] private int raySenseToAdd = 30;
 
 
-    [SerializeField] private Condition whatCheck;
+    [SerializeField] private Condition whatToCheck;
 
     [SerializeField] private float hight = 1;
 
@@ -42,7 +42,7 @@ public class Transition_OnSeeEntity : AbstractTransition
         isCheckForTarget = false;
         isFollowAllied = false;
 
-        switch (whatCheck)
+        switch (whatToCheck)
         {
             case Condition.CheckForAllie:
                 isCheckForAllie = true; 

@@ -1,15 +1,15 @@
-using System.Collections;
 using UnityEngine;
 
 public class Transition_OnLostSightEntity : AbstractTransition
 {
     public enum Condition {OnLostTarget, OnLostAllied }
 
+    [Header("Setting OnLostSightEntity")]
     [SerializeField] private float hight = 1;
     [SerializeField] private float sightDistance = 12;
     [SerializeField] private float timeForLostSightEnemy = 10;
 
-    [SerializeField] private Condition whatDo;
+    [SerializeField] private Condition whatToDo;
 
     private bool onLostTarget;
     private bool onLostAllied;
@@ -32,7 +32,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
         onLostTarget = false;
         onLostAllied = false;
 
-        switch (whatDo)
+        switch (whatToDo)
         {
             case Condition.OnLostTarget:
                 onLostTarget = true;
@@ -45,8 +45,10 @@ public class Transition_OnLostSightEntity : AbstractTransition
 
     private bool SeeAllied(FSM_Controller controller)
     {
+        // Se non sto cercando per alleato lascio
         if (!onLostAllied) return false;
 
+        // se non ho alleato, non mi possono più seguire e me ne vado
         if (controller.Allied == null)
         {
             controller.CanBeFollowTarget = false; 
@@ -56,7 +58,8 @@ public class Transition_OnLostSightEntity : AbstractTransition
         {  
             if (controller.Allied.TryGetComponent(out I_Team team))
             {
-                if(team.GetAllied() == transform.root)
+                // controllo di sicurezza, se l'alleato che voglio seguire sta seguendo me ,non mi possono più seguire e me ne vado
+                if (team.GetAllied() == transform)
                 {
                     if (controller.CanSeeDebug) Debug.Log("Tu Hai me e Io ho te Non Siamo Compatibili Ti Mollo");
 
@@ -65,6 +68,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
                     return true;
                 }
 
+                // se l'alleato che sto seguendo non lo posso più seguire non mi possono più seguire e me ne vado
                 if (!team.CanBeFollow())
                 {
                     controller.Allied = null;
@@ -78,7 +82,10 @@ public class Transition_OnLostSightEntity : AbstractTransition
 
     private bool SeeTarget(FSM_Controller controller)
     {
-        if(!onLostTarget) return false; 
+        // se non sto cercando per target lascio
+        // se ho il target ma non sto cercando per target me ne vado
+        // se non ho il target ma sto cercando per target me ne vado
+        if (!onLostTarget) return false; 
         if(controller.Target != null && !onLostTarget) return true;
         if(controller.Target == null) return true;
 

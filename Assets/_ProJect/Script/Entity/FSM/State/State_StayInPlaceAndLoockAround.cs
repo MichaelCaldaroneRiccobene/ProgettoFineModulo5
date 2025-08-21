@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class State_StayInPlaceAndLoockAround : AbstractState
 {
+    [Header("Setting StayInPlaceAndLoockAround")]
     [SerializeField] private float timeForStayOnPlaceAndLookAround = 2f;
     [SerializeField] private float timeUpdateRoutine = 1f;
     [SerializeField] private float stopDistanceToDestination = 2f;
@@ -17,18 +16,24 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     private Quaternion startRotation;
 
     private NavMeshAgent agent;
+    private bool isStartSetUpPositionAndRotation;
+
 
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State StayInPlaceAndLoockAround");
-
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
-        if (startPosition == null) startPosition = controller.transform.position;
-        if (startRotation == null) startRotation = controller.transform.rotation;
+        if(!isStartSetUpPositionAndRotation)
+        {
+            isStartSetUpPositionAndRotation = true;
+
+            startPosition = transform.position;
+            startRotation = transform.rotation;
+        }
 
         agent.ResetPath();
-        StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine());
+        StartCoroutine(GoOnStartPosition());
     }
 
     public override void StateExit()
@@ -37,6 +42,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
 
         StopAllCoroutines();
         agent.ResetPath();
+        agent.updateRotation = true;
     }
 
     public override void StateUpdate() { }
@@ -49,7 +55,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
         while (true)
         {
             Quaternion startRotation = agent.transform.rotation;
-            Quaternion targetRotation = Quaternion.LookRotation(transform.forward * 10 * -1);
+            Quaternion targetRotation = Quaternion.LookRotation(-transform.forward,Vector3.up);
 
             OnTurn180?.Invoke();
             float progress = 0;
@@ -70,35 +76,28 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
 
-        agent.SetDestination(startPosition);
+        Vector3 positionToFollow = startPosition;
+        if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
+
+        agent.SetDestination(positionToFollow);
         while (agent.pathPending) yield return null;
 
-        bool isOnStartPosition = false;
-        while (!isOnStartPosition)
+        while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
+
+
+        agent.updateRotation = false;
+        Quaternion curretRotation = agent.transform.rotation;
+        float velocityRotation = 10;
+
+        float progress = 0;
+        while (progress < 1)
         {
-            if (agent.remainingDistance < stopDistanceToDestination) isOnStartPosition = true;
+            progress += Time.deltaTime * velocityRotation;
+            agent.transform.rotation = Quaternion.Lerp(curretRotation, startRotation, progress);
 
-            yield return waitForSeconds;
+            yield return null;
         }
-
-        bool isOnStartRotation = false;
-        while (!isOnStartRotation)
-        {
-            agent.updateRotation = false;
-            Quaternion curretRotation = agent.transform.rotation;
-
-            float velocityRotation = 10;
-            float progress = 0;
-
-            while (progress < 1)
-            {
-                progress += Time.deltaTime * velocityRotation;
-                agent.transform.rotation = Quaternion.Lerp(curretRotation, startRotation, progress);
-                yield return null;
-            }
-            isOnStartRotation = true;
-            agent.updateRotation = true;
-        }
+        agent.updateRotation = true;
 
         StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine());
     }

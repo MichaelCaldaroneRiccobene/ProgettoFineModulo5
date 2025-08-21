@@ -85,25 +85,6 @@ public static class Utility
         return false;
     }
 
-
-    public static void RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range, out Vector3 result)
-    {
-        int numberOfTentativ = 5;
-
-        for (int i = 0; i < numberOfTentativ; i++)
-        {
-            Vector3 randomPosition = Random.insideUnitSphere * range + startPosition;
-            randomPosition.y = agent.transform.position.y;
-
-            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas))
-            {
-                result = hit.position;
-                return;
-            }
-        }
-        result = Vector3.zero;
-    }
-
     public static Vector3 RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range)
     {
         int numberOfTentativ = 5;
@@ -118,7 +99,7 @@ public static class Utility
         return Vector3.zero;
     }
 
-    public static void RandomPoint(NavMeshAgent agent, Vector3 startPosition, float minRange, float maxRange, out Vector3 result)
+    public static Vector3 RandomPoint(NavMeshAgent agent, Vector3 startPosition, float minRange, float maxRange)
     {
         int numberOfTentativ = 5;
 
@@ -127,12 +108,8 @@ public static class Utility
             Vector3 randomPosition = Random.insideUnitSphere * Random.Range(minRange, maxRange) + startPosition;
             randomPosition.y = agent.transform.position.y;
 
-            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas))
-            {
-                result = hit.position;
-                return;
-            }
+            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 1, NavMesh.AllAreas)) return hit.position;
         }
-        result = Vector3.zero;
+        return Vector3.zero;
     }
 }

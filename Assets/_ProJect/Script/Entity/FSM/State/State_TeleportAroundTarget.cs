@@ -5,14 +5,11 @@ using UnityEngine.AI;
 
 public class State_TeleportAroundTarget : AbstractState
 {
+    // Test Boss Non so se Lo faro
     [SerializeField] private Transform[] pointsForPatrol;
-
-    [SerializeField] private float timeUpdateRoutine = 1f;
-    [SerializeField] private float stopDistanceToDestination = 2f;
 
     private NavMeshPath pathToFollw;
     private NavMeshAgent agent;
-    private Vector3 pointToGo;
 
     public override void StateEnter()
     {
@@ -37,10 +34,9 @@ public class State_TeleportAroundTarget : AbstractState
 
     private IEnumerator TeleportAroundTargetRoutine()
     {
-        Utility.RandomPoint(agent,controller.Target.position,10,10, out pointToGo);
+        Vector3 newPosition = Utility.RandomPoint(agent,controller.Target.position,10,10);
 
         Vector3 currentPosition = agent.transform.position;
-        Vector3 newPosition = pointToGo;
         agent.updatePosition = false;
 
 

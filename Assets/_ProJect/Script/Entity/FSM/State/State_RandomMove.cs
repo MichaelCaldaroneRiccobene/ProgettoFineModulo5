@@ -4,17 +4,16 @@ using UnityEngine.AI;
 
 public class State_RandomMove : AbstractState
 {
+    [Header("Setting RandomMove")]
     [SerializeField] private float timeUpdateRoutine = 1f;
     [SerializeField] private float radiusRandomPosition = 10;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
     private NavMeshAgent agent;
-    private Vector3 pointToGo;
 
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State RandomMove");
-
         if(agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
         agent.ResetPath();
@@ -37,21 +36,13 @@ public class State_RandomMove : AbstractState
 
         while (true)
         {
-            bool isOnGoRandomPoint = false;
+            Vector3 positionToFollow = Utility.RandomPoint(agent, agent.transform.position, radiusRandomPosition);
+            if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            Utility.RandomPoint(agent, agent.transform.position, radiusRandomPosition, out pointToGo);
-            agent.SetDestination(pointToGo);
-
+            agent.SetDestination(positionToFollow);
             while (agent.pathPending) yield return null;
 
-            isOnGoRandomPoint = true;
-
-            while (isOnGoRandomPoint)
-            {
-                if (agent.remainingDistance < stopDistanceToDestination) isOnGoRandomPoint = false;
-
-                yield return waitForSeconds;
-            }
+            while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
         }
     }
 }

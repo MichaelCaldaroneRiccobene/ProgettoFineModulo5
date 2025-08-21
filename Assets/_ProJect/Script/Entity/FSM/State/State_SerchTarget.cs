@@ -4,17 +4,16 @@ using UnityEngine.AI;
 
 public class State_SerchTarget : AbstractState
 {
+    [Header("Setting SerchTarget")]
     [SerializeField] private float timeUpdateRoutine = 1f;
     [SerializeField] private float radiusRandomPosition = 10;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
     private NavMeshAgent agent;
-    private Vector3 pointToGo;
 
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State SerchTarget");
-
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
         agent.ResetPath();
@@ -38,21 +37,16 @@ public class State_SerchTarget : AbstractState
         while (controller.LastTarget)
         {
             WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
-            bool isOnGoRandomPoint = false;
 
-            Utility.RandomPoint(agent, controller.LastTarget.position, radiusRandomPosition, out pointToGo);
-            agent.SetDestination(pointToGo);
+            Vector3 positionToFollow = Utility.RandomPoint(agent, controller.LastTarget.position, radiusRandomPosition);
+            if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
+            agent.SetDestination(positionToFollow);
             while (agent.pathPending) yield return null;
 
-            isOnGoRandomPoint = true;
+            yield return timeUpdateRoutine;
+            while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
 
-            while (isOnGoRandomPoint)
-            {
-                if (agent.remainingDistance < stopDistanceToDestination) isOnGoRandomPoint = false;
-
-                yield return waitForSeconds;
-            }
             controller.LastTarget = null;
         }
     }

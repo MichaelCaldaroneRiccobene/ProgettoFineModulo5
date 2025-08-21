@@ -12,14 +12,11 @@ public class State_FollowAlliedTarget : AbstractState
     [SerializeField] private bool isOnRandomSpot;
 
     private NavMeshAgent agent;
-    private NavMeshPath pathToFollw;
 
     public override void StateEnter()
     {
         if(controller.CanSeeDebug) Debug.Log("Entrato in State FollowAlliedTarget");
-
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
-        if (pathToFollw == null) pathToFollw = new NavMeshPath();
 
         controller.CanBeFollowTarget = true;
         agent.ResetPath();
@@ -48,8 +45,8 @@ public class State_FollowAlliedTarget : AbstractState
 
             if(isOnRandomSpot)
             {
-                while (agent.pathPending) yield return null;
                 agent.SetDestination(positionToFollow);
+                while (agent.pathPending) yield return null;
 
                 while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
             }
@@ -59,12 +56,13 @@ public class State_FollowAlliedTarget : AbstractState
 
                 if (distanceToTarget >= stopDistanceToDestination)
                 {
-                    while (agent.pathPending) yield return null;
                     agent.SetDestination(positionToFollow);
+                    while (agent.pathPending) yield return null;
 
                     yield return waitForSeconds;
                 }
                 else agent.ResetPath();
+
             }
             yield return null;
         }
