@@ -55,21 +55,17 @@ public class State_FollowAlliedTarget : AbstractState
             {
                 float distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
 
-                if (distanceToTarget >= stopDistanceToDestination)
+                while (!forceExitWhile && distanceToTarget >= stopDistanceToDestination)
                 {
                     agent.destination = positionToFollow;
+                    distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
+                    timerForForChangePosition += timeUpdateSightRoutine;
 
-                    while (!forceExitWhile && distanceToTarget >= stopDistanceToDestination)
-                    {
-                        distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
-                        timerForForChangePosition += timeUpdateSightRoutine;
+                    if (timerForForChangePosition >= timeForChangePosition) forceExitWhile = true;
 
-                        if (timerForForChangePosition >= timeForChangePosition) forceExitWhile = true;
-
-                        yield return waitForSeconds;
-                    }
+                    yield return waitForSeconds;
                 }
-                else agent.ResetPath();
+                agent.ResetPath();
             }
             yield return waitForSeconds;
 

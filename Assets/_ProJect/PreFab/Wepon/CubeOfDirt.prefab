@@ -491,7 +491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objToDisable: {fileID: 6979525048630666706}
   timeLife: 5
-  damage: 1000
+  damage: 10
   velocityToEnd: 10
   velocityToMid: 20
   velocityToStart: 20

@@ -26,6 +26,7 @@ public class EnemyAttack : MonoBehaviour
 
     public void OnAttackMelee()
     {
+        Debug.Log("Attac");
         if (Physics.Raycast(head.position,transform.forward, out RaycastHit hit,distanceRayAttackMelee, shieldLayer))
         {
             if (hit.collider.TryGetComponent(out LifeSistem life)) life.UpdateHp(-stats.DamageMelee);

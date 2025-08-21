@@ -88,7 +88,7 @@ public static class Utility
 
     public static void RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range, out Vector3 result)
     {
-        int numberOfTentativ = 100;
+        int numberOfTentativ = 5;
 
         for (int i = 0; i < numberOfTentativ; i++)
         {
@@ -106,7 +106,7 @@ public static class Utility
 
     public static Vector3 RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range)
     {
-        int numberOfTentativ = 100;
+        int numberOfTentativ = 5;
 
         for (int i = 0; i < numberOfTentativ; i++)
         {
@@ -120,7 +120,7 @@ public static class Utility
 
     public static void RandomPoint(NavMeshAgent agent, Vector3 startPosition, float minRange, float maxRange, out Vector3 result)
     {
-        int numberOfTentativ = 100;
+        int numberOfTentativ = 5;
 
         for (int i = 0; i < numberOfTentativ; i++)
         {

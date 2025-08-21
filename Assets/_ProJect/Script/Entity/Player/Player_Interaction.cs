@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player_Interaction : MonoBehaviour
@@ -29,9 +30,11 @@ public class Player_Interaction : MonoBehaviour
         {
             Debug.DrawRay(head.position, hit.point, Color.black, 1);
 
-            if (hit.collider.TryGetComponent(out I_Interection interection))
+            I_Interection interaction = hit.transform.GetComponentInChildren<I_Interection>();
+
+            if(interaction != null)
             {
-                if(lastInteraction != interection)
+                if (lastInteraction != interaction)
                 {
                     if (lastInteraction != null)
                     {
@@ -39,8 +42,8 @@ public class Player_Interaction : MonoBehaviour
                         lastInteraction = null;
                     }
 
-                    currentInteraction = interection;
-                    lastInteraction = interection;
+                    currentInteraction = interaction;
+                    lastInteraction = interaction;
 
                     currentInteraction.ShowInteractable();
                 }
@@ -58,6 +61,36 @@ public class Player_Interaction : MonoBehaviour
             currentInteraction = null;
             lastInteraction = null;
         }
+
+        //    if (hit.collider.TryGetComponent(out I_Interection interection))
+        //    {
+        //        if(lastInteraction != interection)
+        //        {
+        //            if (lastInteraction != null)
+        //            {
+        //                lastInteraction.HideInteractable();
+        //                lastInteraction = null;
+        //            }
+
+        //            currentInteraction = interection;
+        //            lastInteraction = interection;
+
+        //            currentInteraction.ShowInteractable();
+        //        }
+        //    }
+        //    else if (lastInteraction != null)
+        //    {
+        //        lastInteraction.HideInteractable();
+        //        currentInteraction = null;
+        //        lastInteraction = null;
+        //    }
+        //}
+        //else if (lastInteraction != null)
+        //{
+        //    lastInteraction.HideInteractable();
+        //    currentInteraction = null;
+        //    lastInteraction = null;
+        //}
     }
 
 
