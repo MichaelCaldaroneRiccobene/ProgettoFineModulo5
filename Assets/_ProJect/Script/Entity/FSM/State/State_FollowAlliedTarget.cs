@@ -4,15 +4,12 @@ using UnityEngine.AI;
 
 public class State_FollowAlliedTarget : AbstractState
 {
+    [Header("Setting FollowAlliedTarget")]
     [SerializeField] private float timeUpdateSightRoutine = 0.2f;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
     [SerializeField] private float radiusForPosition;
     [SerializeField] private bool isOnRandomSpot;
-
-
-    private float timeForChangePosition = 5;
-    private float timerForForChangePosition;
 
     private NavMeshAgent agent;
     private NavMeshPath pathToFollw;
@@ -42,35 +39,35 @@ public class State_FollowAlliedTarget : AbstractState
     private IEnumerator GoOnTargetRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-        bool forceExitWhile = false;
         agent.ResetPath();
 
         while (controller.Allied != null)
         {
             Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(agent, controller.Allied.transform.position, radiusForPosition) : controller.Allied.transform.position;
-            timerForForChangePosition = 0;
-            forceExitWhile = false;
+            if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            if (agent.CalculatePath(positionToFollow, pathToFollw))
+            if(isOnRandomSpot)
+            {
+                while (agent.pathPending) yield return null;
+                agent.SetDestination(positionToFollow);
+
+                while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
+            }
+            else
             {
                 float distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
 
-                while (!forceExitWhile && distanceToTarget >= stopDistanceToDestination)
+                if (distanceToTarget >= stopDistanceToDestination)
                 {
-                    agent.destination = positionToFollow;
-                    distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
-                    timerForForChangePosition += timeUpdateSightRoutine;
-
-                    if (timerForForChangePosition >= timeForChangePosition) forceExitWhile = true;
+                    while (agent.pathPending) yield return null;
+                    agent.SetDestination(positionToFollow);
 
                     yield return waitForSeconds;
                 }
-                agent.ResetPath();
+                else agent.ResetPath();
             }
-            yield return waitForSeconds;
-
+            yield return null;
         }
-
         agent.ResetPath();
     }
 }

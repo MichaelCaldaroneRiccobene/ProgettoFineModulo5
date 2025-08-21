@@ -23,6 +23,11 @@ PrefabInstance:
       propertyPath: CanBeFollowTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5870369174538393255, guid: ed473e306ee8278479e46da4448d025c,
+        type: 3}
+      propertyPath: canBeFollowTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7570405732307525278, guid: ed473e306ee8278479e46da4448d025c,
         type: 3}
       propertyPath: m_LocalPosition.x

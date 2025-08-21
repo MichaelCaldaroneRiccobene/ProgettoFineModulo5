@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AbstractTransition : MonoBehaviour
 {
+    [Header("Next State")]
     [SerializeField] protected AbstractState targetState;
 
     public AbstractState GetTargetState() => targetState;

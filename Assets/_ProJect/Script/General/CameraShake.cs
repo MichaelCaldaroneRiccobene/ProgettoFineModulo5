@@ -7,6 +7,7 @@ public class CameraShake : MonoBehaviour
 {
     public static CameraShake Instance {  get; private set; }
 
+    [Header("Setting")]
     [SerializeField] private Transform targetForShakeDistance;
 
     private CinemachineVirtualCamera virtualCamera;

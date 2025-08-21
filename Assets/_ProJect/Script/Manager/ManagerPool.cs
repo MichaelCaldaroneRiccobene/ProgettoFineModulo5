@@ -33,11 +33,10 @@ public class ManagerPool : MonoBehaviour
             {
                 GameObject obj = Instantiate(pool.prefab, transform);
                 objectPool.Enqueue(obj);
+                obj.gameObject.SetActive(false);
             }
             poolDictionaryObj.Add(pool.tag, objectPool);
         }
-
-        foreach (PoolObj pool in poolsList) pool.prefab.gameObject.SetActive(false);
     }
 
     public GameObject GetGameObjFromPool(string tag)

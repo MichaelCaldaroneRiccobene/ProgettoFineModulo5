@@ -1,37 +1,37 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FSM_Controller : MonoBehaviour, I_Team
 {
+    [Header("Setting")]
     [SerializeField] private AbstractState defualtState;
+
     [SerializeField] private float currentStateTime;
-
-    [SerializeField] private AbstractState currentState;
-
     [SerializeField] private float timeUpdateEvaluateTransition = 0.15f;
+
+    [Header("Setting Team")]
     [SerializeField] private int teamNumber;
 
+    [SerializeField] private bool canAttackFriend;
+    [SerializeField] private bool canBeFollowTarget;
+
+    [Header("Debug")]
+    [SerializeField] private bool canSeeDebug;
+    [SerializeField] private AbstractState currentState;
 
     public Transform Allied;
     public Transform Target;
     public Transform LastTarget;
 
-    public FSM_Controller(Transform lastTarget)
-    {
-        LastTarget = lastTarget;
-    }
-
-    public bool CanBeFollowTarget;
-    public bool CanSeeDebug;
-
     private AbstractState targetState;
 
+    public float CurrentStateTime => currentStateTime;
     public float TimeUpdateEvaluateTransition => timeUpdateEvaluateTransition;
 
     public int TeamNumber => teamNumber;
 
-    public float CurrentStateTime => currentStateTime;
+    public bool CanBeFollowTarget { get => canBeFollowTarget; set => value = canBeFollowTarget;}
+    public bool CanSeeDebug => canSeeDebug;
 
     private void Start()
     {
@@ -76,24 +76,37 @@ public class FSM_Controller : MonoBehaviour, I_Team
         currentState.StateEnter();
     }
 
+    #region I_Team
+    public void SetTarget(Transform target) { if (LastTarget == null) SetTargetForMe(target); }
+    public void SetPriorityTarget(Transform target) => SetTargetForMe(target);
+
+    private void SetTargetForMe(Transform target)
+    {
+        if (target.TryGetComponent(out I_Team entity))
+        {
+            if (entity.GetTeamNumber() != teamNumber)
+            {
+                Target = target;
+                LastTarget = target;
+
+                return;
+            }
+            else if (canAttackFriend)
+            {
+                Target = target;
+                LastTarget = target;
+
+                return;
+            }
+        }
+    }
+
     public int GetTeamNumber() => teamNumber;
-
-    public void SetTarget(Transform target)
-    {
-        if (LastTarget == null) Target = target;
-    }
-
-    public void SetTargetPriority(Transform target)
-    {
-        Target = target;
-        LastTarget = target;
-    }
-
     public Transform GetAllied() => Allied;
 
-    public bool HasTarget() => Target != null;
-
     public bool CanBeFollow() => CanBeFollowTarget;
+    public bool HasTarget() => Target != null;
+    #endregion
 
     public void OnDead() => Destroy(gameObject);
 }

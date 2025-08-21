@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class State_StayInPlaceAndLoockAround : AbstractState
 {
@@ -10,7 +11,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     [SerializeField] private float timeUpdateRoutine = 1f;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
-    public event Action OnTurn180;
+    public UnityEvent OnTurn180;
 
     private Vector3 startPosition;
     private Quaternion startRotation;

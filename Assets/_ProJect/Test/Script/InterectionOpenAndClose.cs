@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class InterectionOpenAndClose : MonoBehaviour, I_Interection
 {
+    [Header("Setting")]
     [SerializeField] private Transform mesh;
     [SerializeField] private Vector3 openRotation;
     [SerializeField] private float velocityOpenCloseDoor = 5;
@@ -41,13 +42,7 @@ public class InterectionOpenAndClose : MonoBehaviour, I_Interection
         RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
 
-    public void ShowInteractable()
-    {
-        throw new System.NotImplementedException();
-    }
+    public void ShowInteractable() { }
 
-    public void HideInteractable()
-    {
-        throw new System.NotImplementedException();
-    }
+    public void HideInteractable() { }
 }

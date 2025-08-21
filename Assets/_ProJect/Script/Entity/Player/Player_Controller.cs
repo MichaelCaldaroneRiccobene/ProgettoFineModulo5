@@ -31,7 +31,7 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     public Transform GetAllied() => null;
 
-    public void SetTargetPriority(Transform target)
+    public void SetPriorityTarget(Transform target)
     {
     }
 }

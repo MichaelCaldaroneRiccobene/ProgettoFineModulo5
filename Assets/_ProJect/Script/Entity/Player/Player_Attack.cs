@@ -47,14 +47,13 @@ public class Player_Attack : MonoBehaviour
         player_Mana.UpdateMana(-manaRequestFirstAttack);
 
         GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.FireBallObjForPool);
+        BaseWeapon weapon = obj.gameObject.GetComponentInChildren<BaseWeapon>();
 
-        if (obj.gameObject.TryGetComponent(out FireBall fireball))
+        if (weapon is FireBall fireball)
         {
-            float shooterSpeed = 0;
+            weapon.BasicSetUp(firePoint.position, firePoint.rotation, stats.DamageRange, transform);
+            fireball.OnShoot(transform.forward);
 
-            fireball.transform.position = firePoint.position;
-            fireball.transform.rotation = firePoint.rotation;
-            fireball.OnShoot(transform.forward, shooterSpeed, stats.DamageRange, transform);
             CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
         }
     }
@@ -76,13 +75,13 @@ public class Player_Attack : MonoBehaviour
 
         for (int i = 0; i < numberOfCubeOfGrass; i++)
         {
-            GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.CubeOfGrassObjForpool);
+            GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.CubeOfDirtObjForpool);
 
             sizeCube += obj.transform.localScale.x + distanceForeachCubeOfGrass;
             Vector3 positionToSpawn = positionStart + positionForwardStart * sizeCube;
 
-            obj.transform.position = positionToSpawn;
-            obj.transform.rotation = transform.rotation;
+            BaseWeapon weapon = obj.gameObject.GetComponentInChildren<BaseWeapon>();
+            if (weapon != null) weapon.BasicSetUp(positionToSpawn, transform.rotation, stats.DamageMelee, transform);
 
             CameraShake.Instance.OnCameraShake(obj.transform.position,1, 1.5f, 15);
             RegenerateNavMesh.Instance.UpdateNaveMeshSurface();

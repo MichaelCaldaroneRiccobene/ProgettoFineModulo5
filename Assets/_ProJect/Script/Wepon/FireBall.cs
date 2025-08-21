@@ -1,24 +1,19 @@
 using UnityEngine;
 
-public class FireBall : BaseWepon
+public class FireBall : BaseWeapon
 {
+    [Header("Setting FireBall")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float speed = 5;
 
-    public void OnShoot(Vector3 direction, float shooterVelocity,int damage,Transform shoter)
-    {
-        this.damage = damage;
-        this.shoter = shoter;
-
-        rb.velocity = direction * (speed + shooterVelocity);
-    }
+    public void OnShoot(Vector3 direction) => rb.velocity = direction * speed;
 
     public override void OnEnable()
     {
+        base.OnEnable();
+
         rb.isKinematic = false;
         rb.velocity = Vector3.zero;
-
-        StartCoroutine(LifeTimeRoutione());
     }
 
     private void SpawnExsplosion()
@@ -34,8 +29,9 @@ public class FireBall : BaseWepon
 
     public override void OnDisable()
     {
+        base.OnDisable();
+
         SpawnExsplosion();
-        StopAllCoroutines();
 
         rb.velocity = Vector3.zero;
         rb.isKinematic = true;

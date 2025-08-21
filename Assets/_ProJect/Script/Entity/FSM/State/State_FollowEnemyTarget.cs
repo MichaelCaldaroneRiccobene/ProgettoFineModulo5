@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using static Transition_OnSeeEntity;
 
 public class State_FollowEnemyTarget : AbstractState
 {
@@ -51,7 +50,6 @@ public class State_FollowEnemyTarget : AbstractState
         if (controller.Target != null)
         {
             WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-            agent.ResetPath();
 
             while (controller.Target != null)
             {

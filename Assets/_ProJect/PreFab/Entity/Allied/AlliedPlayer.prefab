@@ -207,6 +207,9 @@ MonoBehaviour:
   timeForStayOnPlaceAndLookAround: 2
   timeUpdateRoutine: 1
   stopDistanceToDestination: 2
+  OnTurn180:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7907395429237100564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,14 +494,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defualtState: {fileID: 4953186176240209718}
   currentStateTime: 0
-  currentState: {fileID: 0}
   timeUpdateEvaluateTransition: 0
   teamNumber: 1
+  canAttackFriend: 0
+  canBeFollowTarget: 0
+  canSeeDebug: 1
+  currentState: {fileID: 0}
   Allied: {fileID: 0}
   Target: {fileID: 0}
   LastTarget: {fileID: 0}
-  CanBeFollowTarget: 0
-  CanSeeDebug: 0
 --- !u!114 &5488364347490736619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1220,23 +1224,8 @@ MonoBehaviour:
   parameterFloatSpeed: Speed
   parametetTriggerAttack: Attack
   parameterTriggerOnHit: OnHit
-  parameterTriggerSitUp: SitUp
   smoothAnimation: 0.04
-  OnDoBadAttackMelee:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5488364347490736619}
-        m_TargetAssemblyTypeName: EnemyAttack, Assembly-CSharp
-        m_MethodName: OnAttackMelee
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  parameterTriggerSitUp: SitUp
   OnDoSitUp:
     m_PersistentCalls:
       m_Calls:

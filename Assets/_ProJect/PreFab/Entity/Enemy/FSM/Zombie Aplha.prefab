@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeUpdateSightRoutine: 0.2
   stopDistanceToDestination: 2
+  radiusForPosition: 0
+  isOnRandomSpot: 0
 --- !u!114 &8215326791372053120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +290,21 @@ MonoBehaviour:
   timeForStayOnPlaceAndLookAround: 2
   timeUpdateRoutine: 1
   stopDistanceToDestination: 2
+  OnTurn180:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1359401278179824731}
+        m_TargetAssemblyTypeName: Zombie_Animation, Assembly-CSharp
+        m_MethodName: TriggerTurn180
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3203638036367124670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,14 +542,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defualtState: {fileID: 1267960479109964246}
   currentStateTime: 0
-  currentState: {fileID: 0}
   timeUpdateEvaluateTransition: 0
   teamNumber: 2
+  canAttackFriend: 0
+  canBeFollowTarget: 1
+  canSeeDebug: 0
+  currentState: {fileID: 0}
   Allied: {fileID: 0}
   Target: {fileID: 0}
   LastTarget: {fileID: 0}
-  CanBeFollowTarget: 1
-  CanSeeDebug: 0
 --- !u!114 &6432974694252675198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,9 +1060,8 @@ MonoBehaviour:
   parameterFloatSpeed: Speed
   parametetTriggerAttack: Attack
   parameterTriggerOnHit: OnHit
-  parameterTriggerOnTurn180: OnTurn180
   smoothAnimation: 0.04
-  state_StayInPlaceAndLoockAround: {fileID: 6143577999947082663}
+  parameterTriggerOnTurn180: OnTurn180
 --- !u!4 &1879611803532370831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6279823610682781954, guid: 970a0e0414fa8be4695cbe8c3d95afd7,

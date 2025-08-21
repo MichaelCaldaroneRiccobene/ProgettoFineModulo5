@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 
 public class OpenTheGate : MonoBehaviour, I_Interection
 {
+    [Header("Setting")]
     [SerializeField] private Transform button;
     [SerializeField] private GameObject pannelInputToPress;
 

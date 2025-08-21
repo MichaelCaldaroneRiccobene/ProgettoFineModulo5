@@ -1,19 +1,30 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeOfGrass : BaseWepon
+public class CubeOfGrass : BaseWeapon
 {
+    [Header("Setting Position For Animation")]
+    [SerializeField] private Vector3 endPosition;
+    [SerializeField] private Vector3 midPosition;
+
+    [Header("Setting Velocity For Animation")]
     [SerializeField] private float velocityToEnd = 5;
     [SerializeField] private float velocityToMid = 10;
     [SerializeField] private float velocityToStart = 10;
 
-    [SerializeField] private Vector3 endPosition;
-    [SerializeField] private Vector3 midPosition;
-
     private Vector3 originalPosition;
 
-    private void Awake()
+    private void Awake() => SetUpPositions();
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+
+        transform.localPosition = originalPosition;
+        StartCoroutine(AnimationCubeOfGrassRoutine());
+    }
+
+    private void SetUpPositions()
     {
         originalPosition = transform.localPosition;
 
@@ -21,13 +32,6 @@ public class CubeOfGrass : BaseWepon
         midPosition += originalPosition;
     }
 
-    public override void OnEnable()
-    {
-        transform.localPosition = originalPosition;
-        base.OnEnable();
-
-        StartCoroutine(AnimationCubeOfGrassRoutine());
-    }
     private IEnumerator AnimationCubeOfGrassRoutine()
     {
         float progress = 0f;
@@ -35,7 +39,7 @@ public class CubeOfGrass : BaseWepon
 
         float distanceToNextPoint = Vector3.Distance(startPosition, midPosition);
 
-
+        //SpawnPosition To MidPosition
         while ( progress < 1f )
         {
             progress += Time.deltaTime * velocityToMid / distanceToNextPoint;
@@ -49,6 +53,7 @@ public class CubeOfGrass : BaseWepon
 
         distanceToNextPoint = Vector3.Distance(startPosition, originalPosition);
 
+        //MidPosition To SpawnPosition
         while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToStart / distanceToNextPoint;
@@ -60,9 +65,9 @@ public class CubeOfGrass : BaseWepon
         progress = 0;
         startPosition = transform.localPosition;
 
-
         distanceToNextPoint = Vector3.Distance(startPosition, endPosition);
 
+        //SpawnPosition To EndPosition
         while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToEnd / distanceToNextPoint;
@@ -81,6 +86,7 @@ public class CubeOfGrass : BaseWepon
 
         float distanceToNextPoint = Vector3.Distance(startPosition, originalPosition);
 
+        //When Life is Over Go Back in SpawnPosition
         while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToStart / distanceToNextPoint;
@@ -90,19 +96,13 @@ public class CubeOfGrass : BaseWepon
         }
         CameraShake.Instance.OnCameraShake(transform.position, 1, 1.5f, 15);
 
+        RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
         objToDisable.gameObject.SetActive(false);
     }
-
 
     public override void OnTriggerEnter(Collider other)
     {
         OnTriggerCollisionLife(other);
         OnTriggerCollisionInteract(other);
-    }
-
-    public override void OnDisable()
-    {
-        RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
-        base.OnDisable();
     }
 }
