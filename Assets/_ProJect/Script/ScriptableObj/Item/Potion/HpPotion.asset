@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73754f37ae961f94cad43ceb760b3e96, type: 3}
+  m_Name: HpPotion
+  m_EditorClassIdentifier: 
+  preFab: {fileID: 5136594959838457407, guid: d7d31b9eb74517c4e88335cdc0bd8aee, type: 3}
+  Name: Hp Potion
+  Description: Hp++
+  ammountHp: 20
