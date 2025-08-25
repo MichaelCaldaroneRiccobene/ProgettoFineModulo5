@@ -14,10 +14,10 @@ public class Transition_OnSeeEntity : AbstractTransition
     [SerializeField] private int raySightToAdd = 70;
     [SerializeField] private int raySenseToAdd = 30;
 
+    [SerializeField] private float hight = 1;
 
     [SerializeField] private Condition whatToCheck;
 
-    [SerializeField] private float hight = 1;
 
     private bool isCheckForAllie;
     private bool isCheckForTarget;

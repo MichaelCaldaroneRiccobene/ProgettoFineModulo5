@@ -30,7 +30,7 @@ public class FSM_Controller : MonoBehaviour, I_Team
 
     public int TeamNumber => teamNumber;
 
-    public bool CanBeFollowTarget { get => canBeFollowTarget; set => value = canBeFollowTarget;}
+    public bool CanBeAFollowTarget { get => canBeFollowTarget; set => value = canBeFollowTarget;}
     public bool CanSeeDebug => canSeeDebug;
 
     public virtual void Start()
@@ -77,10 +77,10 @@ public class FSM_Controller : MonoBehaviour, I_Team
     }
 
     #region I_Team
-    public virtual void SetTarget(Transform target) { if (LastTarget == null) SetTargetForMe(target); }
-    public virtual void SetPriorityTarget(Transform target) => SetTargetForMe(target);
+    public virtual void SetTarget(Transform target) { if (LastTarget == null) SetTargetForThis(target); }
+    public virtual void SetPriorityTarget(Transform target) => SetTargetForThis(target);
 
-    public virtual void SetTargetForMe(Transform target)
+    public virtual void SetTargetForThis(Transform target)
     {
         if (target.TryGetComponent(out I_Team entity))
         {
@@ -103,8 +103,11 @@ public class FSM_Controller : MonoBehaviour, I_Team
 
     public virtual int GetTeamNumber() => teamNumber;
     public virtual Transform GetAllied() => Allied;
+    public Transform GetTarget() => Target;
 
-    public virtual bool CanBeFollow() => CanBeFollowTarget;
+
+    public virtual bool CanBeFollow() => CanBeAFollowTarget;
     public virtual bool HasTarget() => Target != null;
+
     #endregion
 }

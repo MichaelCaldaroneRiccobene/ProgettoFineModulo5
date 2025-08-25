@@ -16,7 +16,7 @@ public class Player_Inventory : MonoBehaviour
     private void SetUpAction()
     {
         player_Input = GetComponent<Player_Input>();
-        player_Input.OnUseItem += UseItem;
+        if(player_Input != null) player_Input.OnUseItem += UseItem;
     }
 
     public void UseItem()
@@ -42,7 +42,6 @@ public class Player_Inventory : MonoBehaviour
 
     private void OnDisable()
     {
-        player_Input.OnUseItem -= UseItem;
-
+        if (player_Input != null) player_Input.OnUseItem -= UseItem;
     }
 }

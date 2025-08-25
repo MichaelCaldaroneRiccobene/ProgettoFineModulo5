@@ -24,6 +24,8 @@ public class Npc_Animation : MonoBehaviour
 
     protected bool isAttack = false;
 
+    protected Vector3 localVelocity;
+
     public virtual void Start()
     {
         animator = GetComponent<Animator>();
@@ -32,12 +34,26 @@ public class Npc_Animation : MonoBehaviour
         npc_Attack = GetComponentInParent<Npc_Attack>();
         if(npc_Attack != null) npc_Attack.OnTryAnimationAttack += TryAttack;
 
-        if (npc_Attack != null) state_Dead = npc_Attack.GetComponentInChildren<State_Dead>();
+        if(npc_Attack != null) state_Dead = npc_Attack.GetComponentInChildren<State_Dead>();
         if(state_Dead != null) state_Dead.OnTriggerDead += OnTriggerDead;
     }
 
+    public virtual void Update()
+    {
+        AnimationMoving();
+    }
 
-    public virtual void Update() {if (animator != null) animator.SetFloat(parameterFloatSpeed, agent.velocity.magnitude, smoothAnimation, Time.deltaTime);}
+    private void AnimationMoving()
+    {
+        if (animator == null) return;
+
+        localVelocity = transform.InverseTransformDirection(agent.velocity);
+
+        float vertical = localVelocity.z * agent.speed;
+        vertical = Mathf.Clamp(vertical, -1f, 1f);
+
+        if (animator != null) animator.SetFloat(parameterFloatSpeed, vertical, smoothAnimation, Time.deltaTime);
+    }
 
     public virtual void TryAttack()
     {

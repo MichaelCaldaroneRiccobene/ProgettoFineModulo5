@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -13,57 +14,54 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private float distanceForeachCubeOfGrass = 3;
     [SerializeField] private float timeSpawnCubeOfGrass = 0.5f;
 
+    [SerializeField] private string parameterTriggerFirstAttack = "FirstAttack";
+    [SerializeField] private string parameterTriggerSecondAttack = "SecondAttack";
+
+    public event Action<int, Action> OnAttack;
+    public event Action<string> OnTryAttack;
 
     private Player_Input player_Input;
 
-    private Player_Mana player_Mana;
-    private Player_Animation player_Animation;
-
     private void Start()
     {
-        player_Mana = GetComponent<Player_Mana>();
-
-        player_Animation = GetComponentInChildren<Player_Animation>();
-
         SetUpEventAction();
     }
 
     private void SetUpEventAction()
     {
         player_Input = GetComponentInChildren<Player_Input>();
-        player_Input.OnTryFirstAttack += TryOnFirstAttack;
-        player_Input.OnTrySecondAttack += TryOnSecondAttack;
+        if(player_Input != null) player_Input.OnTryFirstAttack += TryOnFirstAttack;
+        if(player_Input != null) player_Input.OnTrySecondAttack += TryOnSecondAttack;
     }
 
-    public void TryOnFirstAttack() => player_Animation.FirstAttack();
+    public void TryOnFirstAttack() =>  OnTryAttack?.Invoke(parameterTriggerFirstAttack);
 
-    public void TryOnSecondAttack() => player_Animation.SecondAttack();
+    public void TryOnSecondAttack() => OnTryAttack?.Invoke(parameterTriggerSecondAttack);
 
 
     public void OnFirstAttack()
     {
-        if(!player_Mana.CanUseMana(manaRequestFirstAttack)) return;
-
-        player_Mana.UpdateMana(-manaRequestFirstAttack);
-
-        GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.FireBallObjForPool);
-        BaseWeapon weapon = obj.gameObject.GetComponentInChildren<BaseWeapon>();
-
-        if (weapon is FireBall fireball)
+        OnAttack?.Invoke(manaRequestFirstAttack, () =>
         {
-            weapon.BasicSetUp(firePoint.position, firePoint.rotation, stats.DamageRange, transform);
-            fireball.OnShoot(transform.forward);
+            GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.FireBallObjForPool);
+            BaseMagic weapon = obj.gameObject.GetComponentInChildren<BaseMagic>();
 
-            CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
-        }
+            if (weapon is FireBall fireball)
+            {
+                weapon.BasicSetUp(firePoint.position, firePoint.rotation, stats.DamageRange, transform);
+                fireball.OnShoot(transform.forward);
+
+                CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
+            }
+        });
     }
 
     public void OnSecondAttack()
     {
-        if (!player_Mana.CanUseMana(manaRequestSecondAttack)) return;
-
-        player_Mana.UpdateMana(-manaRequestSecondAttack);
-        StartCoroutine(OnSecondAttackRoutine());
+        OnAttack?.Invoke(manaRequestSecondAttack, () =>
+        {
+            StartCoroutine(OnSecondAttackRoutine());
+        });
     }
 
     private IEnumerator OnSecondAttackRoutine()
@@ -80,7 +78,7 @@ public class Player_Attack : MonoBehaviour
             sizeCube += obj.transform.localScale.x + distanceForeachCubeOfGrass;
             Vector3 positionToSpawn = positionStart + positionForwardStart * sizeCube;
 
-            BaseWeapon weapon = obj.gameObject.GetComponentInChildren<BaseWeapon>();
+            BaseMagic weapon = obj.gameObject.GetComponentInChildren<BaseMagic>();
             if (weapon != null) weapon.BasicSetUp(positionToSpawn, transform.rotation, stats.DamageMelee, transform);
 
             CameraShake.Instance.OnCameraShake(obj.transform.position,1, 1.5f, 15);
@@ -92,7 +90,7 @@ public class Player_Attack : MonoBehaviour
 
     private void OnDisable()
     {
-        player_Input.OnTryFirstAttack -= TryOnFirstAttack;
-        player_Input.OnTrySecondAttack -= TryOnSecondAttack;
+        if (player_Input != null) player_Input.OnTryFirstAttack -= TryOnFirstAttack;
+        if (player_Input != null) player_Input.OnTrySecondAttack -= TryOnSecondAttack;
     }
 }

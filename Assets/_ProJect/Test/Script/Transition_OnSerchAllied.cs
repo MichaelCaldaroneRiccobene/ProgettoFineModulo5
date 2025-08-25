@@ -17,7 +17,7 @@ public class Transition_SerchAllied : AbstractTransition
     {
         if(Utility.OnSeeOrSenseTarget(controller, hight, raySightToAdd, sightDistance, viewAngleForward, transform.forward, isCheckForTarget, isCheckForAllie, isFollowAllied, Color.yellow))
         {
-            controller.CanBeFollowTarget = true;
+            controller.CanBeAFollowTarget = true;
             return true;
         }
 

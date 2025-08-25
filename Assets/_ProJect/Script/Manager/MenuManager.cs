@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
 public class MenuManager : MonoBehaviour
 {
     public enum PanelType { menu, option, credit }

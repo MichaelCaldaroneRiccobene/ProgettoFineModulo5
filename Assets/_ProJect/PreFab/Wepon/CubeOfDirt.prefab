@@ -492,11 +492,12 @@ MonoBehaviour:
   objToDisable: {fileID: 6979525048630666706}
   timeLife: 5
   damage: 10
-  endPosition: {x: 0, y: 5, z: 0}
+  isDestroyOnImpact: 0
   midPosition: {x: 0, y: 2, z: 0}
-  velocityToEnd: 10
-  velocityToMid: 20
+  endPosition: {x: 0, y: 5, z: 0}
   velocityToStart: 20
+  velocityToMid: 20
+  velocityToEnd: 10
 --- !u!65 &4698482906636265270
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -3,26 +3,27 @@ using UnityEngine.AI;
 
 public static class Utility
 {
+    #region OnSeeOrSenseTarget
     public static bool OnSeeOrSenseTarget(FSM_Controller controller, float hight, int rayToAdd, float sightDistance, float viewAngle, Vector3 forward, bool isCheckForTarget, bool isCheckForAllied, bool isFollowAllie, Color color)
     {
-        Vector3 originCast = controller.transform.position + new Vector3(0, hight, 0);
-        float deltaAngle = (2 * viewAngle) / (rayToAdd - 1);
-
         // Se cerco Allied e ho Allied Io Felice ;)
         if (isFollowAllie)
         {
-            if (controller.Allied != null) return true;
+            if (controller.GetAllied() != null) return true;
         }
 
         // Se cerco Target e ho target o mi hanno dato target Io Felice ;)
         if (isCheckForTarget)
         {
-            if (controller.Target != null)
+            if (controller.HasTarget())
             {
-                controller.LastTarget = controller.Target;
+                controller.LastTarget = controller.GetTarget();
                 return true;
             }
         }
+
+        Vector3 originCast = controller.transform.position + new Vector3(0, hight, 0);
+        float deltaAngle = (2 * viewAngle) / (rayToAdd - 1);
 
         for (int i = 0; i < rayToAdd; i++)
         {
@@ -52,7 +53,7 @@ public static class Utility
                             if (isFollowAllie)
                             {
                                 // Se vedo Amico Sono Felice e li Do il Target ;D
-                                if (controller.Target != null)
+                                if (controller.HasTarget())
                                 {
                                     if (!hitEntity.HasTarget()) hitEntity.SetTarget(controller.Target);
                                 }
@@ -64,18 +65,14 @@ public static class Utility
                                 }
                             }
                         }
-
-                        // Vede Nemici :(
-                        if (hitEntity.GetTeamNumber() != controller.TeamNumber)
+                        else // Vede Nemici :(
                         {
-                            if (isCheckForTarget)
+                            if (isCheckForTarget) // Se vedo Target Sono Felice
                             {
-                                // Se vedo Target Sono Felice
-                                controller.LastTarget = hit.transform;
-                                controller.Target = controller.LastTarget;
-
-                                return true;
-                            }
+                                controller.Target = hit.transform;
+                                controller.LastTarget = controller.Target;
+                            }                               
+                            return true;
                         }
                     }
                 }
@@ -84,6 +81,9 @@ public static class Utility
         }
         return false;
     }
+    #endregion
+
+    #region ChooseRandomPoint
 
     public static Vector3 RandomPoint(NavMeshAgent agent, Vector3 startPosition, float range)
     {
@@ -112,4 +112,5 @@ public static class Utility
         }
         return Vector3.zero;
     }
+    #endregion
 }

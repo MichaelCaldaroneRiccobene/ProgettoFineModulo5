@@ -18,8 +18,7 @@ public class State_FollowAlliedTarget : AbstractState
         if(controller.CanSeeDebug) Debug.Log("Entrato in State FollowAlliedTarget");
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
-        controller.CanBeFollowTarget = true;
-        agent.ResetPath();
+        controller.CanBeAFollowTarget = true;
         StartCoroutine(GoOnTargetRoutin());
     }
 
@@ -36,6 +35,7 @@ public class State_FollowAlliedTarget : AbstractState
     private IEnumerator GoOnTargetRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
+        agent.stoppingDistance = stopDistanceToDestination;
         agent.ResetPath();
 
         while (controller.Allied != null)
@@ -43,29 +43,12 @@ public class State_FollowAlliedTarget : AbstractState
             Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(agent, controller.Allied.transform.position, radiusForPosition) : controller.Allied.transform.position;
             if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            if(isOnRandomSpot)
-            {
-                agent.SetDestination(positionToFollow);
-                while (agent.pathPending) yield return null;
+            agent.SetDestination(positionToFollow);
+            while (agent.pathPending) yield return null;
 
-                while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
-            }
-            else
-            {
-                float distanceToTarget = Vector3.Distance(transform.position, positionToFollow);
+            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
 
-                if (distanceToTarget >= stopDistanceToDestination)
-                {
-                    agent.SetDestination(positionToFollow);
-                    while (agent.pathPending) yield return null;
-
-                    yield return waitForSeconds;
-                }
-                else agent.ResetPath();
-
-            }
             yield return null;
         }
-        agent.ResetPath();
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
@@ -27,7 +26,7 @@ public class CameraShake : MonoBehaviour
         StartCoroutine(OnCameraShakeRoutine(position, timer, maxIntensity, maxDistance));   
     }
 
-    private IEnumerator OnCameraShakeRoutine(Vector3 position, float timer,float maxIntensity,float maxDistance)
+    private IEnumerator OnCameraShakeRoutine(Vector3 position, float duration,float maxIntensity,float maxDistance)
     {
         if (targetForShakeDistance == null) yield break;
 
@@ -35,7 +34,7 @@ public class CameraShake : MonoBehaviour
         float distanceFactor = Mathf.Clamp01(1 - (distanceToCamera - maxDistance));
 
         channelPerlin.m_AmplitudeGain = maxIntensity * distanceFactor;
-        yield return new WaitForSeconds(timer);
+        yield return new WaitForSeconds(duration);
 
         channelPerlin.m_AmplitudeGain = 0;
     }

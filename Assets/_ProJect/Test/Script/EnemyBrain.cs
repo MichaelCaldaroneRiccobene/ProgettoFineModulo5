@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class EnemyBrain : MonoBehaviour, I_Team
 {
-    // Basic SetUp AI With Enum (La lascio perche ci ho messo 1 giorno e mezzo per crearla, anche se lo un po rovinata dopo)
+    // Basic SetUpUI AI With Enum (La lascio perche ci ho messo 1 giorno e mezzo per crearla, anche se lo un po rovinata dopo)
 
     public enum StateAI {None,IsOnStayOnPlaceAndLookAround, IsOnRandomMove,IsOnPatrol,IsOnTarget,IsOnSerchTarget }   
     public enum ComportamentNormalAI {GoStayOnPlace,GoPatrol,GoRandomMove,GoOnTarget }
@@ -499,6 +499,7 @@ public class EnemyBrain : MonoBehaviour, I_Team
     public void SetPriorityTarget(Transform target)
     {
     }
+    public Transform GetTarget() => null;
     #endregion
 }
 

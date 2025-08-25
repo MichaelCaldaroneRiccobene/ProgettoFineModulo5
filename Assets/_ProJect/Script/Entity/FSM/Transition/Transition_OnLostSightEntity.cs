@@ -51,7 +51,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
         // se non ho alleato, non mi possono più seguire e me ne vado
         if (controller.Allied == null)
         {
-            controller.CanBeFollowTarget = false; 
+            controller.CanBeAFollowTarget = false; 
             return true;
         }
         else
@@ -64,7 +64,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
                     if (controller.CanSeeDebug) Debug.Log("Tu Hai me e Io ho te Non Siamo Compatibili Ti Mollo");
 
                     controller.Allied = null;
-                    controller.CanBeFollowTarget = false;
+                    controller.CanBeAFollowTarget = false;
                     return true;
                 }
 
@@ -72,7 +72,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
                 if (!team.CanBeFollow())
                 {
                     controller.Allied = null;
-                    controller.CanBeFollowTarget = false;
+                    controller.CanBeAFollowTarget = false;
                     return true;
                 }
             }

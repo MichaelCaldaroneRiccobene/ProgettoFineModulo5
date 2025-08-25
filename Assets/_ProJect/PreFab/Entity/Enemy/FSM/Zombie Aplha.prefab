@@ -70,8 +70,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &2020688891131910978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   targetState: {fileID: 6713745742255616773}
   hight: 1
   sightDistance: 12
-  timeForLostSightEnemy: 5
+  timeForLostSightEnemy: 15
   whatToDo: 0
 --- !u!114 &3352999093528158157
 MonoBehaviour:
@@ -353,8 +353,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &252384959472444585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -374,8 +374,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &3531358627123566055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -554,8 +554,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &1312589294769763139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,8 +575,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &8333301180169404947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -846,8 +846,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &4023252709557019900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,8 +867,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &6150445182163943907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -964,8 +964,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &7262212165076132191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,8 +1048,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &325068402079814587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,8 +1069,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &7414071983783863389
 MonoBehaviour:
   m_ObjectHideFlags: 0

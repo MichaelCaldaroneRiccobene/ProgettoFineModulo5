@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37dd6608b6535af41bf4d3398bcc2530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canBeFollow: 1
   teamNumber: 1
 --- !u!114 &1014084700928800376
 MonoBehaviour:
@@ -133,7 +134,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
   firePoint: {fileID: 6605110141977894947}
   manaRequestFirstAttack: 10
-  manaRequestSecondAttack: 99
+  manaRequestSecondAttack: 25
   numberOfCubeOfGrass: 5
   distanceForeachCubeOfGrass: 3
   timeSpawnCubeOfGrass: 0.2
@@ -192,12 +193,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8635128434598549991}
+        m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
+        m_MethodName: OnDead
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnHit:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8635128434598549991}
         m_TargetAssemblyTypeName: Player_Animation, Assembly-CSharp
         m_MethodName: TriggerHit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5015501917361526586}
+        m_TargetAssemblyTypeName: Player_Controller, Assembly-CSharp
+        m_MethodName: ShakeCameraOnHit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -218,7 +243,7 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 16
   avoidancePriority: 50
   m_AngularSpeed: 0
   m_StoppingDistance: 0
@@ -545,7 +570,7 @@ PrefabInstance:
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.08
       objectReference: {fileID: 0}
     - target: {fileID: 5251107426523682287, guid: 6a3c3c37133b6ae4d9590995c8166d88,
         type: 3}
@@ -642,7 +667,8 @@ MonoBehaviour:
   parameterTriggerFirstAttack: FirstAttack
   parameterTriggerSecondAttack: SecondAttack
   parameterTriggerOnHit: OnHit
-  smoothAnimation: 0.1
+  parameterTriggerOnDead: OnDead
+  smoothAnimation: 0.04
 --- !u!1 &8599092263904558528 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4048716473296048094, guid: 6a3c3c37133b6ae4d9590995c8166d88,

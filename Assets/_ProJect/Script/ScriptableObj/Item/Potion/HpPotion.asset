@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73754f37ae961f94cad43ceb760b3e96, type: 3}
   m_Name: HpPotion
   m_EditorClassIdentifier: 
-  preFab: {fileID: 5136594959838457407, guid: d7d31b9eb74517c4e88335cdc0bd8aee, type: 3}
+  PreFab: {fileID: 5136594959838457407, guid: d7d31b9eb74517c4e88335cdc0bd8aee, type: 3}
   Name: Hp Potion
   Description: Hp++
   ammountHp: 20

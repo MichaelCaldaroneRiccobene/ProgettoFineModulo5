@@ -17,5 +17,5 @@ MonoBehaviour:
   MaxHp: 150
   Mana: 100
   MaxMana: 100
-  DamageMelee: 25
+  DamageMelee: 20
   DamageRange: 30

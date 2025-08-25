@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 4995313232522153402}
+  canvasInputToPress: {fileID: 6564831985137492633}
   pannelInputToPress: {fileID: 6564831985137492633}
   meshFirstGate: {fileID: 0}
   meshSecondGate: {fileID: 0}
@@ -116,8 +117,8 @@ RectTransform:
   m_GameObject: {fileID: 9047385303960755713}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.225, y: 1.225, z: 1.225}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6046098261420628323}
   m_Father: {fileID: 2893818223005318155}
@@ -126,7 +127,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!223 &7108249520195388036
 Canvas:
   m_ObjectHideFlags: 0

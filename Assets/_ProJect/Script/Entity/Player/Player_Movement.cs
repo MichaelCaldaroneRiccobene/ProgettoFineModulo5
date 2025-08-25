@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,8 +9,9 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private GameObject dashEffect;
     [SerializeField] private GameObject[] hideTargetForDash;
 
+    public event Action<int, Action> OnDash;
+
     private NavMeshAgent agent;
-    private Player_Mana player_Mana;
     private Player_Input player_Input;
 
     private Vector3 direction;
@@ -18,18 +20,17 @@ public class Player_Movement : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        player_Mana = GetComponent<Player_Mana>();
         agent.updateRotation = false;
 
-        SetUpEventAction();
+        SetUpAction();
     }
 
-    private void SetUpEventAction()
+    private void SetUpAction()
     {
         player_Input = GetComponent<Player_Input>();
-        player_Input.OnTakeHorizontalAndVertical += Movement;
-        player_Input.OnDash += Dash;
-        player_Input.OnRotate += Rotation;
+        if (player_Input != null) player_Input.OnTakeHorizontalAndVertical += Movement;
+        if (player_Input != null) player_Input.OnDash += Dash;
+        if (player_Input != null) player_Input.OnRotate += Rotation;
     }
 
     public void Rotation()
@@ -54,10 +55,11 @@ public class Player_Movement : MonoBehaviour
 
     public void Dash()
     {
-        if (!player_Mana.CanUseMana(dashCost)) return;
-
-        player_Mana.UpdateMana(-dashCost);
-        StartCoroutine(DashRoutine(direction));
+        OnDash?.Invoke(dashCost, () =>
+        {
+            StartCoroutine(DashRoutine(direction));
+        }
+        );
     }
 
     public IEnumerator DashRoutine(Vector3 direction)

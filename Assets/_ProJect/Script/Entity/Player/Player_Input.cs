@@ -32,23 +32,49 @@ public class Player_Input : MonoBehaviour
         }
 
         if (!CanPlayerUseInput) return;
+        InputPlayer();
+    }
 
+    private void InputPlayer()
+    {
+        InputDirectionPlayer();
+
+        InputUseObjOrInteract();
+
+        InputAttackOrInteract();
+
+        InputDash();
+        InputPause();
+    }
+
+    private void InputDirectionPlayer()
+    {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         OnTakeHorizontalAndVertical?.Invoke(horizontal, vertical);
         OnRotate?.Invoke();
+    }
 
+    private void InputUseObjOrInteract()
+    {
         if (Input.GetKeyDown(KeyCode.Q)) OnUseItem?.Invoke();
-        if (Input.GetKeyDown(KeyCode.Q)) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
 
         if (Input.GetKeyDown(KeyCode.E)) OnInteract?.Invoke();
+    }
+
+    private void InputAttackOrInteract()
+    {
         if (Input.GetMouseButtonDown(0)) OnTryFirstAttack?.Invoke();
-
         if (Input.GetMouseButtonDown(1)) OnTrySecondAttack?.Invoke();
+    }
 
+    private void InputDash()
+    {
         if (Input.GetKeyDown(KeyCode.Space)) OnDash?.Invoke();
+    }
 
-
+    private void InputPause()
+    {
         if (Input.GetKeyDown(KeyCode.Escape)) MenuInGameManager.Instance.GoToOpenMenu();
     }
 }

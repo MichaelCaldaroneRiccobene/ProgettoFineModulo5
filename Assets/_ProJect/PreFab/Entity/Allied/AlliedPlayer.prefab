@@ -70,8 +70,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &448986767209915337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   targetState: {fileID: 1412541420784899315}
   hight: 1
   sightDistance: 12
-  timeForLostSightEnemy: 5
+  timeForLostSightEnemy: 15
   whatToDo: 0
 --- !u!114 &2128848929099757558
 MonoBehaviour:
@@ -303,8 +303,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &7527028791035944298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,8 +324,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &6404471982371177690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,8 +408,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &4800801023803298712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,8 +429,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &535799569498468156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,7 +455,6 @@ GameObject:
   - component: {fileID: 774477572912383060}
   - component: {fileID: 4953186176240209718}
   - component: {fileID: 736526454468330}
-  - component: {fileID: 76193778250287934}
   - component: {fileID: 7025324448477717763}
   m_Layer: 6
   m_Name: Wait
@@ -504,7 +503,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetState: {fileID: 6883635674016181255}
-  pannelInput: {fileID: 712356583115612794}
+  pannelInputToPress: {fileID: 712356583115612794}
+  velocityAnimationButton: 1.5
   OnTriggerSitUp:
     m_PersistentCalls:
       m_Calls:
@@ -520,27 +520,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &76193778250287934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3414859517482440699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 420de599093070a418c29b9805e69e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetState: {fileID: 2926264287097634733}
-  viewAngleForward: 60
-  viewAngleBack: 120
-  sightDistance: 12
-  sightSenseDistance: 4
-  raySightToAdd: 70
-  raySenseToAdd: 30
-  whatToCheck: 1
-  hight: 1
 --- !u!114 &7025324448477717763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,7 +609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 884f7050e169b274d968c3cb9fc355f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
+  stats: {fileID: 11400000, guid: a09b25e60796ca642b96bd5ebf89f242, type: 2}
   head: {fileID: 1433320237419124081}
   distanceRayAttackMelee: 1.5
   shieldLayer:
@@ -648,25 +627,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df009cd180cb7148a50a0b246197331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
+  stats: {fileID: 11400000, guid: a09b25e60796ca642b96bd5ebf89f242, type: 2}
   OnUpdateHp:
     m_PersistentCalls:
       m_Calls: []
   OnDead:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2987742485513614085}
-        m_TargetAssemblyTypeName: FSM_Controller, Assembly-CSharp
-        m_MethodName: OnDead
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnHit:
     m_PersistentCalls:
       m_Calls:
@@ -695,8 +662,8 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 500
-  m_StoppingDistance: 0
+  m_AngularSpeed: 800
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -823,8 +790,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &7460416768458181924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -844,8 +811,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 2
   hight: 1
+  whatToCheck: 2
 --- !u!114 &6601131323194012899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,8 +1132,8 @@ MonoBehaviour:
   sightSenseDistance: 4
   raySightToAdd: 70
   raySenseToAdd: 30
-  whatToCheck: 1
   hight: 1
+  whatToCheck: 1
 --- !u!114 &2032382083471986313
 MonoBehaviour:
   m_ObjectHideFlags: 0

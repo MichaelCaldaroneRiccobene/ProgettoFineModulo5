@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public interface I_Team
@@ -9,6 +8,7 @@ public interface I_Team
 
     public int GetTeamNumber();
     public Transform GetAllied();
+    public Transform GetTarget();
 
 
     public bool CanBeFollow();

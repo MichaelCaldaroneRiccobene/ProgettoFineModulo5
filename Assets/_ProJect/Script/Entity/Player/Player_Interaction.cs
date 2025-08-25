@@ -8,6 +8,7 @@ public class Player_Interaction : MonoBehaviour
     [SerializeField] private Transform head;
 
     private Player_Input player_Input;
+
     private I_Interection currentInteraction;
     private I_Interection lastInteraction;
 
@@ -22,6 +23,11 @@ public class Player_Interaction : MonoBehaviour
     {
         player_Input = GetComponent<Player_Input>();
         player_Input.OnInteract += Interaction;
+    }
+
+    public void Interaction()
+    {
+        if (currentInteraction != null) currentInteraction.Interact();
     }
 
     private void ISeeAInteraction()
@@ -61,42 +67,6 @@ public class Player_Interaction : MonoBehaviour
             currentInteraction = null;
             lastInteraction = null;
         }
-
-        //    if (hit.collider.TryGetComponent(out I_Interection interection))
-        //    {
-        //        if(lastInteraction != interection)
-        //        {
-        //            if (lastInteraction != null)
-        //            {
-        //                lastInteraction.HideInteractable();
-        //                lastInteraction = null;
-        //            }
-
-        //            currentInteraction = interection;
-        //            lastInteraction = interection;
-
-        //            currentInteraction.ShowInteractable();
-        //        }
-        //    }
-        //    else if (lastInteraction != null)
-        //    {
-        //        lastInteraction.HideInteractable();
-        //        currentInteraction = null;
-        //        lastInteraction = null;
-        //    }
-        //}
-        //else if (lastInteraction != null)
-        //{
-        //    lastInteraction.HideInteractable();
-        //    currentInteraction = null;
-        //    lastInteraction = null;
-        //}
-    }
-
-
-    public void Interaction()
-    {
-        if(currentInteraction != null) currentInteraction.Interact();
     }
 
     private void OnDisable()

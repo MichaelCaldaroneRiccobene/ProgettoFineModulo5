@@ -75,6 +75,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     private IEnumerator GoOnStartPosition()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
+        agent.stoppingDistance = stopDistanceToDestination;
 
         Vector3 positionToFollow = startPosition;
         if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
@@ -82,7 +83,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
         agent.SetDestination(positionToFollow);
         while (agent.pathPending) yield return null;
 
-        while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
+        while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
 
 
         agent.updateRotation = false;

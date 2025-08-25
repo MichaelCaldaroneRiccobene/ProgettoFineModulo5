@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player_Animation : MonoBehaviour
 {
@@ -8,59 +8,62 @@ public class Player_Animation : MonoBehaviour
 
     [SerializeField] private string parameterTriggerSitUp = "SitUp";
 
-    [SerializeField] private string parameterTriggerFirstAttack = "FirstAttack";
-    [SerializeField] private string parameterTriggerSecondAttack = "SecondAttack";
-
     [SerializeField] private string parameterTriggerOnHit = "OnHit";
     [SerializeField] private string parameterTriggerOnDead = "OnDead";
 
     [SerializeField] private float smoothAnimation = 0.1f;
 
+    private NavMeshAgent agent;
+    private Animator animator;
+
     private Player_Attack player_Attack;
     private Player_Input player_Input;
-    private Animator animator;
 
     private bool isAttack = false;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-
-        player_Attack = GetComponentInParent<Player_Attack>();
+        agent = GetComponentInParent<NavMeshAgent>();
 
         SetUpAction();
     }
 
-    private void SetUpAction()
+    private void Update()
     {
-        player_Input = GetComponentInParent<Player_Input>();
-        player_Input.OnTakeHorizontalAndVertical += TakeHorizontalAndVertical;
-        player_Input.OnTriggerSitUp += TriggerSitUp;
+        Vector3 localVelocity = transform.InverseTransformDirection(agent.velocity);
+
+        float vertical = localVelocity.z * agent.speed;
+        float horizontal = localVelocity.x * agent.speed;
+
+        vertical = Mathf.Clamp(vertical, -1f, 1f);
+        horizontal = Mathf.Clamp(horizontal, -1f, 1f);
+
+        if (animator != null) animator.SetFloat(parameterFloatSpeed, vertical, smoothAnimation, Time.deltaTime);
+        if (animator != null) animator.SetFloat(parameterFloatDirection, horizontal, smoothAnimation, Time.deltaTime);
     }
 
-    public void FirstAttack()
+    private void SetUpAction()
+    {
+        player_Attack = GetComponentInParent<Player_Attack>();
+        if(player_Attack != null) player_Attack.OnTryAttack += OnTryAttack;
+
+        player_Input = GetComponentInParent<Player_Input>();
+        if(player_Input != null) player_Input.OnTriggerSitUp += TriggerSitUp;
+    }
+
+    private void OnTryAttack(string nameAttack)
     {
         if (isAttack) return;
         isAttack = true;
-        if (animator != null) animator.SetTrigger(parameterTriggerFirstAttack);
+        if (animator != null) animator.SetTrigger(nameAttack);
     }
-
-    public void SecondAttack()
-    {
-        if(isAttack) return;
-        isAttack = true;
-        if (animator != null) animator.SetTrigger(parameterTriggerSecondAttack);
-    }
-
-    public void OnFinishAttack() => isAttack = false;
-
-
-
     public void DoFirstAttack() => player_Attack.OnFirstAttack();
 
     public void DoSecondAttack() => player_Attack.OnSecondAttack();
 
 
+    public void OnFinishAttack() => isAttack = false;
 
 
     public void TriggerHit()
@@ -79,19 +82,10 @@ public class Player_Animation : MonoBehaviour
         Player_Ui.Instance.ShowPlayerUI();
     }
 
-
-    public void TakeHorizontalAndVertical(float horizontal, float vertical)
-    {
-        if (animator != null) animator.SetFloat(parameterFloatSpeed, vertical, smoothAnimation, Time.deltaTime);
-        if (animator != null) animator.SetFloat(parameterFloatDirection, horizontal, smoothAnimation, Time.deltaTime);
-    }
-
-
     public void OnDead() => animator.SetTrigger(parameterTriggerOnDead);
 
     private void OnDisable()
     {
-        player_Input.OnTakeHorizontalAndVertical -= TakeHorizontalAndVertical;
         player_Input.OnTriggerSitUp -= TriggerSitUp;
     }
 }

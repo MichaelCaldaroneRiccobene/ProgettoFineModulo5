@@ -33,6 +33,7 @@ public class State_RandomMove : AbstractState
     private IEnumerator GoOnRandomPointRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
+        agent.stoppingDistance = stopDistanceToDestination;
 
         while (true)
         {
@@ -42,7 +43,7 @@ public class State_RandomMove : AbstractState
             agent.SetDestination(positionToFollow);
             while (agent.pathPending) yield return null;
 
-            while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
+            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
         }
     }
 }

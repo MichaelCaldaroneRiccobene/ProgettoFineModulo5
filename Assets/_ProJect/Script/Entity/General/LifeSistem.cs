@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class LifeSistem : MonoBehaviour
+public class LifeSistem : MonoBehaviour,I_Damageble
 {
     [SerializeField] private Stats_EntitySO stats;
 
@@ -31,4 +31,6 @@ public class LifeSistem : MonoBehaviour
     public int GetMaxHp() => stats.MaxHp;
 
     public bool IsDead() => hp <= 0;
+
+    public void Damage(int damage) => UpdateHp(damage);
 }

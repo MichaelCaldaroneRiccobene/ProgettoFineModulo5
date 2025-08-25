@@ -19,17 +19,15 @@ public class State_FollowEnemyTarget : AbstractState
     [SerializeField] private bool isCheckForAllie;
 
     private NavMeshAgent agent;
+    private float distanceToTarget;
 
     public event Action OnTryMeleeAttack;
 
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State FollowTarget");
-
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
-        agent.ResetPath();
-        agent.updateRotation = false;
         StartCoroutine(GoOnTargetRoutin());
     }
 
@@ -39,21 +37,28 @@ public class State_FollowEnemyTarget : AbstractState
 
         StopAllCoroutines();
         agent.ResetPath();
-        agent.updateRotation = true;
     }
 
     public override void StateUpdate() { LookOnTarget(); }
 
     private IEnumerator GoOnTargetRoutin()
     {
-
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
+        agent.stoppingDistance = stopDistanceToDestination;
+
+        agent.ResetPath();
 
         while (controller.Target != null)
         {
-            float distanceToTarget = Vector3.Distance(transform.position, controller.Target.position);
+            distanceToTarget = Vector3.Distance(transform.position, controller.Target.position);
 
-            if (distanceToTarget >= stopDistanceToDestination)
+            if (isCheckForAllie)
+            {
+                Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
+            }
+
+
+            if (distanceToTarget > agent.stoppingDistance)
             {
                 agent.SetDestination(controller.Target.position);
                 while (agent.pathPending) yield return null;
@@ -66,11 +71,6 @@ public class State_FollowEnemyTarget : AbstractState
                 agent.ResetPath();
             }
 
-
-            if (isCheckForAllie)
-            {
-                Utility.OnSeeOrSenseTarget(controller, hight, rayToAdd, sightDistance, viewAngleBack, transform.forward, false, isCheckForAllie, false, Color.blue);
-            }
             yield return null;
         }
 
@@ -78,7 +78,7 @@ public class State_FollowEnemyTarget : AbstractState
 
     private void LookOnTarget()
     {
-        if (controller.Target == null) return;
+        if (controller.Target == null && distanceToTarget > agent.stoppingDistance) return;
 
         Quaternion lookDirection = Quaternion.LookRotation((controller.Target.position - agent.transform.position).normalized);
         agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);

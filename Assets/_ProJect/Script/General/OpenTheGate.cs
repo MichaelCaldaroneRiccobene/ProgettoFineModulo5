@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Net.NetworkInformation;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class OpenTheGate : MonoBehaviour, I_Interection
+public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 {
     [Header("Setting")]
     [SerializeField] private Transform button;
@@ -92,18 +90,25 @@ public class OpenTheGate : MonoBehaviour, I_Interection
             yield return null;
         }
 
+        meshFirstGate.localRotation = destinationRotationFirstGate;
+        meshSecondGate.localRotation = destinationRotationSecondonGate;
+
         isMoving = false;
         RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
 
     private IEnumerator ButtonAnimatioRoutine()
     {
+        Vector3 originLocalScaleCanvas = pannelInputToPress.transform.localScale;
+        Vector3 pressLocalScaleCanvas = originLocalScaleCanvas / 2;
+
         float progress = 0;
 
         while (progress < 1.0f)
         {
             progress += Time.deltaTime * velocityAnimationButton;
 
+            pannelInputToPress.transform.localScale = Vector3.Lerp(originLocalScaleCanvas, pressLocalScaleCanvas, progress);
             button.localPosition = Vector3.Lerp(startButtonPosition, targetButtonPosition, progress);
             yield return null;
         }
@@ -114,9 +119,13 @@ public class OpenTheGate : MonoBehaviour, I_Interection
         {
             progress += Time.deltaTime * velocityAnimationButton;
 
+            pannelInputToPress.transform.localScale = Vector3.Lerp(pressLocalScaleCanvas, originLocalScaleCanvas, progress);
             button.localPosition = Vector3.Lerp(targetButtonPosition, startButtonPosition, progress);
             yield return null;
         }
+
+        pannelInputToPress.transform.localScale = originLocalScaleCanvas;
+        button.localPosition = startButtonPosition;
     }
 
 
@@ -135,4 +144,6 @@ public class OpenTheGate : MonoBehaviour, I_Interection
             uI_ShowOrHide.ShowOrHideUI(canvasGroupInput, 3, canvasGroupInput.alpha, 0);
         }
     }
+
+    public void Damage(int damage) => Interact();
 }

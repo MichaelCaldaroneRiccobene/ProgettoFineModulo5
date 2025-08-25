@@ -16,7 +16,6 @@ public class State_SerchTarget : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Entrato in State SerchTarget");
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
-        agent.ResetPath();
         StartCoroutine(GoOnSerchTargetRoutin());
     }
 
@@ -33,6 +32,8 @@ public class State_SerchTarget : AbstractState
     private IEnumerator GoOnSerchTargetRoutin()
     {
         if(controller.LastTarget == null) yield break;
+        agent.stoppingDistance = stopDistanceToDestination;
+        agent.ResetPath();
 
         while (controller.LastTarget)
         {
@@ -44,8 +45,8 @@ public class State_SerchTarget : AbstractState
             agent.SetDestination(positionToFollow);
             while (agent.pathPending) yield return null;
 
-            yield return timeUpdateRoutine;
-            while (agent.remainingDistance > stopDistanceToDestination) { yield return waitForSeconds; }
+            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
+            yield return null;
 
             controller.LastTarget = null;
         }

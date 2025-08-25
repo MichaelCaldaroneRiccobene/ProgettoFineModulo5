@@ -4,7 +4,13 @@ using UnityEngine.SceneManagement;
 public class Player_Controller : MonoBehaviour, I_Team
 {
     public static Player_Controller Instance;
+    [Header("Setting CameraShake")]
+    [SerializeField] private float durationCameraShake = 0.4f;
+    [SerializeField] private float intensityCameraShake = 1.1f;
+    [SerializeField] private float distanceCameraShake = 2f;
 
+    [Header("Setting I_Team")]
+    [SerializeField] private bool canBeFollow = true;
     [SerializeField] private int teamNumber = 1;
 
     private void Awake() =>  Instance = this;
@@ -12,12 +18,8 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     public void UpDatePlayerUI(float hp) { if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateHp(hp); }
 
-    public void ShakeCameraOnHit() => CameraShake.Instance.OnCameraShake(transform.position, 0.25f, 1, 2);
+    public void ShakeCameraOnHit() => CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, intensityCameraShake, distanceCameraShake);
 
-
-    public int GetTeamNumber() => teamNumber;
-
-    public void SetTarget(Transform target) { }
 
     public void OnDead()
     {
@@ -27,13 +29,17 @@ public class Player_Controller : MonoBehaviour, I_Team
         Player_Input.CanPlayerUseInput = false;
     }
 
-    public bool HasTarget() => false;
+    #region I_Team
+    public void SetTarget(Transform target) { }
+    public void SetPriorityTarget(Transform target) { }
 
-    public bool CanBeFollow() => true;
 
+    public int GetTeamNumber() => teamNumber;
     public Transform GetAllied() => null;
+    public Transform GetTarget() => null;
 
-    public void SetPriorityTarget(Transform target)
-    {
-    }
+
+    public bool CanBeFollow() => canBeFollow;
+    public bool HasTarget() => false;
+    #endregion
 }

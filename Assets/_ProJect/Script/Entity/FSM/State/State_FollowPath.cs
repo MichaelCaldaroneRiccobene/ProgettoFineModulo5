@@ -22,7 +22,6 @@ public class State_FollowPath : AbstractState
         if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
         if(pathToFollw == null) pathToFollw = new NavMeshPath();
 
-        agent.ResetPath();
         StartCoroutine(GoOnPatrolRoutine());
     }
 
@@ -39,6 +38,9 @@ public class State_FollowPath : AbstractState
     private IEnumerator GoOnPatrolRoutine()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
+        agent.stoppingDistance = stopDistanceToDestination;
+
+        agent.ResetPath();
 
         if (pointsForPatrol == null || pointsForPatrol.Length <= 0)
         {
@@ -50,22 +52,16 @@ public class State_FollowPath : AbstractState
 
         while (true)
         {
-            bool isOnGoOnPatrol = false;
-
             if (agent.CalculatePath(pointsForPatrol[destinationForPatrolIndex].position, pathToFollw)) pointToGo = pointsForPatrol[destinationForPatrolIndex].position;
-            agent.SetDestination(pointToGo);
 
+            agent.SetDestination(pointToGo);
             while (agent.pathPending) yield return null;
 
-            isOnGoOnPatrol = true;
+            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
 
-            while (isOnGoOnPatrol)
-            {
-                if (agent.remainingDistance < stopDistanceToDestination) isOnGoOnPatrol = false;
-
-                yield return waitForSeconds;
-            }
             destinationForPatrolIndex = (destinationForPatrolIndex + 1) % pointsForPatrol.Length;
+
+            yield return null;
         }
     }
 }
