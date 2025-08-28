@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player_Attack : MonoBehaviour
 {
+    [Header("Setting")]
     [SerializeField] private Stats_EntitySO stats;
     [SerializeField] private Transform firePoint;
 
@@ -14,6 +15,7 @@ public class Player_Attack : MonoBehaviour
     [SerializeField] private float distanceForeachCubeOfGrass = 3;
     [SerializeField] private float timeSpawnCubeOfGrass = 0.5f;
 
+    [Header("Setting Name Attack")]
     [SerializeField] private string parameterTriggerFirstAttack = "FirstAttack";
     [SerializeField] private string parameterTriggerSecondAttack = "SecondAttack";
 
@@ -50,8 +52,8 @@ public class Player_Attack : MonoBehaviour
             {
                 weapon.BasicSetUp(firePoint.position, firePoint.rotation, stats.DamageRange, transform);
                 fireball.OnShoot(transform.forward);
-
-                CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
+          
+                if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
             }
         });
     }
@@ -81,9 +83,7 @@ public class Player_Attack : MonoBehaviour
             BaseMagic weapon = obj.gameObject.GetComponentInChildren<BaseMagic>();
             if (weapon != null) weapon.BasicSetUp(positionToSpawn, transform.rotation, stats.DamageMelee, transform);
 
-            CameraShake.Instance.OnCameraShake(obj.transform.position,1, 1.5f, 15);
-            RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
-
+            if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(obj.transform.position,1, 1.5f, 15);            
             yield return new WaitForSeconds(timeSpawnCubeOfGrass);
         }
     }

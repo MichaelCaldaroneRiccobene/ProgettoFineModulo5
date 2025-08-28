@@ -19,6 +19,7 @@ public class LifeSistem : MonoBehaviour,I_Damageble
     {
         float tempHp = hp;
         tempHp += amount;
+
         if (hp > tempHp) OnHit?.Invoke();
 
         hp += amount;

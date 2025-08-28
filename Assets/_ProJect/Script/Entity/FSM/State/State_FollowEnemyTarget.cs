@@ -37,6 +37,7 @@ public class State_FollowEnemyTarget : AbstractState
 
         StopAllCoroutines();
         agent.ResetPath();
+        agent.updateRotation = true;
     }
 
     public override void StateUpdate() { LookOnTarget(); }
@@ -61,6 +62,8 @@ public class State_FollowEnemyTarget : AbstractState
             if (distanceToTarget > agent.stoppingDistance)
             {
                 agent.SetDestination(controller.Target.position);
+                agent.updateRotation = true;
+
                 while (agent.pathPending) yield return null;
 
                 yield return waitForSeconds;
@@ -68,6 +71,7 @@ public class State_FollowEnemyTarget : AbstractState
             else
             {
                 OnTryMeleeAttack?.Invoke();
+                agent.updateRotation = false;
                 agent.ResetPath();
             }
 
@@ -78,7 +82,7 @@ public class State_FollowEnemyTarget : AbstractState
 
     private void LookOnTarget()
     {
-        if (controller.Target == null && distanceToTarget > agent.stoppingDistance) return;
+        if (controller.Target == null || distanceToTarget > agent.stoppingDistance) return;
 
         Quaternion lookDirection = Quaternion.LookRotation((controller.Target.position - agent.transform.position).normalized);
         agent.transform.rotation = Quaternion.Lerp(agent.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);

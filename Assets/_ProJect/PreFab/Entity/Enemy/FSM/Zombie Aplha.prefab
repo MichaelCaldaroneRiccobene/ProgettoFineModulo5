@@ -671,6 +671,7 @@ MonoBehaviour:
   shieldLayer:
     serializedVersion: 2
     m_Bits: 1088
+  clipZombie: {fileID: 8300000, guid: 90eafb7b463e6e542827bedf5c368497, type: 3}
 --- !u!114 &2193094864780237897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -684,6 +685,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: c76d417f1a7db6d45a6012232a4fc865, type: 2}
+  audioHit: {fileID: 8300000, guid: fe44ea30aa4d3c54681f9831ec3fc033, type: 3}
+  audioDead: {fileID: 8300000, guid: ceb718f94608c884fb1b5d25590d4641, type: 3}
   OnUpdateHp:
     m_PersistentCalls:
       m_Calls: []

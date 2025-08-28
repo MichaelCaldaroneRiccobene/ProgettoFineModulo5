@@ -6,7 +6,6 @@ public class FireBall : BaseMagic
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float speed = 5;
 
-
     private float durationCameraShake = 0.25f;
     private float powerCameraShake = 5f;
     private float distanceCameraShake = 10;

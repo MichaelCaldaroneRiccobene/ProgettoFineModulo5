@@ -59,6 +59,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37dd6608b6535af41bf4d3398bcc2530, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  durationCameraShake: 0.4
+  intensityCameraShake: 1.1
+  distanceCameraShake: 2
   canBeFollow: 1
   teamNumber: 1
 --- !u!114 &1014084700928800376
@@ -90,6 +93,7 @@ MonoBehaviour:
   hideTargetForDash:
   - {fileID: 8599092263904558528}
   - {fileID: 3918204499552889033}
+  audioDash: {fileID: 8300000, guid: d9eb25e0434cff94ebece6a37aef11d6, type: 3}
 --- !u!114 &9173853460446289337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c12cb857f6934940be11aba3b943416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_Attack: {fileID: 0}
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
   regenerateMana: 1
   timeForRegenerateMana: 0.25
@@ -134,10 +137,12 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
   firePoint: {fileID: 6605110141977894947}
   manaRequestFirstAttack: 10
-  manaRequestSecondAttack: 25
+  manaRequestSecondAttack: 75
   numberOfCubeOfGrass: 5
   distanceForeachCubeOfGrass: 3
   timeSpawnCubeOfGrass: 0.2
+  parameterTriggerFirstAttack: FirstAttack
+  parameterTriggerSecondAttack: SecondAttack
 --- !u!114 &7294536189540863917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,6 +168,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: 828692dc0ed96e249abda85c7921cce0, type: 2}
+  audioHit: {fileID: 8300000, guid: fe44ea30aa4d3c54681f9831ec3fc033, type: 3}
+  audioDead: {fileID: 8300000, guid: ceb718f94608c884fb1b5d25590d4641, type: 3}
   OnUpdateHp:
     m_PersistentCalls:
       m_Calls:
@@ -664,11 +671,10 @@ MonoBehaviour:
   parameterFloatSpeed: Speed
   parameterFloatDirection: Direction
   parameterTriggerSitUp: SitUp
-  parameterTriggerFirstAttack: FirstAttack
-  parameterTriggerSecondAttack: SecondAttack
   parameterTriggerOnHit: OnHit
   parameterTriggerOnDead: OnDead
   smoothAnimation: 0.04
+  audioStartMagic: {fileID: 8300000, guid: 2da537ed22220d042a56bacc55126926, type: 3}
 --- !u!1 &8599092263904558528 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4048716473296048094, guid: 6a3c3c37133b6ae4d9590995c8166d88,

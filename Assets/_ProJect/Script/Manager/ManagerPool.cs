@@ -53,17 +53,6 @@ public class ManagerPool : MonoBehaviour
         } return SpawnForPool(tag);
     }
 
-    public GameObject GetAudioFromPool(string tag)
-    {
-        if (!poolDictionaryObj.ContainsKey(tag)) return null;
-
-        GameObject obj = poolDictionaryObj[tag].Dequeue();
-        obj.SetActive(true);
-        poolDictionaryObj[tag].Enqueue(obj);
-
-        return obj;
-    }
-
     private GameObject SpawnForPool(string tag)
     {
         PoolObj poolList = poolsList.Find(x => x.tag == tag);

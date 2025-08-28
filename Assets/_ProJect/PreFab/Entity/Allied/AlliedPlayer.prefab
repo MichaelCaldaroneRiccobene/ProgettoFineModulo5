@@ -628,6 +628,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 11400000, guid: a09b25e60796ca642b96bd5ebf89f242, type: 2}
+  audioHit: {fileID: 8300000, guid: fe44ea30aa4d3c54681f9831ec3fc033, type: 3}
+  audioDead: {fileID: 8300000, guid: ceb718f94608c884fb1b5d25590d4641, type: 3}
   OnUpdateHp:
     m_PersistentCalls:
       m_Calls: []

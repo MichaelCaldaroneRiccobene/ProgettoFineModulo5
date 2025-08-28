@@ -57,3 +57,11 @@ MonoBehaviour:
     prefab: {fileID: 2079628632273510991, guid: 80b837e4f6e24b647ab79b0d08e2426d,
       type: 3}
     size: 10
+  - tag: SoundFX
+    prefab: {fileID: 3577614210906265611, guid: e71892607e3cb3142bcada4fa72a33b1,
+      type: 3}
+    size: 20
+  - tag: SoundFX3D
+    prefab: {fileID: 3577614210906265611, guid: 573d18803cdef764093bd917b3ecdb69,
+      type: 3}
+    size: 20

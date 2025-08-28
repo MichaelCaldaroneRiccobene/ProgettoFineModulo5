@@ -14,7 +14,11 @@ public class BaseMagic : MonoBehaviour
 
     public virtual void OnEnable() => StartCoroutine(LifeTimeRoutione());
 
-    public virtual IEnumerator LifeTimeRoutione() { yield return new WaitForSeconds(timeLife); }
+    public virtual IEnumerator LifeTimeRoutione() 
+    {
+        yield return new WaitForSeconds(timeLife);
+        objToDisable.SetActive(false);
+    }
 
     public virtual void BasicSetUp(Vector3 position,Quaternion rotation,int damage,Transform shooter)
     {

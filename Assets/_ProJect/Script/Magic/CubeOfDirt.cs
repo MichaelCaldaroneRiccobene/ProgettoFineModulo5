@@ -23,8 +23,6 @@ public class CubeOfDirt : BaseMagic
     public override void OnEnable()
     {
         base.OnEnable();
-
-        transform.localPosition = originalPosition;
         StartCoroutine(AnimationCubeOfGrassRoutine());
     }
 
@@ -38,26 +36,30 @@ public class CubeOfDirt : BaseMagic
 
     private IEnumerator AnimationCubeOfGrassRoutine()
     {
+        yield return null;
+        transform.localPosition = originalPosition;
+
         float progress = 0f;
-        Vector3 startPosition = transform.localPosition;    
+        Vector3 startPosition = transform.localPosition;
 
         float distanceToNextPoint = Vector3.Distance(startPosition, midPosition);
 
-        //SpawnPosition To MidPosition
-        while ( progress < 1f )
+        // SpawnPosition To MidPosition
+        while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToMid / distanceToNextPoint;
             transform.localPosition = Vector3.Lerp(startPosition, midPosition, progress);
 
             yield return null;
         }
+        transform.localPosition = midPosition;
 
         progress = 0;
         startPosition = transform.localPosition;
 
         distanceToNextPoint = Vector3.Distance(startPosition, originalPosition);
 
-        //MidPosition To SpawnPosition
+        // MidPosition To SpawnPosition
         while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToStart / distanceToNextPoint;
@@ -65,13 +67,14 @@ public class CubeOfDirt : BaseMagic
 
             yield return null;
         }
+        transform.localPosition = originalPosition;
 
         progress = 0;
         startPosition = transform.localPosition;
 
         distanceToNextPoint = Vector3.Distance(startPosition, endPosition);
 
-        //SpawnPosition To EndPosition
+        // SpawnPosition To EndPosition
         while (progress < 1f)
         {
             progress += Time.deltaTime * velocityToEnd / distanceToNextPoint;
@@ -79,6 +82,9 @@ public class CubeOfDirt : BaseMagic
 
             yield return null;
         }
+
+        transform.localPosition = endPosition;
+        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
 
     public override IEnumerator LifeTimeRoutione()
@@ -98,9 +104,13 @@ public class CubeOfDirt : BaseMagic
 
             yield return null;
         }
-        CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake,powerCameraShake,distanceCameraShake);
-
-        RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
         objToDisable.gameObject.SetActive(false);
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
     }
 }

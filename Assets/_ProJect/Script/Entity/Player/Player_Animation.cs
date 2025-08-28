@@ -72,15 +72,13 @@ public class Player_Animation : MonoBehaviour
 
         isAttack = false;
     }
-
-
-
     public void TriggerSitUp() => animator.SetTrigger(parameterTriggerSitUp);
     public void OnSitUp()
     {
         Player_Input.CanPlayerUseInput = true;
         Player_Ui.Instance.ShowPlayerUI();
     }
+
 
     public void OnDead() => animator.SetTrigger(parameterTriggerOnDead);
 

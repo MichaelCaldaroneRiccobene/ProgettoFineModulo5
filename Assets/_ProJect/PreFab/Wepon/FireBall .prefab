@@ -4988,8 +4988,10 @@ MonoBehaviour:
   objToDisable: {fileID: 3390429315513436093}
   timeLife: 5
   damage: 35
+  isDestroyOnImpact: 1
   rb: {fileID: 4369734532253649218}
   speed: 7.5
+  audioExsplosion: {fileID: 8300000, guid: 56cb4e778099a4945abbec0ceb8411d1, type: 3}
 --- !u!1 &3748626251116114946
 GameObject:
   m_ObjectHideFlags: 0
