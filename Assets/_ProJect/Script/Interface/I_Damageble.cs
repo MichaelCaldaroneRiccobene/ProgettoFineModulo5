@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public interface I_Damageble
 {
-    public void Damage(int  damage);
+    public void Damage(int damage);
 }

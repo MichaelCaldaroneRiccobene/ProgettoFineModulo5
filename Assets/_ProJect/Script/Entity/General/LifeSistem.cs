@@ -1,17 +1,16 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
-
-public class LifeSistem : MonoBehaviour,I_Damageble
+public class LifeSistem : MonoBehaviour, I_Damageble
 {
     [SerializeField] private Stats_EntitySO stats;
 
-    public UnityEvent <float> OnUpdateHp;
-    public UnityEvent OnDead;
-    public UnityEvent OnHit;
+    public event Action <float> OnUpdateHp;
+    public event Action OnDead;
+    public event Action OnHit;
 
     private int hp;
 
-    private void Awake() =>  hp = stats.Hp;
+    private void Awake() => hp = stats.Hp;
 
     private void Start() => OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
 

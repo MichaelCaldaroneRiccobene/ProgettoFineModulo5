@@ -14,13 +14,13 @@ public class BaseMagic : MonoBehaviour
 
     public virtual void OnEnable() => StartCoroutine(LifeTimeRoutione());
 
-    public virtual IEnumerator LifeTimeRoutione() 
+    public virtual IEnumerator LifeTimeRoutione()
     {
         yield return new WaitForSeconds(timeLife);
         objToDisable.SetActive(false);
     }
 
-    public virtual void BasicSetUp(Vector3 position,Quaternion rotation,int damage,Transform shooter)
+    public virtual void BasicSetUp(Vector3 position, Quaternion rotation, int damage, Transform shooter)
     {
         objToDisable.transform.position = position;
         objToDisable.transform.rotation = rotation;
@@ -29,12 +29,20 @@ public class BaseMagic : MonoBehaviour
         this.shooter = shooter;
     }
 
-    public virtual void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent(out I_Team team)) team.SetTarget(shooter);
+        if (collision.collider.TryGetComponent(out I_Team team)) team.SetPriorityTarget(shooter);
+        if (collision.collider.TryGetComponent(out I_Damageble damageble)) damageble.Damage(-damage);
+
+        if (isDestroyOnImpact) objToDisable.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out I_Team team)) team.SetPriorityTarget(shooter);
         if (other.TryGetComponent(out I_Damageble damageble)) damageble.Damage(-damage);
 
-        if(isDestroyOnImpact) objToDisable.SetActive(false);
+        if (isDestroyOnImpact) objToDisable.SetActive(false);
     }
 
     public virtual void OnDisable() => StopAllCoroutines();

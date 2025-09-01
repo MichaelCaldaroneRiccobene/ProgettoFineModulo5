@@ -1,45 +1,47 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FSM_Controller : MonoBehaviour, I_Team
 {
     [Header("Setting")]
     [SerializeField] protected AbstractState defualtState;
-
     [SerializeField] protected float currentStateTime;
-    [SerializeField] protected float timeUpdateEvaluateTransition = 0.15f;
+    [SerializeField] protected float updateTimerForTransition = 0.15f;
 
     [Header("Setting Team")]
     [SerializeField] protected int teamNumber;
 
     [SerializeField] protected bool canAttackFriend;
-    [SerializeField] protected bool canBeFollowTarget;
+    [SerializeField] protected bool canBeAFollowTarget;
 
     [Header("Debug")]
     [SerializeField] protected bool canSeeDebug;
     [SerializeField] protected AbstractState currentState;
+    [SerializeField] protected AbstractState[] subStates;
 
-    public Transform Allied;
-    public Transform Target;
-    public Transform LastTarget;
-
+    protected AbstractState[] availableStates;
     protected AbstractState targetState;
+    protected NavMeshAgent agent;
 
+    protected Transform allied;
+    protected Transform target;
+    protected Transform lastTarget;
+
+    public NavMeshAgent Agent => agent;
     public float CurrentStateTime => currentStateTime;
-    public float TimeUpdateEvaluateTransition => timeUpdateEvaluateTransition;
 
-    public int TeamNumber => teamNumber;
-
-    public bool CanBeAFollowTarget { get => canBeFollowTarget; set => value = canBeFollowTarget;}
+    public bool CanBeAFollowTarget { get => canBeAFollowTarget; set => canBeAFollowTarget = value; }
     public bool CanSeeDebug => canSeeDebug;
 
-    public virtual void Start()
+    private void Start()
     {
-        AbstractState[] availableStates = GetComponentsInChildren<AbstractState>(true);
+        agent = GetComponent<NavMeshAgent>();   
+        availableStates = GetComponentsInChildren<AbstractState>();
 
         foreach (AbstractState availableState in availableStates) availableState.SetUp(this);
 
-        if(defualtState != null) SetUpState(defualtState);
+        if (defualtState != null) SetUpState(defualtState);
         else SetUpState(availableStates[0]);
 
         StartCoroutine(EvaluateTransitionRoutine());
@@ -47,16 +49,42 @@ public class FSM_Controller : MonoBehaviour, I_Team
 
     public virtual void Update()
     {
-        if (currentState != null)
+        if (currentState == null) return;
+
+        currentStateTime += Time.deltaTime;
+        currentState.StateUpdate();
+
+        if (subStates != null)
         {
-            currentStateTime += Time.deltaTime;
-            currentState.StateUpdate();
+            foreach(AbstractState subState in subStates) subState.StateUpdate();
+        }
+    }
+
+    public virtual void SetUpState(AbstractState state)
+    {
+        if(currentState != null)
+        {
+            foreach(AbstractState subState in subStates)
+            {
+                if (subState.gameObject.activeInHierarchy) subState.StateExit();
+            }
+
+            subStates = null;
+        }
+
+        currentStateTime = 0;
+        currentState = state;
+
+        subStates = currentState.GetComponentsInChildren<AbstractState>();
+        foreach (AbstractState subState in subStates)
+        {
+            if(subState.gameObject.activeInHierarchy) subState.StateEnter();
         }
     }
 
     public virtual IEnumerator EvaluateTransitionRoutine()
     {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(0.15f);
+        WaitForSeconds waitForSeconds = new WaitForSeconds(updateTimerForTransition);
 
         while (true)
         {
@@ -67,47 +95,63 @@ public class FSM_Controller : MonoBehaviour, I_Team
         }
     }
 
-    public virtual void SetUpState(AbstractState state)
-    {
-        if (currentState != null) currentState.StateExit();
+    #region I_Team
 
-        currentStateTime = 0;
-        currentState = state;
-        currentState.StateEnter();
+    public void ClearTarget() => target = null;
+    public void ClearLastTarget() => lastTarget = null;
+    public void ClearAllied() => allied = null;
+
+
+    public void SetAllied(Transform allied) => this.allied = allied;
+    public void SetTarget(Transform target) 
+    {
+        if (this.target != null) return;
+        if (lastTarget != null) return;
+
+        SetTargetForThis(target);
     }
 
-    #region I_Team
-    public virtual void SetTarget(Transform target) { if (LastTarget == null) SetTargetForThis(target); }
-    public virtual void SetPriorityTarget(Transform target) => SetTargetForThis(target);
+    public void SetPriorityTarget(Transform target) => SetTargetForThis(target);
+    public void SetLastTarget(Transform lastTarget) => SetTargetForThis(lastTarget);
 
-    public virtual void SetTargetForThis(Transform target)
+
+
+    public int GetTeamNumber() => teamNumber;
+
+    public Transform GetAllied() => allied;
+
+    public Transform GetTarget() => target;
+    public Transform GetLastTarget() => lastTarget;
+
+
+    public bool CanBeFollow() => canBeAFollowTarget;
+
+    public bool HasTarget() => target != null;
+
+    private void SetTargetForThis(Transform target)
     {
+        if (target == null) return;
+
         if (target.TryGetComponent(out I_Team entity))
         {
-            if (entity.GetTeamNumber() != teamNumber)
+            if (entity.GetTeamNumber() == teamNumber)
             {
-                Target = target;
-                LastTarget = target;
-
-                return;
+                if (!canAttackFriend)
+                {
+                    allied = target;
+                }
+                else
+                {
+                    this.target = target;
+                    lastTarget = target;
+                }
             }
-            else if (canAttackFriend)
+            else
             {
-                Target = target;
-                LastTarget = target;
-
-                return;
+                this.target = target;
+                lastTarget = target;
             }
         }
     }
-
-    public virtual int GetTeamNumber() => teamNumber;
-    public virtual Transform GetAllied() => Allied;
-    public Transform GetTarget() => Target;
-
-
-    public virtual bool CanBeFollow() => CanBeAFollowTarget;
-    public virtual bool HasTarget() => Target != null;
-
     #endregion
 }

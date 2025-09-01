@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class FireBall : BaseMagic
 {
     [Header("Setting FireBall")]
@@ -22,13 +21,13 @@ public class FireBall : BaseMagic
 
     private void SpawnExsplosion()
     {
-        GameObject obj = ManagerPool.Instace.GetGameObjFromPool(Parameters_ObjectPool.ExsplosionFireBallObjForpool);
+        GameObject obj = ManagerPool.Instace.GetGameObjFromPool(StaticName.Parameters_ObjectPool.ExsplosionFireBallObjForpool);
         if (obj == null) return;
 
         obj.transform.position = transform.position;
         obj.transform.rotation = transform.rotation;
 
-        if(CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
+        if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
     }
 
     public override void OnDisable()

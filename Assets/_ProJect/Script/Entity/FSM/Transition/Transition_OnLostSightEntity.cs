@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class Transition_OnLostSightEntity : AbstractTransition
 {
-    public enum Condition {OnLostTarget, OnLostAllied }
+    public enum WhatToDo 
+    { 
+        None = 0, OnLostTarget = 1, OnLostAllied = 2
+    }
 
     [Header("Setting OnLostSightEntity")]
     [SerializeField] private float hight = 1;
     [SerializeField] private float sightDistance = 12;
     [SerializeField] private float timeForLostSightEnemy = 10;
 
-    [SerializeField] private Condition whatToDo;
+    [SerializeField] private WhatToDo whatToDo;
 
     private bool onLostTarget;
     private bool onLostAllied;
@@ -19,25 +22,25 @@ public class Transition_OnLostSightEntity : AbstractTransition
 
     public override bool IsConditionMet(FSM_Controller controller, AbstractState ownerState)
     {
-        if(SeeTarget(controller)) return true;
-        if(SeeAllied(controller)) return true;
+        if (SeeTarget(controller)) return true;
+        if (SeeAllied(controller)) return true;
 
         return false;
     }
 
-    private void Start() => SwichtCondition();
+    private void Start() => SelectWhatToDo();
 
-    private void SwichtCondition()
+    private void SelectWhatToDo()
     {
         onLostTarget = false;
         onLostAllied = false;
 
         switch (whatToDo)
         {
-            case Condition.OnLostTarget:
+            case WhatToDo.OnLostTarget:
                 onLostTarget = true;
                 break;
-            case Condition.OnLostAllied:
+            case WhatToDo.OnLostAllied:
                 onLostAllied = true;
                 break;
         }
@@ -49,30 +52,39 @@ public class Transition_OnLostSightEntity : AbstractTransition
         if (!onLostAllied) return false;
 
         // se non ho alleato, non mi possono più seguire e me ne vado
-        if (controller.Allied == null)
+        if (controller.GetAllied() == null)
         {
-            controller.CanBeAFollowTarget = false; 
+            controller.CanBeAFollowTarget = false;
             return true;
         }
         else
-        {  
-            if (controller.Allied.TryGetComponent(out I_Team team))
+        {
+            // se alleato muore vado via
+            if (controller.GetAllied().TryGetComponent(out LifeSistem lifeSistem))
+            {
+                if (lifeSistem.IsDead())
+                {
+                    OnLostAllied(controller);
+                    return true;
+                }
+            }
+
+
+            if (controller.GetAllied().TryGetComponent(out I_Team team))
             {
                 // controllo di sicurezza, se l'alleato che voglio seguire sta seguendo me ,non mi possono più seguire e me ne vado
                 if (team.GetAllied() == transform)
                 {
                     if (controller.CanSeeDebug) Debug.Log("Tu Hai me e Io ho te Non Siamo Compatibili Ti Mollo");
 
-                    controller.Allied = null;
-                    controller.CanBeAFollowTarget = false;
+                    OnLostAllied(controller);
                     return true;
                 }
 
                 // se l'alleato che sto seguendo non lo posso più seguire non mi possono più seguire e me ne vado
                 if (!team.CanBeFollow())
                 {
-                    controller.Allied = null;
-                    controller.CanBeAFollowTarget = false;
+                    OnLostAllied(controller);
                     return true;
                 }
             }
@@ -85,19 +97,29 @@ public class Transition_OnLostSightEntity : AbstractTransition
         // se non sto cercando per target lascio
         // se ho il target ma non sto cercando per target me ne vado
         // se non ho il target ma sto cercando per target me ne vado
-        if (!onLostTarget) return false; 
-        if(controller.Target != null && !onLostTarget) return true;
-        if(controller.Target == null) return true;
+        if (!onLostTarget) return false;
+        if (controller.GetTarget() != null && !onLostTarget) return true;
+        if (controller.GetTarget() == null) return true;
+
+        // se target muore vado via
+        if (controller.GetTarget().TryGetComponent(out LifeSistem lifeSistem))
+        {
+            if (lifeSistem.IsDead())
+            {
+                OnLostTarget(controller);
+                return true;
+            }
+        }
 
         Vector3 originCast = transform.position + new Vector3(0, hight, 0);
-        Vector3 targetOriginCast = controller.Target.position + new Vector3(0, hight, 0);
+        Vector3 targetOriginCast = controller.GetTarget().position + new Vector3(0, hight, 0);
         Vector3 direction = targetOriginCast - originCast;
 
         if (Physics.Raycast(originCast, direction, out RaycastHit hit, sightDistance))
         {
             if (controller.CanSeeDebug) Debug.DrawLine(originCast, hit.point, Color.red, 1);
 
-            if (hit.transform == controller.Target) timerForLostSightTarget = 0;
+            if (hit.transform == controller.GetTarget()) timerForLostSightTarget = 0;
             else timerForLostSightTarget += Time.time - lastTimeCheck;
         }
         else timerForLostSightTarget += Time.time - lastTimeCheck;
@@ -106,10 +128,20 @@ public class Transition_OnLostSightEntity : AbstractTransition
 
         if (timerForLostSightTarget >= timeForLostSightEnemy)
         {
-            timerForLostSightTarget = 0;
-            controller.Target = null;
+            OnLostTarget(controller);
             return true;
         }
         return false;
+    }
+    private void OnLostAllied(FSM_Controller controller)
+    {
+        controller.ClearAllied();
+        controller.CanBeAFollowTarget = false;
+    }
+
+    private void OnLostTarget(FSM_Controller controller)
+    {
+        timerForLostSightTarget = 0;
+        controller.ClearTarget();
     }
 }

@@ -1,85 +1,88 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
-
 public class Npc_Animation : MonoBehaviour
 {
     [Header("Setting")]
     [SerializeField] protected string parameterFloatSpeed = "Speed";
 
-    [SerializeField] protected string parametetTriggerAttack = "Attack";
     [SerializeField] protected string parameterTriggerOnHit = "OnHit";
+    [SerializeField] private string parameterTriggerOnDead = "OnDead";
 
-    [SerializeField] protected string parameterTriggerOnDead = "OnDead";
-
-    [SerializeField] protected float smoothAnimation = 0.04f;
-
-    public event Action OnDoAttackMelee;
+    [SerializeField] protected float smoothAnimation = 0.1f;
 
     protected NavMeshAgent agent;
     protected Animator animator;
 
-    protected State_Dead state_Dead;
-    protected Npc_Attack npc_Attack;
-
-    protected bool isAttack = false;
+    protected LifeSistem lifeSistem;
 
     protected Vector3 localVelocity;
+    protected float vertical;
+    protected float horizontal;
+
+    protected bool isOnHit;
+    protected bool isAttacking;
 
     public virtual void Start()
     {
         animator = GetComponent<Animator>();
         agent = GetComponentInParent<NavMeshAgent>();
 
-        npc_Attack = GetComponentInParent<Npc_Attack>();
-        if(npc_Attack != null) npc_Attack.OnTryAnimationAttack += TryAttack;
-
-        if(npc_Attack != null) state_Dead = npc_Attack.GetComponentInChildren<State_Dead>();
-        if(state_Dead != null) state_Dead.OnTriggerDead += OnTriggerDead;
+        SetUpAction();
     }
 
-    public virtual void Update()
+    public virtual void Update() => AnimationMoving();
+
+    public virtual void SetUpAction()
     {
-        AnimationMoving();
+        lifeSistem = GetComponentInParent<LifeSistem>();
+
+        if(lifeSistem != null) lifeSistem.OnHit += OnHit;
+        if (lifeSistem != null) lifeSistem.OnDead += OnDead;
     }
 
-    private void AnimationMoving()
+    public virtual void DoAttack(string parameter)
+    {
+        isAttacking = true;
+        animator.SetTrigger(parameter);
+    }
+
+    public virtual void OnFinishAttack() => isAttacking = false;
+
+    public virtual void OnHit()
+    {
+        if (isOnHit) return;
+
+        isOnHit = true;
+        isAttacking = false;
+        animator.SetTrigger(parameterTriggerOnHit);
+    }
+
+    public virtual void OnFinishHit()
+    {
+        isOnHit = false;
+        isAttacking = false;
+    }
+
+    public virtual void OnDead() => animator.SetTrigger(parameterTriggerOnDead);
+
+    public virtual void AnimationMoving()
     {
         if (animator == null) return;
 
-        localVelocity = transform.InverseTransformDirection(agent.velocity);
+        Vector3 localVelocity = transform.InverseTransformDirection(agent.velocity);
 
-        float vertical = localVelocity.z * agent.speed;
+        vertical = localVelocity.z;
+        horizontal = localVelocity.x;
+
         vertical = Mathf.Clamp(vertical, -1f, 1f);
 
-        if (animator != null) animator.SetFloat(parameterFloatSpeed, vertical, smoothAnimation, Time.deltaTime);
+        float speedVertical = (agent.velocity.magnitude / agent.speed) * vertical;
+        if (animator != null) animator.SetFloat(parameterFloatSpeed, speedVertical, smoothAnimation, Time.deltaTime);
     }
-
-    public virtual void TryAttack()
-    {
-        if (isAttack) return;
-
-        isAttack = true;
-        animator.SetTrigger(parametetTriggerAttack);
-    }
-
-    public virtual void OnAttack() => OnDoAttackMelee?.Invoke();
-    public virtual void OnAttackFinish() => isAttack = false;
-
-
-    public virtual void TriggerHit()
-    {
-        animator.SetTrigger(parameterTriggerOnHit);
-
-        isAttack = false;
-    }
-
-    private void OnTriggerDead() => animator.SetTrigger(parameterTriggerOnDead);
 
     public virtual void OnDisable()
     {
-        if (npc_Attack != null) npc_Attack.OnTryAnimationAttack -= TryAttack;
-
-        if (state_Dead != null) state_Dead.OnTriggerDead -= OnTriggerDead;
+        if (lifeSistem != null) lifeSistem.OnHit -= OnHit;
+        if (lifeSistem != null) lifeSistem.OnDead -= OnDead;
     }
 }

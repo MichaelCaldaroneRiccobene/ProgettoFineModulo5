@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 26
-  productGUID: 8fc2d9324cb0fd84f91b24a8a741c669
+  productGUID: 7af062dd69e37754ca5ad44cc4a14c2b
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: 641 Game Enterprice
-  productName: WizardVsZombie
+  companyName: DefaultCompany
+  productName: M5D4W4
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -843,14 +843,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: ProgettoFineModulo5
+  metroPackageName: M5D4W4
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: ProgettoFineModulo5
+  metroApplicationDescription: M5D4W4
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -920,10 +920,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 0a5f5a1a-f229-40e1-be96-baf038af8f62
+  cloudProjectId: b15ed4cb-f16d-46c7-a8b0-443903175e8d
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: ProgettoFineModulo5
+  projectName: M5D4W4
   organizationId: ascolandia1002
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

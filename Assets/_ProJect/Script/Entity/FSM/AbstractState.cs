@@ -10,7 +10,6 @@ public abstract class AbstractState : MonoBehaviour
     public abstract void StateUpdate();
     public abstract void StateExit();
 
-
     public virtual void SetUp(FSM_Controller controller)
     {
         this.controller = controller;

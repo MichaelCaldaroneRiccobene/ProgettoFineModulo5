@@ -5,17 +5,19 @@ using UnityEngine.AI;
 
 public class Player_Movement : MonoBehaviour
 {
+    [SerializeField] private float rotationSpeed = 2f;
+
     [SerializeField] private int dashCost = 5;
     [SerializeField] private GameObject dashEffect;
     [SerializeField] private GameObject[] hideTargetForDash;
 
     public event Action<int, Action> OnDash;
 
-    private NavMeshAgent agent;
-    private Player_Input player_Input;
+    private Player_Controller player_Controller;
 
+    private NavMeshAgent agent;
     private Vector3 direction;
-    private bool isDashing;
+    private bool isOnDash;
 
     private void Start()
     {
@@ -25,35 +27,49 @@ public class Player_Movement : MonoBehaviour
         SetUpAction();
     }
 
-    private void SetUpAction()
+    private void Update()
     {
-        player_Input = GetComponent<Player_Input>();
-        if (player_Input != null) player_Input.OnTakeHorizontalAndVertical += Movement;
-        if (player_Input != null) player_Input.OnDash += Dash;
-        if (player_Input != null) player_Input.OnRotate += Rotation;
+        if (!Player_Controller.CanPlayerUseInput)
+        {
+            direction = Vector3.zero;
+            return;
+        }
+
+        Rotation();
+        Movement();
     }
 
-    public void Rotation()
+    private void Movement()
+    {
+        Vector3 targetVelocity = direction.normalized * agent.speed;
+        agent.velocity = Vector3.MoveTowards(agent.velocity, targetVelocity, agent.acceleration * Time.deltaTime);
+    }
+
+
+    private void SetUpAction()
+    {
+        player_Controller = GetComponent<Player_Controller>();
+        if (player_Controller != null) player_Controller.OnTakeHorizontalAndVertical += OnTakeHorizontalAndVertical;
+        if (player_Controller != null) player_Controller.OnDash += Dash;
+    }
+
+    private void Rotation()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 lookDirection = hit.point - transform.position;
+            Vector3 lookDirection = hit.point - agent.transform.position;
             lookDirection.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * 3.5f);
+            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed);
         }
-    }    
-
-    public void Movement(float horizontal, float vertical)
-    {
-        direction = transform.forward * vertical + transform.right * horizontal;
-        agent.velocity = direction.normalized * agent.speed;
     }
 
-    public void Dash()
+    private void OnTakeHorizontalAndVertical(float horizontal, float vertical) => direction = transform.forward * vertical + transform.right * horizontal;
+
+    private void Dash()
     {
         OnDash?.Invoke(dashCost, () =>
         {
@@ -64,9 +80,9 @@ public class Player_Movement : MonoBehaviour
 
     public IEnumerator DashRoutine(Vector3 direction)
     {
-        if (isDashing) yield break;
+        if (isOnDash) yield break;
 
-        isDashing = true;
+        isOnDash = true;
         Vector3 currentPosition = agent.transform.position;
         Vector3 newPosition = currentPosition + direction.normalized * 5;
         agent.updatePosition = false;
@@ -74,8 +90,7 @@ public class Player_Movement : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, direction.normalized, out hit, 5)) newPosition = hit.point - direction.normalized * 1f;
 
-        SetEffectForDash(isDashing);
-
+        SetEffectForDash(isOnDash);
         float distanceDash = Vector3.Distance(currentPosition, newPosition);
         float progress = 0;
 
@@ -90,21 +105,25 @@ public class Player_Movement : MonoBehaviour
         agent.updatePosition = true;
         agent.Warp(newPosition);
 
-        isDashing = false;
-        SetEffectForDash(isDashing);
-        CameraShake.Instance.OnCameraShake(transform.position, 0.2f, 1.5f,10);
+        isOnDash = false;
+
+        SetEffectForDash(isOnDash);
+        CameraShake.Instance.OnCameraShake(transform.position, 0.2f, 1.5f, 10);
     }
 
     private void SetEffectForDash(bool isDashing)
     {
-        dashEffect.SetActive(isDashing);
-        foreach(GameObject obj in hideTargetForDash) obj.SetActive(!isDashing);
+        if(dashEffect != null) dashEffect.SetActive(isDashing);
+
+        foreach (GameObject obj in hideTargetForDash)
+        {
+            foreach(Renderer renderer in obj.GetComponentsInChildren<Renderer>()) renderer.enabled = !isDashing;
+        }
     }
 
     private void OnDisable()
     {
-        player_Input.OnTakeHorizontalAndVertical -= Movement;
-        player_Input.OnDash -= Dash;
-        player_Input.OnRotate -= Rotation;
+        player_Controller.OnTakeHorizontalAndVertical -= OnTakeHorizontalAndVertical;
+        player_Controller.OnDash -= Dash;
     }
 }

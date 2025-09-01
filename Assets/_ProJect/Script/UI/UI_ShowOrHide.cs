@@ -7,7 +7,7 @@ public class UI_ShowOrHide : MonoBehaviour
     private Coroutine coroutine;
     public void ShowOrHideWithActionUI(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint, Action onComplete = null)
     {
-        if(coroutine != null) StopCoroutine(coroutine);
+        if (coroutine != null) StopCoroutine(coroutine);
         coroutine = StartCoroutine(AToBRoutine(canvasGroup, velocity, startPoint, endPoint, onComplete));
     }
 
@@ -33,7 +33,7 @@ public class UI_ShowOrHide : MonoBehaviour
         canvasGroup.alpha = endPoint;
     }
 
-    private IEnumerator AToBRoutine(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint,Action onComplete)
+    private IEnumerator AToBRoutine(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint, Action onComplete)
     {
         float currentA = startPoint;
         if (velocity <= 0) velocity = 1;

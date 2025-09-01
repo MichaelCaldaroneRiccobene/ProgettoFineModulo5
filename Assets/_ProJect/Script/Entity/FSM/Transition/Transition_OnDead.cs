@@ -9,4 +9,3 @@ public class Transition_OnDead : AbstractTransition
         else return false;
     }
 }
-    

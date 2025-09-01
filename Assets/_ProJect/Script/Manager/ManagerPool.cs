@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
-
 public class ManagerPool : MonoBehaviour
 {
+    public static ManagerPool Instace {  get; private set; }
+
     [System.Serializable]
     public class PoolObj
     {
@@ -10,8 +11,6 @@ public class ManagerPool : MonoBehaviour
         public GameObject prefab;
         public int size;
     }
-
-    public static ManagerPool Instace;
 
     [SerializeField] private List<PoolObj> poolsList;
 
@@ -41,7 +40,7 @@ public class ManagerPool : MonoBehaviour
 
     public GameObject GetGameObjFromPool(string tag)
     {
-        if(!poolDictionaryObj.ContainsKey(tag)) return null;
+        if (!poolDictionaryObj.ContainsKey(tag)) return null;
 
         foreach (GameObject obj in poolDictionaryObj[tag])
         {
@@ -50,7 +49,8 @@ public class ManagerPool : MonoBehaviour
                 obj.SetActive(true);
                 return obj;
             }
-        } return SpawnForPool(tag);
+        }
+        return SpawnForPool(tag);
     }
 
     private GameObject SpawnForPool(string tag)

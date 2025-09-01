@@ -10,7 +10,7 @@ public class Transition_OnSitToSitUp : AbstractTransition, I_Interection
 
     public UnityEvent OnTriggerSitUp;
     private FSM_Controller controller;
- 
+
     private bool conditionMet;
     private bool isOnInteract;
 
@@ -41,7 +41,7 @@ public class Transition_OnSitToSitUp : AbstractTransition, I_Interection
     private IEnumerator ButtonAnimatioRoutine()
     {
         Vector3 originLocalScaleCanvas = pannelInputToPress.transform.localScale;
-        Vector3 pressLocalScaleCanvas = originLocalScaleCanvas / 2;
+        Vector3 pressLocalScaleCanvas = new Vector3 (0,0,0);
 
         float progress = 0;
 
@@ -52,25 +52,14 @@ public class Transition_OnSitToSitUp : AbstractTransition, I_Interection
             pannelInputToPress.transform.localScale = Vector3.Lerp(originLocalScaleCanvas, pressLocalScaleCanvas, progress);
             yield return null;
         }
-
-        progress = 0;
-
-        while (progress < 1.0f)
-        {
-            progress += Time.deltaTime * velocityAnimationButton;
-
-            pannelInputToPress.transform.localScale = Vector3.Lerp(pressLocalScaleCanvas, originLocalScaleCanvas, progress);
-            yield return null;
-        }
-
-        pannelInputToPress.transform.localScale = originLocalScaleCanvas;
+        HideInteractable();
     }
 
 
-    public void HideInteractable() {if(pannelInputToPress != null) pannelInputToPress.SetActive(false); }
-    public void ShowInteractable() 
+    public void HideInteractable() { if (pannelInputToPress != null) pannelInputToPress.SetActive(false); }
+    public void ShowInteractable()
     {
-        if(conditionMet) pannelInputToPress.SetActive(false);
+        if (conditionMet) pannelInputToPress.SetActive(false);
         else pannelInputToPress.SetActive(true);
     }
 }

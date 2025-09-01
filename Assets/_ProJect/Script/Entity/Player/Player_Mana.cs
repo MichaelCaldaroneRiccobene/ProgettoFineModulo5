@@ -14,15 +14,9 @@ public class Player_Mana : MonoBehaviour
 
     private void Awake() => mana = stats.Mana;
 
-    private void Start()
-    {
-        SetUp();
-    }
+    private void Start() => SetUp();
 
-    private void Update()
-    {
-        RegenerateMana();
-    }
+    private void Update() => RegenerateMana();
 
     private void SetUp()
     {
@@ -69,8 +63,8 @@ public class Player_Mana : MonoBehaviour
 
     public void UpdateMana(int ammount)
     {
-        mana = Mathf.Clamp(mana + ammount,0, stats.MaxMana);
-        if(Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
+        mana = Mathf.Clamp(mana + ammount, 0, stats.MaxMana);
+        if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
     }
 
     private bool CanUseMana(int ammount) => mana > ammount;

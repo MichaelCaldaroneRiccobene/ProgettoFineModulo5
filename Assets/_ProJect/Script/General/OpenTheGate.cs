@@ -12,8 +12,8 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 
     [SerializeField] private Vector3 targetButtonPosition;
 
-    [SerializeField] private Vector3 openRotationFirstGate = new Vector3(-5, 0, 0);
-    [SerializeField] private Vector3 openRotationSecondGate = new Vector3(5,0,0);
+    [SerializeField] private Vector3 openRotationFirstGate;
+    [SerializeField] private Vector3 openRotationSecondGate;
 
     private UI_ShowOrHide uI_ShowOrHide;
     private CanvasGroup canvasGroupInput;
@@ -37,7 +37,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 
     private void Start()
     {
-        if(pannelInputToPress != null)
+        if (pannelInputToPress != null)
         {
             canvasGroupInput = pannelInputToPress.GetComponent<CanvasGroup>();
             if (canvasGroupInput != null)
@@ -58,7 +58,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         targetRotationSecondGate = startRotationFirstGate * Quaternion.Euler(openRotationSecondGate);
     }
 
-
+    [ContextMenu("Interact Gate")]
     public void Interact()
     {
         if (meshFirstGate == null || meshSecondGate == null || button == null || isMoving) return;
@@ -67,7 +67,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 
         StartCoroutine(OpenCloseGateRoutine());
         StartCoroutine(ButtonAnimatioRoutine());
-        CameraShake.Instance.OnCameraShake(meshFirstGate.position, timeShakeCameraWhenOpenGate, intesityShakeCameraWhenOpenGate,maxDistanceShakeCameraWhenOpenGate);
+        CameraShake.Instance.OnCameraShake(meshFirstGate.position, timeShakeCameraWhenOpenGate, intesityShakeCameraWhenOpenGate, maxDistanceShakeCameraWhenOpenGate);
     }
 
     private IEnumerator OpenCloseGateRoutine()
@@ -75,7 +75,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         Quaternion currentRotationFirstGate = meshFirstGate.localRotation;
         Quaternion currentRotationSecondGate = meshSecondGate.localRotation;
 
-        Quaternion destinationRotationFirstGate = isOpen? targetRotationFirstGate : startRotationFirstGate;
+        Quaternion destinationRotationFirstGate = isOpen ? targetRotationFirstGate : startRotationFirstGate;
         Quaternion destinationRotationSecondonGate = isOpen ? targetRotationSecondGate : startRotationSecondGate;
 
         float progress = 0;
@@ -129,9 +129,9 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
     }
 
 
-    public void ShowInteractable() 
-    { 
-        if(canvasGroupInput != null)
+    public void ShowInteractable()
+    {
+        if (canvasGroupInput != null)
         {
             uI_ShowOrHide.ShowOrHideUI(canvasGroupInput, 3, canvasGroupInput.alpha, 1);
         }

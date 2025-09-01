@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public static CameraShake Instance {  get; private set; }
+    public static CameraShake Instance { get; private set; }
 
     [Header("Setting")]
     [SerializeField] private Transform targetForShakeDistance;
@@ -21,12 +21,12 @@ public class CameraShake : MonoBehaviour
         channelPerlin.m_AmplitudeGain = 0;
     }
 
-    public void OnCameraShake(Vector3 position, float timer , float maxIntensity, float maxDistance)
+    public void OnCameraShake(Vector3 position, float timer, float maxIntensity, float maxDistance)
     {
-        StartCoroutine(OnCameraShakeRoutine(position, timer, maxIntensity, maxDistance));   
+        StartCoroutine(OnCameraShakeRoutine(position, timer, maxIntensity, maxDistance));
     }
 
-    private IEnumerator OnCameraShakeRoutine(Vector3 position, float duration,float maxIntensity,float maxDistance)
+    private IEnumerator OnCameraShakeRoutine(Vector3 position, float duration, float maxIntensity, float maxDistance)
     {
         if (targetForShakeDistance == null) yield break;
 
