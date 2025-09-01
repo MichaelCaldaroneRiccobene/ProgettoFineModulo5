@@ -19,7 +19,6 @@ public class Npc_Animation : MonoBehaviour
     protected float vertical;
     protected float horizontal;
 
-    protected bool isOnHit;
     protected bool isAttacking;
 
     public virtual void Start()
@@ -50,18 +49,11 @@ public class Npc_Animation : MonoBehaviour
 
     public virtual void OnHit()
     {
-        if (isOnHit) return;
-
-        isOnHit = true;
         isAttacking = false;
         animator.SetTrigger(parameterTriggerOnHit);
     }
 
-    public virtual void OnFinishHit()
-    {
-        isOnHit = false;
-        isAttacking = false;
-    }
+    public virtual void OnFinishHit() => isAttacking = false;
 
     public virtual void OnDead() => animator.SetTrigger(parameterTriggerOnDead);
 

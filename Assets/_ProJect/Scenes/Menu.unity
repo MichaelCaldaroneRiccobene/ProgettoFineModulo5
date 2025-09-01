@@ -135855,21 +135855,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1491112024}
     m_Modifications:
-    - target: {fileID: 4504016712151953570, guid: f0dccafc89a3e4b45b1a50cddd59f7b9,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4504016712151953570, guid: f0dccafc89a3e4b45b1a50cddd59f7b9,
-        type: 3}
-      propertyPath: m_ColorTemperature
-      value: 20000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8053562214908750725, guid: f0dccafc89a3e4b45b1a50cddd59f7b9,
-        type: 3}
-      propertyPath: m_SoftShadowQuality
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8342313406125650100, guid: f0dccafc89a3e4b45b1a50cddd59f7b9,
         type: 3}
       propertyPath: m_Name
