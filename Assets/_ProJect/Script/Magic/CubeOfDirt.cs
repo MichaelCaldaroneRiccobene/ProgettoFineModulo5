@@ -20,12 +20,19 @@ public class CubeOfDirt : BaseMagic
     public override void OnEnable()
     {
         base.OnEnable();
-        StartCoroutine(AnimationCubeOfGrassRoutine());
+        StartCoroutine(StartAnimationCubeOfGrassRoutine());
     }
 
     private void SetUpPositions() => originalScale = transform.localScale;
 
-    private IEnumerator AnimationCubeOfGrassRoutine()
+    private IEnumerator StartAnimationCubeOfGrassRoutine()
+    {
+        yield return AnimationCubeOfGrassRoutine(scaleOnY);
+
+        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+    }
+
+    private IEnumerator AnimationCubeOfGrassRoutine(float target)
     {
         float progress = 0f;
         Vector3 currentScale = transform.localScale;
@@ -35,34 +42,20 @@ public class CubeOfDirt : BaseMagic
         {
             progress += Time.deltaTime * velocityToAnimation;
 
-            currentScale.y = Mathf.Lerp(currentScaleY, scaleOnY, progress);
+            currentScale.y = Mathf.Lerp(currentScaleY, target, progress);
             transform.localScale = currentScale;
 
             yield return null;
-        }
-        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        }   
     }
 
     public override IEnumerator LifeTimeRoutione()
     {
         yield return new WaitForSeconds(timeLife);
-
-        float progress = 0f;
-        Vector3 currentScale = transform.localScale;
-        float currentScaleY = currentScale.y;
-
-        while (progress < 1f)
-        {
-            progress += Time.deltaTime * velocityToAnimation;
-
-            currentScale.y = Mathf.Lerp(currentScaleY,originalScale.y, progress);
-            transform.localScale = currentScale;
-
-            yield return null;
-        }
+        yield return AnimationCubeOfGrassRoutine(originalScale.y);
 
         if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
-        objToDisable.gameObject.SetActive(false);
+        ReturnToPool();
     }
 
     public override void OnDisable()

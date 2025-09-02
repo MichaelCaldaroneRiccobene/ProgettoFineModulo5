@@ -8,7 +8,8 @@ public class BaseMagic : MonoBehaviour
     [SerializeField] protected float timeLife = 5;
     [SerializeField] protected int damage;
 
-    [SerializeField] protected bool isDestroyOnImpact = true;
+    [SerializeField] protected string idForPool;
+    [SerializeField] protected bool isDisableOnImpact = true;
 
     protected Transform shooter;
 
@@ -17,7 +18,7 @@ public class BaseMagic : MonoBehaviour
     public virtual IEnumerator LifeTimeRoutione()
     {
         yield return new WaitForSeconds(timeLife);
-        objToDisable.SetActive(false);
+        ReturnToPool();
     }
 
     public virtual void BasicSetUp(Vector3 position, Quaternion rotation, int damage, Transform shooter)
@@ -29,21 +30,19 @@ public class BaseMagic : MonoBehaviour
         this.shooter = shooter;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.TryGetComponent(out I_Team team)) team.SetPriorityTarget(shooter);
-        if (collision.collider.TryGetComponent(out I_Damageble damageble)) damageble.Damage(-damage);
+    private void OnCollisionEnter(Collision collision) => OnTouch(collision.collider);
 
-        if (isDestroyOnImpact) objToDisable.SetActive(false);
+    private void OnTriggerEnter(Collider collider) => OnTouch(collider);
+
+    private void OnTouch(Collider collider)
+    {
+        if (collider.TryGetComponent(out I_Team team)) team.SetPriorityTarget(shooter);
+        if (collider.TryGetComponent(out I_Damageble damageble)) damageble.Damage(-damage);
+
+        if (isDisableOnImpact) ReturnToPool();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out I_Team team)) team.SetPriorityTarget(shooter);
-        if (other.TryGetComponent(out I_Damageble damageble)) damageble.Damage(-damage);
-
-        if (isDestroyOnImpact) objToDisable.SetActive(false);
-    }
+    public virtual void ReturnToPool() { if (ManagerPool.Instace != null) ManagerPool.Instace.ReturnToPool(idForPool, objToDisable);}
 
     public virtual void OnDisable() => StopAllCoroutines();
 }

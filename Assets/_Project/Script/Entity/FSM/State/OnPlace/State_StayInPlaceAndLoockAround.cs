@@ -17,7 +17,6 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     private Vector3 startPosition;
     private Quaternion startRotation;
 
-    private NavMeshAgent agent;
     private bool isStartSetUpPositionAndRotation;
 
     private float timeRotation;
@@ -27,7 +26,6 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State StayInPlaceAndLoockAround");
-        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
         if(!isStartSetUpPositionAndRotation)
         {
@@ -38,7 +36,7 @@ public class State_StayInPlaceAndLoockAround : AbstractState
         }
 
         timeRotation = randomTimeForTurn ? Random.Range(minTimeRotation, maxTimeRoation) : timeForStayOnPlaceAndLookAround;
-        agent.ResetPath();
+        controller.Agent.ResetPath();
         StartCoroutine(GoOnStartPosition());
     }
 
@@ -47,8 +45,8 @@ public class State_StayInPlaceAndLoockAround : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Uscito dallo State StayInPlaceAndLoockAround");
 
         StopAllCoroutines();
-        agent.ResetPath();
-        agent.updateRotation = true;
+        controller.Agent.ResetPath();
+        controller.Agent.updateRotation = true;
     }
 
     public override void StateUpdate() { }
@@ -56,12 +54,12 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     private IEnumerator GoOnStayInPlaceAndLoockAroundRoutine()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeRotation);
-        agent.ResetPath();
+        controller.Agent.ResetPath();
 
         while (true)
         {
-            Quaternion startRotation = agent.transform.rotation;
-            Quaternion targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
+            Quaternion startRotation = controller.Agent.transform.rotation;
+            Quaternion targetRotation = Quaternion.LookRotation(-transform.forward * 1);
 
             OnTurn180?.Invoke();
             float progress = 0;
@@ -69,11 +67,11 @@ public class State_StayInPlaceAndLoockAround : AbstractState
             while (progress < 1)
             {
                 progress += Time.deltaTime;
-                agent.transform.rotation = Quaternion.Lerp(startRotation, targetRotation, progress);
+                controller.Agent.transform.rotation = Quaternion.Lerp(startRotation, targetRotation, progress);
 
                 yield return null;
             }
-
+            controller.Agent.transform.rotation = targetRotation;
             yield return waitForSeconds;
         }
     }
@@ -81,31 +79,30 @@ public class State_StayInPlaceAndLoockAround : AbstractState
     private IEnumerator GoOnStartPosition()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
-        agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
 
         Vector3 positionToFollow = startPosition;
         if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-        agent.SetDestination(positionToFollow);
-        while (agent.pathPending) yield return null;
+        controller.Agent.SetDestination(positionToFollow);
+        while (controller.Agent.pathPending) yield return null;
 
-        while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
+        while (controller.Agent.remainingDistance > controller.Agent.stoppingDistance) { yield return waitForSeconds; }
 
 
-        agent.updateRotation = false;
-        Quaternion curretRotation = agent.transform.rotation;
+        controller.Agent.updateRotation = false;
+        Quaternion curretRotation = controller.Agent.transform.rotation;
         float velocityRotation = 10;
 
         float progress = 0;
         while (progress < 1)
         {
             progress += Time.deltaTime * velocityRotation;
-            agent.transform.rotation = Quaternion.Lerp(curretRotation, startRotation, progress);
+            controller.Agent.transform.rotation = Quaternion.Lerp(curretRotation, startRotation, progress);
 
             yield return null;
         }
-        agent.updateRotation = true;
-
+        controller.Agent.updateRotation = true;
         StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine());
     }
 }

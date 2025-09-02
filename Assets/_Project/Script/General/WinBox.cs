@@ -6,7 +6,7 @@ public class WinBox : MonoBehaviour
     private void OnWinLevel()
     {
         Player_Controller.CanPlayerUseInput = false;
-        if (GameManager.Instance != null) GameManager.Instance.OnWinLevel();
+        if (GameManager.Instace != null) GameManager.Instace.OnWinLevel();
     }
 
     private void OnTriggerEnter(Collider other)

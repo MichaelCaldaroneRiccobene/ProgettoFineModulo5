@@ -4,14 +4,19 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance {  get; private set; }
+    public static GameManager Instace {  get; private set; }
 
+    [Header("Setting")]
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
 
     [SerializeField] private string LevelMenu = "Menu";
     [SerializeField] private float velocityForGoToNewLevel = 0.5f;
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
+    }
 
     public void OnStaticCamera() { if (virtualCamera != null) virtualCamera.enabled = true; }
 

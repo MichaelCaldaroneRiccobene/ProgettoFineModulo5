@@ -14376,8 +14376,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4593356458389139178}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.24420276, z: 0, w: 0.96972424}
+  m_LocalPosition: {x: 4.525049, y: 1.6233335, z: 3.6322744}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14399,8 +14399,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objToDisable: {fileID: 4593356458389139178}
   timeLife: 5
-  damage: 0
-  isDestroyOnImpact: 1
+  damage: 30
+  idForPool: FireBall
+  isDisableOnImpact: 1
   rb: {fileID: 1617850463514159897}
   speed: 5
 --- !u!135 &4311653354908742132

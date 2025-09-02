@@ -34,11 +34,11 @@ public class Player_Controller : MonoBehaviour, I_Team
     {
         if (Input.anyKeyDown && !CanPlayerUseInput)
         {
-            //GameManager.Instance.OnStart();
+            //GameManager.Instace.OnStart();
             OnTriggerSitUp?.Invoke();
 
             if(Player_Ui.Instance != null) Player_Ui.Instance.ShowPlayerUI();
-            if(GameManager.Instance != null) GameManager.Instance.OffStaticCamera();
+            if(GameManager.Instace != null) GameManager.Instace.OffStaticCamera();
         }
 
         if (!CanPlayerUseInput) return;
@@ -63,7 +63,7 @@ public class Player_Controller : MonoBehaviour, I_Team
     private void OnDead()
     {
         CanPlayerUseInput = false;
-        if(GameManager.Instance != null) GameManager.Instance.OnGameOverLevel();
+        if(GameManager.Instace != null) GameManager.Instace.OnGameOverLevel();
     }
 
     #endregion
@@ -109,7 +109,7 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     private void InputPause()
     {
-        //if (Input.GetKeyDown(KeyCode.Escape)) MenuInGameManager.Instance.GoToOpenMenu();
+        //if (Input.GetKeyDown(KeyCode.Escape)) MenuInGameManager.Instace.GoToOpenMenu();
     }
 
     #endregion

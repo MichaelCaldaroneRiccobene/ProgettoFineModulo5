@@ -44,16 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 677c8fe877482c849a772a2374ea5392, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolsList:
-  - tag: FireBall
-    prefab: {fileID: 4593356458389139178, guid: 8cae26a997ef5664bbd9960945f36ec0,
-      type: 3}
-    size: 5
-  - tag: CubeOfDirt
-    prefab: {fileID: 4445192842945204247, guid: 39cd66edc4319ba40b135f2cd69f10b5,
-      type: 3}
-    size: 20
-  - tag: ExsplosionFireBall
-    prefab: {fileID: 2577100083099710030, guid: 92267cb0afa6da449b1e0bdcd33ebd52,
-      type: 3}
-    size: 2
+  poolObjs:
+  - {fileID: 11400000, guid: b465bbf945afa2740b6cbdd48e910419, type: 2}
+  - {fileID: 11400000, guid: 4e2d08b997715e64dae6e3f2b8075733, type: 2}
+  - {fileID: 11400000, guid: 1e5a859b58bb8f040838bb506f3e2b6e, type: 2}

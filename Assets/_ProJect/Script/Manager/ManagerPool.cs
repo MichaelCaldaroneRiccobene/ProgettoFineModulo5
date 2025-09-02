@@ -4,19 +4,16 @@ public class ManagerPool : MonoBehaviour
 {
     public static ManagerPool Instace {  get; private set; }
 
-    [System.Serializable]
-    public class PoolObj
-    {
-        public string tag;
-        public GameObject prefab;
-        public int size;
-    }
-
-    [SerializeField] private List<PoolObj> poolsList;
+    [Header("Setting")]
+    [SerializeField] private List<PoolObj_SO> poolObjs;
 
     private Dictionary<string, Queue<GameObject>> poolDictionaryObj;
 
-    private void Awake() => Instace = this;
+    private void Awake()
+    {
+        if (Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
+    }
 
     private void Start() => GeneratePool();
 
@@ -24,17 +21,18 @@ public class ManagerPool : MonoBehaviour
     {
         poolDictionaryObj = new Dictionary<string, Queue<GameObject>>();
 
-        foreach (PoolObj pool in poolsList)
+        foreach (PoolObj_SO pool in poolObjs)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for (int i = 0; i < pool.size; i++)
+            if(pool == null) continue;
+            for (int i = 0; i < pool.StartPool;i++)
             {
-                GameObject obj = Instantiate(pool.prefab, transform);
+                GameObject obj = Instantiate(pool.PreFab,transform);
                 objectPool.Enqueue(obj);
                 obj.gameObject.SetActive(false);
             }
-            poolDictionaryObj.Add(pool.tag, objectPool);
+            poolDictionaryObj.Add(pool.ID, objectPool);
         }
     }
 
@@ -42,22 +40,28 @@ public class ManagerPool : MonoBehaviour
     {
         if (!poolDictionaryObj.ContainsKey(tag)) return null;
 
-        foreach (GameObject obj in poolDictionaryObj[tag])
+        if (poolDictionaryObj[tag].Count > 0)
         {
-            if (!obj.activeInHierarchy)
-            {
-                obj.SetActive(true);
-                return obj;
-            }
+            GameObject objToSpawn = poolDictionaryObj[tag].Dequeue();
+            objToSpawn.SetActive(true);
+            return objToSpawn;
         }
-        return SpawnForPool(tag);
+        else return SpawnForPool(tag);
+    }
+
+    public void ReturnToPool(string tag,GameObject obj)
+    {
+        if (!poolDictionaryObj.ContainsKey(tag)) return;
+        PoolObj_SO poolList = poolObjs.Find(x => x.ID == tag);
+
+        obj.gameObject.SetActive(false);
+        poolDictionaryObj[tag].Enqueue(obj);
     }
 
     private GameObject SpawnForPool(string tag)
     {
-        PoolObj poolList = poolsList.Find(x => x.tag == tag);
-        GameObject objToSpawn = Instantiate(poolList.prefab, transform);
-        poolDictionaryObj[tag].Enqueue(objToSpawn);
+        PoolObj_SO poolList = poolObjs.Find(x => x.ID == tag);
+        GameObject objToSpawn = Instantiate(poolList.PreFab, transform);
 
         return objToSpawn;
     }

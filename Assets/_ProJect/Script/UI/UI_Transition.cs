@@ -5,20 +5,22 @@ public class UI_Transition : MonoBehaviour
 {
     public static UI_Transition Instace {  get; private set; }
 
+    [Header("Setting")]
     [SerializeField] private float velocityTransitionOnStart = 0.5f;
 
     private CanvasGroup canvasGroup;
-
     private UI_ShowOrHide showOrHide;
 
     private void Awake()
     {
-        Instace = this;
+        if(Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
 
         showOrHide = GetComponent<UI_ShowOrHide>();
         canvasGroup = GetComponent<CanvasGroup>();
 
-        showOrHide.ShowOrHideUI(canvasGroup, velocityTransitionOnStart, 1, 0);
+        if (canvasGroup != null && showOrHide != null) showOrHide.ShowOrHideUI(canvasGroup, velocityTransitionOnStart, 1, 0);
+        else Debug.LogError("canvasGroup è " + canvasGroup + " showOrHide è " + showOrHide);
     }
 
     public void FadeToBlackForLevel(float velocity, string level)

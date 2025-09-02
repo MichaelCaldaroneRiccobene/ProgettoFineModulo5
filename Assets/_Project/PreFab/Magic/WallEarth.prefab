@@ -49,7 +49,8 @@ MonoBehaviour:
   objToDisable: {fileID: 4445192842945204247}
   timeLife: 5
   damage: 0
-  isDestroyOnImpact: 0
+  idForPool: CubeOfDirt
+  isDisableOnImpact: 0
   scaleOnY: 8
   velocityToAnimation: 10
 --- !u!65 &3745838740416442628
