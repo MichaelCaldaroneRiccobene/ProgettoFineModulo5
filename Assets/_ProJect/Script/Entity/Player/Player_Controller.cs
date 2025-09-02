@@ -60,7 +60,12 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     private void OnHit() => CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, intensityCameraShake, distanceCameraShake);
 
-    private void OnDead() => CanPlayerUseInput = false;
+    private void OnDead()
+    {
+        CanPlayerUseInput = false;
+        if(GameManager.Instance != null) GameManager.Instance.OnGameOverLevel();
+    }
+
     #endregion
 
     #region Player Input

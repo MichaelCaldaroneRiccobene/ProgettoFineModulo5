@@ -8,13 +8,13 @@ public class UI_ShowOrHide : MonoBehaviour
     public void ShowOrHideWithActionUI(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint, Action onComplete = null)
     {
         if (coroutine != null) StopCoroutine(coroutine);
-        coroutine = StartCoroutine(AToBRoutine(canvasGroup, velocity, startPoint, endPoint, onComplete));
+        if (canvasGroup != null) coroutine = StartCoroutine(AToBRoutine(canvasGroup, velocity, startPoint, endPoint, onComplete));
     }
 
     public void ShowOrHideUI(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint)
     {
         if (coroutine != null) StopCoroutine(coroutine);
-        coroutine = StartCoroutine(AToBRoutine(canvasGroup, velocity, startPoint, endPoint));
+        if(canvasGroup != null) coroutine = StartCoroutine(AToBRoutine(canvasGroup, velocity, startPoint, endPoint));
     }
 
     private IEnumerator AToBRoutine(CanvasGroup canvasGroup, float velocity, float startPoint, float endPoint)

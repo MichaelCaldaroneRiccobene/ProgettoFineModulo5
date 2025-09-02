@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +7,6 @@ public class Player_Ui : MonoBehaviour
 
     [SerializeField] private Image imageHp;
     [SerializeField] private Image imageMana;
-
-    [SerializeField] private string transitionToLevel = "Menu";
 
     [SerializeField] private GameObject pannelUIGeneral;
     [SerializeField] private GameObject pannelGameOver;
@@ -69,13 +66,13 @@ public class Player_Ui : MonoBehaviour
         }
     }
 
-    public void FadeToGameOver(int level)
+    public void FadeToGameOver(float velocity,int level)
     {
-        if (UI_Transition.Instace != null) UI_Transition.Instace.FadeToBlackForLevel(canvasGroupGameOver, 0.3f, level);
+        if (UI_Transition.Instace != null) UI_Transition.Instace.FadeToBlackForLevel(canvasGroupGameOver, velocity, level);
     }
 
-    public void FadeToWinOver()
+    public void FadeToWinOver(float velocity,string level)
     {
-        if (UI_Transition.Instace != null) UI_Transition.Instace.FadeToBlackForLevel(canvasGroupWinOver, 0.75f, transitionToLevel);
+        if (UI_Transition.Instace != null) UI_Transition.Instace.FadeToBlackForLevel(canvasGroupWinOver, velocity, level);
     }
 }
