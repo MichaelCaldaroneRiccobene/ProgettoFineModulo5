@@ -52,11 +52,13 @@ public class FSM_Controller : MonoBehaviour, I_Team
         if (currentState == null) return;
 
         currentStateTime += Time.deltaTime;
-        currentState.StateUpdate();
 
         if (subStates != null)
         {
-            foreach(AbstractState subState in subStates) subState.StateUpdate();
+            foreach (AbstractState subState in subStates)
+            {
+                if (subState.gameObject.activeInHierarchy) subState.StateUpdate();
+            }      
         }
     }
 
@@ -68,7 +70,6 @@ public class FSM_Controller : MonoBehaviour, I_Team
             {
                 if (subState.gameObject.activeInHierarchy) subState.StateExit();
             }
-
             subStates = null;
         }
 

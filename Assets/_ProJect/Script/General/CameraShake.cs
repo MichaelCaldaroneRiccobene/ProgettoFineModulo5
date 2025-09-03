@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public static CameraShake Instance { get; private set; }
+    public static CameraShake Instace { get; private set; }
 
     [Header("Setting")]
     [SerializeField] private Transform targetForShakeDistance;
@@ -12,7 +12,12 @@ public class CameraShake : MonoBehaviour
     private CinemachineVirtualCamera virtualCamera;
     private CinemachineBasicMultiChannelPerlin channelPerlin;
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
+    }
+
     void Start()
     {
         virtualCamera = GetComponent<CinemachineVirtualCamera>();
@@ -31,7 +36,7 @@ public class CameraShake : MonoBehaviour
         if (targetForShakeDistance == null) yield break;
 
         float distanceToCamera = Vector3.Distance(position, targetForShakeDistance.position);
-        float distanceFactor = Mathf.Clamp01(1 - (distanceToCamera - maxDistance));
+        float distanceFactor = 1 - Mathf.Clamp01(distanceToCamera - maxDistance);
 
         channelPerlin.m_AmplitudeGain = maxIntensity * distanceFactor;
         yield return new WaitForSeconds(duration);

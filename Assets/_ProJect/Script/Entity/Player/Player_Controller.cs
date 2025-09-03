@@ -17,6 +17,8 @@ public class Player_Controller : MonoBehaviour, I_Team
     private float horizontal;
     private float vertical;
 
+    private bool isSitUp;
+
     public event Action<float, float> OnTakeHorizontalAndVertical;
 
     public event Action <PlayerAttacks> OnTryAttack;
@@ -32,12 +34,12 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     private void Update()
     {
-        if (Input.anyKeyDown && !CanPlayerUseInput)
+        if (Input.anyKeyDown && !isSitUp)
         {
-            //GameManager.Instace.OnStart();
+            isSitUp = true;
             OnTriggerSitUp?.Invoke();
 
-            if(Player_Ui.Instance != null) Player_Ui.Instance.ShowPlayerUI();
+            if(Player_Ui.Instace != null) Player_Ui.Instace.ShowPlayerUI();
             if(GameManager.Instace != null) GameManager.Instace.OffStaticCamera();
         }
 
@@ -49,16 +51,19 @@ public class Player_Controller : MonoBehaviour, I_Team
     {
         lifeSistem = GetComponent<LifeSistem>();
 
-        if(lifeSistem != null ) lifeSistem.OnUpdateHp += OnUpdateHp;
-        if (lifeSistem != null) lifeSistem.OnHit += OnHit;
-        if (lifeSistem != null) lifeSistem.OnDead += OnDead;
+        if (lifeSistem != null)
+        {
+            lifeSistem.OnUpdateHp += OnUpdateHp;
+            lifeSistem.OnHit += OnHit;
+            lifeSistem.OnDead += OnDead;
+        }
     }
 
     #region LifePlayer
 
-    private void OnUpdateHp(float hp) { if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateHp(hp); }
+    private void OnUpdateHp(float hp) { if (Player_Ui.Instace != null) Player_Ui.Instace.UpdateHp(hp); }
 
-    private void OnHit() => CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, intensityCameraShake, distanceCameraShake);
+    private void OnHit() => CameraShake.Instace.OnCameraShake(transform.position, durationCameraShake, intensityCameraShake, distanceCameraShake);
 
     private void OnDead()
     {
@@ -77,17 +82,6 @@ public class Player_Controller : MonoBehaviour, I_Team
         InputInteract();
 
         InputDash();
-        InputPause();
-
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            LifeSistem lifeSistem = transform.GetComponent<LifeSistem>();
-            lifeSistem.Damage(-10);
-        }
-        if (Input.GetKey(KeyCode.Alpha1)) Time.timeScale = 0.1f;
-        if (Input.GetKey(KeyCode.Alpha2)) Time.timeScale = 1f;
     }
 
     private void InputDirectionPlayer()
@@ -106,11 +100,6 @@ public class Player_Controller : MonoBehaviour, I_Team
     }
 
     private void InputDash() { if (Input.GetKeyDown(KeyCode.Space)) OnDash?.Invoke(); }
-
-    private void InputPause()
-    {
-        //if (Input.GetKeyDown(KeyCode.Escape)) MenuInGameManager.Instace.GoToOpenMenu();
-    }
 
     #endregion
 
@@ -142,8 +131,11 @@ public class Player_Controller : MonoBehaviour, I_Team
 
     private void OnDisable()
     {
-        if (lifeSistem != null) lifeSistem.OnUpdateHp -= OnUpdateHp;
-        if (lifeSistem != null) lifeSistem.OnHit -= OnHit;
-        if (lifeSistem != null) lifeSistem.OnDead -= OnDead;
+        if (lifeSistem != null)
+        {
+            lifeSistem.OnUpdateHp -= OnUpdateHp;
+            lifeSistem.OnHit -= OnHit;
+            lifeSistem.OnDead -= OnDead;
+        }
     }
 }

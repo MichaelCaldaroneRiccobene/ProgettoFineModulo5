@@ -17,12 +17,9 @@ public class State_FollowEntity : AbstractState
     [SerializeField] private float radiusForPosition;
     [SerializeField] private bool isOnRandomSpot;
 
-    private NavMeshAgent agent;
-
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State FollowEntity");
-        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
         SelectWhoFollow();
     }
@@ -33,7 +30,7 @@ public class State_FollowEntity : AbstractState
 
         StopAllCoroutines();
         controller.CanBeAFollowTarget = false;
-        agent.ResetPath();
+        controller.Agent.ResetPath();
     }
 
     public override void StateUpdate() { }
@@ -59,16 +56,16 @@ public class State_FollowEntity : AbstractState
     private IEnumerator GoOnTaregetRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-        agent.stoppingDistance = stopDistanceToDestination;
-        agent.ResetPath();
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.ResetPath();
 
         while (controller.GetTarget() != null)
         {
-            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(agent, controller.GetTarget().position, radiusForPosition) : controller.GetTarget().position;
+            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(controller.Agent, controller.GetTarget().position, radiusForPosition) : controller.GetTarget().position;
             if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            agent.SetDestination(positionToFollow);
-            while (agent.pathPending) yield return null;
+            controller.Agent.SetDestination(positionToFollow);
+            while (controller.Agent.pathPending) yield return null;
 
             yield return waitForSeconds;
         }
@@ -77,18 +74,18 @@ public class State_FollowEntity : AbstractState
     private IEnumerator GoOnAlliedRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-        agent.stoppingDistance = stopDistanceToDestination;
-        agent.ResetPath();
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.ResetPath();
 
         while (controller.GetAllied() != null)
         {
-            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(agent, controller.GetAllied().position, radiusForPosition) : controller.GetAllied().position;
+            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(controller.Agent, controller.GetAllied().position, radiusForPosition) : controller.GetAllied().position;
             if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            agent.SetDestination(positionToFollow);
-            while (agent.pathPending) yield return null;
+            controller.Agent.SetDestination(positionToFollow);
+            while (controller.Agent.pathPending) yield return null;
 
-            while(agent.remainingDistance > agent.stoppingDistance) yield return waitForSeconds;
+            while(controller.Agent.remainingDistance > controller.Agent.stoppingDistance) yield return waitForSeconds;
             yield return null; 
         }
     }

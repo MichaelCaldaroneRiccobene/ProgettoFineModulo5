@@ -67,7 +67,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 
         StartCoroutine(OpenCloseGateRoutine());
         StartCoroutine(ButtonAnimatioRoutine());
-        CameraShake.Instance.OnCameraShake(meshFirstGate.position, timeShakeCameraWhenOpenGate, intesityShakeCameraWhenOpenGate, maxDistanceShakeCameraWhenOpenGate);
+        CameraShake.Instace.OnCameraShake(meshFirstGate.position, timeShakeCameraWhenOpenGate, intesityShakeCameraWhenOpenGate, maxDistanceShakeCameraWhenOpenGate);
     }
 
     private IEnumerator OpenCloseGateRoutine()
@@ -99,35 +99,32 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 
     private IEnumerator ButtonAnimatioRoutine()
     {
-        Vector3 originLocalScaleCanvas = pannelInputToPress.transform.localScale;
-        Vector3 pressLocalScaleCanvas = originLocalScaleCanvas / 2;
+        if(pannelInputToPress == null) { Debug.LogError("Non Ce pannelInputToPress ");yield break; }
 
+        Vector3 originLocalScaleCanvas = pannelInputToPress.transform.localScale;
+        Vector3 targetLocalScaleCanvas = originLocalScaleCanvas / 2;
+
+        yield return AnimatorButtonRoutin(startButtonPosition, targetButtonPosition, originLocalScaleCanvas, targetLocalScaleCanvas);
+
+        yield return AnimatorButtonRoutin(targetButtonPosition, startButtonPosition, targetLocalScaleCanvas, originLocalScaleCanvas);
+    }
+
+    private IEnumerator AnimatorButtonRoutin(Vector3 curretButtonPosition,Vector3 targetButtonPosition,Vector3 currentScaleCanvas,Vector3 targetScaleCanvas )
+    {
         float progress = 0;
 
         while (progress < 1.0f)
         {
             progress += Time.deltaTime * velocityAnimationButton;
 
-            pannelInputToPress.transform.localScale = Vector3.Lerp(originLocalScaleCanvas, pressLocalScaleCanvas, progress);
-            button.localPosition = Vector3.Lerp(startButtonPosition, targetButtonPosition, progress);
+            pannelInputToPress.transform.localScale = Vector3.Lerp(currentScaleCanvas, targetScaleCanvas, progress);
+            button.localPosition = Vector3.Lerp(curretButtonPosition, targetButtonPosition, progress);
             yield return null;
         }
 
-        progress = 0;
-
-        while (progress < 1.0f)
-        {
-            progress += Time.deltaTime * velocityAnimationButton;
-
-            pannelInputToPress.transform.localScale = Vector3.Lerp(pressLocalScaleCanvas, originLocalScaleCanvas, progress);
-            button.localPosition = Vector3.Lerp(targetButtonPosition, startButtonPosition, progress);
-            yield return null;
-        }
-
-        pannelInputToPress.transform.localScale = originLocalScaleCanvas;
-        button.localPosition = startButtonPosition;
+        pannelInputToPress.transform.localScale = targetScaleCanvas;
+        button.localPosition = targetButtonPosition;
     }
-
 
     public void ShowInteractable()
     {

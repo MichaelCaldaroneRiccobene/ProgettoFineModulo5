@@ -29,7 +29,6 @@ public class GenerateInEditor : MonoBehaviour
     [SerializeField] private float space = 1;
 
     [Header("Random Rotation Setting")]
-    [SerializeField] private bool isRotationWithObjParent;
     [SerializeField] private bool isRandomRotationAll;
     [SerializeField] private bool isRandomRotationX;
     [SerializeField] private bool isRandomRotationY;
@@ -97,9 +96,6 @@ public class GenerateInEditor : MonoBehaviour
         if (isRandomRotationY) finalRotation.y = Random.Range(minRotationY, maxRotationY);
         if (isRandomRotationZ) finalRotation.z = Random.Range(minRotationZ, maxRotationZ);
 
-
-        if (isRotationWithObjParent) obj.transform.rotation = Quaternion.Euler(finalRotation) * transform.rotation;
-        else obj.transform.rotation = Quaternion.Euler(finalRotation) * transform.rotation;
-
+        obj.transform.rotation = Quaternion.Euler(finalRotation) * transform.rotation;
     }
 }

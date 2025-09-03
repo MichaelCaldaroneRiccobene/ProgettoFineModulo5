@@ -10,6 +10,8 @@ public class LifeSistem : MonoBehaviour, I_Damageble
 
     private int hp;
 
+    private bool isDead;
+
     private void Awake() => hp = stats.Hp;
 
     private void Start() => OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
@@ -21,14 +23,17 @@ public class LifeSistem : MonoBehaviour, I_Damageble
 
         if (hp > tempHp) OnHit?.Invoke();
 
-        hp += amount;
+        hp = Mathf.Clamp(hp += amount, 0, stats.MaxHp);
 
         OnUpdateHp?.Invoke((float)hp / stats.MaxHp);
-        if (IsDead()) OnDead?.Invoke();
+
+        if (IsDead() && !isDead)
+        {
+            isDead = true;
+            OnDead?.Invoke();
+        }
     }
 
-    public int GetHp() => hp;
-    public int GetMaxHp() => stats.MaxHp;
 
     public bool IsDead() => hp <= 0;
 

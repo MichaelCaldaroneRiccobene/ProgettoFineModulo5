@@ -95,11 +95,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
     private bool SeeTarget(FSM_Controller controller)
     {
         // se non sto cercando per target lascio
-        // se ho il target ma non sto cercando per target me ne vado
-        // se non ho il target ma sto cercando per target me ne vado
         if (!onLostTarget) return false;
-        if (controller.GetTarget() != null && !onLostTarget) return true;
-        if (controller.GetTarget() == null) return true;
 
         // se target muore vado via
         if (controller.GetTarget().TryGetComponent(out LifeSistem lifeSistem))
@@ -129,6 +125,7 @@ public class Transition_OnLostSightEntity : AbstractTransition
         if (timerForLostSightTarget >= timeForLostSightEnemy)
         {
             OnLostTarget(controller);
+            timerForLostSightTarget = 0;
             return true;
         }
         return false;

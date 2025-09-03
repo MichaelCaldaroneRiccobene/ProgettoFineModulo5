@@ -9,12 +9,9 @@ public class State_SerchTarget : AbstractState
     [SerializeField] private float radiusRandomPosition = 10;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
-    private NavMeshAgent agent;
-
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State SerchTarget");
-        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
         StartCoroutine(GoOnSerchTargetRoutin());
     }
@@ -24,7 +21,7 @@ public class State_SerchTarget : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Uscito dallo State SerchTarget");
 
         StopAllCoroutines();
-        agent.ResetPath();
+        controller.Agent.ResetPath();
     }
 
     public override void StateUpdate() { }
@@ -32,18 +29,18 @@ public class State_SerchTarget : AbstractState
     private IEnumerator GoOnSerchTargetRoutin()
     {
         if (controller.GetLastTarget() == null) yield break;
-        agent.stoppingDistance = stopDistanceToDestination;
-        agent.ResetPath();
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.ResetPath();
 
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
 
-        Vector3 positionToFollow = Utility.RandomPoint(agent, controller.GetLastTarget().position, radiusRandomPosition);
+        Vector3 positionToFollow = Utility.RandomPoint(controller.Agent, controller.GetLastTarget().position, radiusRandomPosition);
         if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-        agent.SetDestination(positionToFollow);
-        while (agent.pathPending) yield return null;
+        controller.Agent.SetDestination(positionToFollow);
+        while (controller.Agent.pathPending) yield return null;
 
-        while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
+        while (controller.Agent.remainingDistance > controller.Agent.stoppingDistance) { yield return waitForSeconds; }
         yield return null;
          
         controller.ClearLastTarget();

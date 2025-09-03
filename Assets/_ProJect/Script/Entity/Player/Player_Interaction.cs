@@ -17,7 +17,6 @@ public class Player_Interaction : MonoBehaviour
     {
         player_Controller = GetComponent<Player_Controller>();
 
-        if (player_Controller != null) player_Controller = GetComponent<Player_Controller>();
         if (player_Controller != null) player_Controller.OnInteract += Interaction;
     }
 
@@ -49,19 +48,16 @@ public class Player_Interaction : MonoBehaviour
                     currentInteraction.ShowInteractable();
                 }
             }
-            else if (lastInteraction != null)
-            {
-                lastInteraction.HideInteractable();
-                currentInteraction = null;
-                lastInteraction = null;
-            }
+            else if (lastInteraction != null) ClearInteraction();
         }
-        else if (lastInteraction != null)
-        {
-            lastInteraction.HideInteractable();
-            currentInteraction = null;
-            lastInteraction = null;
-        }
+        else if (lastInteraction != null) ClearInteraction();
+    }
+
+    private void ClearInteraction()
+    {
+        lastInteraction.HideInteractable();
+        currentInteraction = null;
+        lastInteraction = null;
     }
 
     private void OnDisable()

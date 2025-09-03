@@ -102,7 +102,6 @@ public class State_StayInPlaceAndLoockAround : AbstractState
 
             yield return null;
         }
-        controller.Agent.updateRotation = true;
         StartCoroutine(GoOnStayInPlaceAndLoockAroundRoutine());
     }
 }

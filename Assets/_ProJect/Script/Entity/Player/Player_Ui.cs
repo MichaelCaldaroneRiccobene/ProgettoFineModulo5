@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Player_Ui : MonoBehaviour
 {
-    public static Player_Ui Instance {  get; private set; }
+    public static Player_Ui Instace {  get; private set; }
 
     [SerializeField] private Image imageHp;
     [SerializeField] private Image imageMana;
@@ -18,7 +18,11 @@ public class Player_Ui : MonoBehaviour
 
     private UI_ShowOrHide showOrHide;
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
+    }
 
     private void Start()
     {

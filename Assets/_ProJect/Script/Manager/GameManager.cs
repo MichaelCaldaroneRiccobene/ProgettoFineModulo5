@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
 
     public void OffStaticCamera() { if (virtualCamera != null) virtualCamera.enabled = false; }
 
-    public void OnWinLevel() { if (Player_Ui.Instance != null) Player_Ui.Instance.FadeToWinOver(velocityForGoToNewLevel, LevelMenu); }
+    public void OnWinLevel() { if (Player_Ui.Instace != null) Player_Ui.Instace.FadeToWinOver(velocityForGoToNewLevel, LevelMenu); }
 
-    public void OnGameOverLevel() { if (Player_Ui.Instance != null) Player_Ui.Instance.FadeToGameOver(velocityForGoToNewLevel, SceneManager.GetActiveScene().buildIndex); }
+    public void OnGameOverLevel() { if (Player_Ui.Instace != null) Player_Ui.Instace.FadeToGameOver(velocityForGoToNewLevel, SceneManager.GetActiveScene().buildIndex); }
 
 }

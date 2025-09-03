@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class Player_Animation : Npc_Animation
@@ -7,6 +6,8 @@ public class Player_Animation : Npc_Animation
     [Header("Setting Player_Animation")]
     [SerializeField] private string parameterFloatDirection = "Direction";
     [SerializeField] private string parameterTriggerOnSitUp = "OnSitUp";
+
+    [SerializeField] private string parameterBoolIsTurn = "IsTurn";
 
     [Header("Setting Name Attack")]
     [SerializeField] private string parameterTriggerFirstAttack = "FirstAttack";
@@ -18,6 +19,14 @@ public class Player_Animation : Npc_Animation
     private Player_Controller player_Controller;
    
     private PlayerAttacks playerAttacks;
+
+    private Quaternion lastRotationForTurnInPlace;
+
+    public override void Update()
+    {
+        base.Update();
+        OnTurnAnimation();
+    }
 
     public override void SetUpAction()
     {
@@ -38,6 +47,22 @@ public class Player_Animation : Npc_Animation
         float speedHorizontal = (agent.velocity.magnitude / agent.speed) * horizontal;
 
         if (animator != null) animator.SetFloat(parameterFloatDirection, speedHorizontal, smoothAnimation, Time.deltaTime);
+    }
+
+    private void OnTurnAnimation()
+    {
+        if(!Player_Controller.CanPlayerUseInput) return;
+
+        if (agent.velocity.sqrMagnitude < 0.01f)
+        {
+            float angle = Quaternion.Angle(transform.rotation,lastRotationForTurnInPlace);
+
+            if(angle > 0.5f) { if (animator != null) animator.SetBool(parameterBoolIsTurn, true); }
+            else if (animator != null) animator.SetBool(parameterBoolIsTurn, false);
+
+            if (angle > 0.01f) lastRotationForTurnInPlace = transform.rotation;
+        }
+        else if (animator != null) animator.SetBool(parameterBoolIsTurn, false);
     }
 
     private void OnTryAttack(PlayerAttacks playerAttacks)

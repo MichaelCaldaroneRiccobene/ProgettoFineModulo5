@@ -49,8 +49,12 @@ public class Player_Movement : MonoBehaviour
     private void SetUpAction()
     {
         player_Controller = GetComponent<Player_Controller>();
-        if (player_Controller != null) player_Controller.OnTakeHorizontalAndVertical += OnTakeHorizontalAndVertical;
-        if (player_Controller != null) player_Controller.OnDash += Dash;
+
+        if (player_Controller != null)
+        {
+            player_Controller.OnTakeHorizontalAndVertical += OnTakeHorizontalAndVertical;
+            player_Controller.OnDash += Dash;
+        } 
     }
 
     private void Rotation()
@@ -63,7 +67,7 @@ public class Player_Movement : MonoBehaviour
             lookDirection.y = 0f;
 
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSpeed);
+            agent.transform.rotation = Quaternion.Slerp(agent.transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -108,7 +112,7 @@ public class Player_Movement : MonoBehaviour
         isOnDash = false;
 
         SetEffectForDash(isOnDash);
-        CameraShake.Instance.OnCameraShake(transform.position, 0.2f, 1.5f, 10);
+        CameraShake.Instace.OnCameraShake(transform.position, 0.2f, 1.5f, 10);
     }
 
     private void SetEffectForDash(bool isDashing)
@@ -123,7 +127,10 @@ public class Player_Movement : MonoBehaviour
 
     private void OnDisable()
     {
-        player_Controller.OnTakeHorizontalAndVertical -= OnTakeHorizontalAndVertical;
-        player_Controller.OnDash -= Dash;
+        if (player_Controller != null)
+        {
+            player_Controller.OnTakeHorizontalAndVertical -= OnTakeHorizontalAndVertical;
+            player_Controller.OnDash -= Dash;
+        }
     }
 }

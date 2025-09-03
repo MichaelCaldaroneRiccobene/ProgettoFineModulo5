@@ -26,7 +26,9 @@ public class Player_Mana : MonoBehaviour
 
     private void SetUpUI()
     {
-        if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
+        if(mana >= stats.MaxMana) return;
+
+        if (Player_Ui.Instace != null) Player_Ui.Instace.UpdateMana((float)mana / stats.MaxMana);
         timerRegenereteMana = timeForRegenerateMana;
     }
 
@@ -64,10 +66,10 @@ public class Player_Mana : MonoBehaviour
     public void UpdateMana(int ammount)
     {
         mana = Mathf.Clamp(mana + ammount, 0, stats.MaxMana);
-        if (Player_Ui.Instance != null) Player_Ui.Instance.UpdateMana((float)mana / stats.MaxMana);
+        if (Player_Ui.Instace != null) Player_Ui.Instace.UpdateMana((float)mana / stats.MaxMana);
     }
 
-    private bool CanUseMana(int ammount) => mana > ammount;
+    private bool CanUseMana(int ammount) => mana >= ammount;
 
     private void OnDisable()
     {

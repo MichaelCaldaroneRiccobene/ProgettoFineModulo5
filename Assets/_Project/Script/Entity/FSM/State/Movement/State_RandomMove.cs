@@ -9,14 +9,11 @@ public class State_RandomMove : AbstractState
     [SerializeField] private float radiusRandomPosition = 10;
     [SerializeField] private float stopDistanceToDestination = 2f;
 
-    private NavMeshAgent agent;
-
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State RandomMove");
-        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
 
-        agent.ResetPath();
+        controller.Agent.ResetPath();
         StartCoroutine(GoOnRandomPointRoutin());
     }
 
@@ -25,7 +22,7 @@ public class State_RandomMove : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Uscito dallo State RandomMove");
 
         StopAllCoroutines();
-        agent.ResetPath();
+        controller.Agent.ResetPath();
     }
 
     public override void StateUpdate() { }
@@ -33,18 +30,18 @@ public class State_RandomMove : AbstractState
     private IEnumerator GoOnRandomPointRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
-        agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
         yield return null;
 
         while (true)
         {
-            Vector3 positionToFollow = Utility.RandomPoint(agent, agent.transform.position, radiusRandomPosition);
+            Vector3 positionToFollow = Utility.RandomPoint(controller.Agent, controller.Agent.transform.position, radiusRandomPosition);
             if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
-            agent.SetDestination(positionToFollow);
-            while (agent.pathPending) yield return null;
+            controller.Agent.SetDestination(positionToFollow);
+            while (controller.Agent.pathPending) yield return null;
 
-            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
+            while (controller.Agent.remainingDistance > controller.Agent.stoppingDistance) { yield return waitForSeconds; }
 
             yield return waitForSeconds;
         }

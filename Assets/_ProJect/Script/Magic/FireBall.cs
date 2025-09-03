@@ -27,7 +27,7 @@ public class FireBall : BaseMagic
         obj.transform.position = transform.position;
         obj.transform.rotation = transform.rotation;
 
-        if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
+        if (CameraShake.Instace != null) CameraShake.Instace.OnCameraShake(transform.position, durationCameraShake, powerCameraShake, distanceCameraShake);
     }
 
     public override void OnDisable()

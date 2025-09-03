@@ -11,15 +11,11 @@ public class State_FollowPath : AbstractState
     [SerializeField] private float stopDistanceToDestination = 2f;
 
     private NavMeshPath pathToFollw;
-    private NavMeshAgent agent;
-
     private Vector3 pointToGo;
 
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State FollowPath");
-
-        if (agent == null) agent = GetComponentInParent<NavMeshAgent>();
         if (pathToFollw == null) pathToFollw = new NavMeshPath();
 
         StartCoroutine(GoOnPatrolRoutine());
@@ -30,7 +26,7 @@ public class State_FollowPath : AbstractState
         if (controller.CanSeeDebug) Debug.Log("Uscito dallo State FollowPath");
 
         StopAllCoroutines();
-        agent.ResetPath();
+        controller.Agent.ResetPath();
     }
 
     public override void StateUpdate() { }
@@ -38,9 +34,9 @@ public class State_FollowPath : AbstractState
     private IEnumerator GoOnPatrolRoutine()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateRoutine);
-        agent.stoppingDistance = stopDistanceToDestination;
+        controller.Agent.stoppingDistance = stopDistanceToDestination;
 
-        agent.ResetPath();
+        controller.Agent.ResetPath();
 
         if (pointsForPatrol == null || pointsForPatrol.Length <= 0)
         {
@@ -52,12 +48,11 @@ public class State_FollowPath : AbstractState
 
         while (true)
         {
-            if (agent.CalculatePath(pointsForPatrol[destinationForPatrolIndex].position, pathToFollw)) pointToGo = pointsForPatrol[destinationForPatrolIndex].position;
+            pointToGo = pointsForPatrol[destinationForPatrolIndex].position;
+            while (controller.Agent.pathPending) yield return null;
 
-            agent.SetDestination(pointToGo);
-            while (agent.pathPending) yield return null;
-
-            while (agent.remainingDistance > agent.stoppingDistance) { yield return waitForSeconds; }
+            controller.Agent.SetDestination(pointToGo);
+            while (controller.Agent.remainingDistance > controller.Agent.stoppingDistance) { yield return waitForSeconds; }
 
             destinationForPatrolIndex = (destinationForPatrolIndex + 1) % pointsForPatrol.Length;
 

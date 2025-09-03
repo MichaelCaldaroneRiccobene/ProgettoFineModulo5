@@ -68,7 +68,7 @@ public class Player_Attack : MonoBehaviour
                 fireball.OnShoot(transform.forward);
             }
 
-            if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(transform.position, 0.5f, 1, 5);
+            if (CameraShake.Instace != null) CameraShake.Instace.OnCameraShake(transform.position, 0.5f, 1, 5);
         });
     }
 
@@ -98,7 +98,7 @@ public class Player_Attack : MonoBehaviour
             BaseMagic weapon = obj.gameObject.GetComponentInChildren<BaseMagic>();
             if (weapon != null) weapon.BasicSetUp(positionToSpawn, transform.rotation, stats.DamageMelee, transform);
 
-            if (CameraShake.Instance != null) CameraShake.Instance.OnCameraShake(obj.transform.position, 1, 1.5f, 15);
+            if (CameraShake.Instace != null) CameraShake.Instace.OnCameraShake(obj.transform.position, 1, 1.5f, 15);
 
             yield return new WaitForSeconds(timeSpawnCubeOfGrass);
         }
