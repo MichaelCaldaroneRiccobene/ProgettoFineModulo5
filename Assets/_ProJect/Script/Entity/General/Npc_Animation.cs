@@ -35,8 +35,11 @@ public class Npc_Animation : MonoBehaviour
     {
         lifeSistem = GetComponentInParent<LifeSistem>();
 
-        if (lifeSistem != null) lifeSistem.OnHit += OnHit;
-        if (lifeSistem != null) lifeSistem.OnDead += OnDead;
+        if (lifeSistem != null)
+        {
+            lifeSistem.OnHit += OnHit;
+            lifeSistem.OnDead += OnDead;
+        }
     }
 
     public virtual void DoAttack(string parameter)
@@ -74,7 +77,10 @@ public class Npc_Animation : MonoBehaviour
 
     public virtual void OnDisable()
     {
-        if (lifeSistem != null) lifeSistem.OnHit -= OnHit;
-        if (lifeSistem != null) lifeSistem.OnDead -= OnDead;
+        if (lifeSistem != null)
+        {
+            lifeSistem.OnHit -= OnHit;
+            lifeSistem.OnDead -= OnDead;
+        }
     }
 }

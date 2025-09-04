@@ -29,7 +29,7 @@ public class CubeOfDirt : BaseMagic
     {
         yield return AnimationCubeOfGrassRoutine(scaleOnY);
 
-        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        if (RegenerateNavMesh.Instace != null) RegenerateNavMesh.Instace.UpdateNaveMeshSurface();
     }
 
     private IEnumerator AnimationCubeOfGrassRoutine(float target)
@@ -61,6 +61,6 @@ public class CubeOfDirt : BaseMagic
     public override void OnDisable()
     {
         base.OnDisable();
-        if (RegenerateNavMesh.Instance != null) RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        if (RegenerateNavMesh.Instace != null) RegenerateNavMesh.Instace.UpdateNaveMeshSurface();
     }
 }

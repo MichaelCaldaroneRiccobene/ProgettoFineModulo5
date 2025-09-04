@@ -20,7 +20,7 @@ public class UI_Transition : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
 
         if (canvasGroup != null && showOrHide != null) showOrHide.ShowOrHideUI(canvasGroup, velocityTransitionOnStart, 1, 0);
-        else Debug.LogError("canvasGroup è " + canvasGroup + " showOrHide è " + showOrHide);
+        else Debug.LogError("canvasGroup è " + canvasGroup + " Oppure showOrHide è " + showOrHide);
     }
 
     public void FadeToBlackForLevel(float velocity, string level)

@@ -52,7 +52,6 @@ public class ManagerPool : MonoBehaviour
     public void ReturnToPool(string tag,GameObject obj)
     {
         if (!poolDictionaryObj.ContainsKey(tag)) return;
-        PoolObj_SO poolList = poolObjs.Find(x => x.ID == tag);
 
         obj.gameObject.SetActive(false);
         poolDictionaryObj[tag].Enqueue(obj);

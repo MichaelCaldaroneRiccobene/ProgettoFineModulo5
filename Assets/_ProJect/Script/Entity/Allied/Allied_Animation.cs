@@ -1,9 +1,9 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Allied_Animation : Npc_Animation
 {
+    [Header("Setting Allied_Animation")]
     [SerializeField] private string parameterFloatDirection = "Direction";
     [SerializeField] private string parameterTriggerOnSitUp = "OnSitUp";
 
@@ -29,12 +29,6 @@ public class Allied_Animation : Npc_Animation
     }
 
     public void OnDoDamageAttackAnimation() => OnDoDamageAttack?.Invoke();
-
-    public override void OnHit()
-    {
-        base.OnHit();
-        isAttacking = false;
-    }
 
     public void OnTriggerSitUp() => animator.SetTrigger(parameterTriggerOnSitUp);
     public void OnSitUp() => OnCanWalk?.Invoke();

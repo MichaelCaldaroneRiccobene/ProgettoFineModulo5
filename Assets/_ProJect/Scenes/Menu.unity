@@ -6436,7 +6436,6 @@ MonoBehaviour:
   zNumber: 3
   yNumber: 1
   space: 5.5
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -63400,7 +63399,6 @@ MonoBehaviour:
   zNumber: 3
   yNumber: 1
   space: 6
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -69213,7 +69211,6 @@ MonoBehaviour:
   zNumber: 2
   yNumber: 1
   space: 5.5
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -70152,7 +70149,6 @@ MonoBehaviour:
   zNumber: 3
   yNumber: 1
   space: 6
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -140759,7 +140755,6 @@ MonoBehaviour:
   zNumber: 5
   yNumber: 1
   space: 3
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -143159,7 +143154,6 @@ MonoBehaviour:
   zNumber: 5
   yNumber: 1
   space: 6
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -243583,7 +243577,6 @@ MonoBehaviour:
   zNumber: 5
   yNumber: 1
   space: 6
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -255211,7 +255204,6 @@ MonoBehaviour:
   zNumber: 6
   yNumber: 1
   space: 8
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -330042,7 +330034,6 @@ MonoBehaviour:
   zNumber: 6
   yNumber: 1
   space: 6
-  isRotationWithObjParent: 0
   isRandomRotationAll: 0
   isRandomRotationX: 0
   isRandomRotationY: 1
@@ -348053,6 +348044,7 @@ MonoBehaviour:
   smoothAnimation: 0.1
   parameterFloatDirection: Direction
   parameterTriggerOnSitUp: OnSitUp
+  parameterBoolIsTurning: IsTurning
   parameterTriggerFirstAttack: FirstAttack
   parameterTriggerSecondAttack: SecondAttack
 --- !u!1 &5891155506254952352

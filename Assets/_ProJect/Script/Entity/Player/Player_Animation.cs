@@ -7,7 +7,7 @@ public class Player_Animation : Npc_Animation
     [SerializeField] private string parameterFloatDirection = "Direction";
     [SerializeField] private string parameterTriggerOnSitUp = "OnSitUp";
 
-    [SerializeField] private string parameterBoolIsTurn = "IsTurn";
+    [SerializeField] private string parameterBoolIsTurning = "IsTurning";
 
     [Header("Setting Name Attack")]
     [SerializeField] private string parameterTriggerFirstAttack = "FirstAttack";
@@ -57,12 +57,12 @@ public class Player_Animation : Npc_Animation
         {
             float angle = Quaternion.Angle(transform.rotation,lastRotationForTurnInPlace);
 
-            if(angle > 0.5f) { if (animator != null) animator.SetBool(parameterBoolIsTurn, true); }
-            else if (animator != null) animator.SetBool(parameterBoolIsTurn, false);
+            if(angle > 0.5f) { if (animator != null) animator.SetBool(parameterBoolIsTurning, true); }
+            else if (animator != null) animator.SetBool(parameterBoolIsTurning, false);
 
             if (angle > 0.01f) lastRotationForTurnInPlace = transform.rotation;
         }
-        else if (animator != null) animator.SetBool(parameterBoolIsTurn, false);
+        else if (animator != null) animator.SetBool(parameterBoolIsTurning, false);
     }
 
     private void OnTryAttack(PlayerAttacks playerAttacks)

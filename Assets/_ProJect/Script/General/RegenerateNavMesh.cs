@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class RegenerateNavMesh : MonoBehaviour
 {
-    public static RegenerateNavMesh Instance;
+    public static RegenerateNavMesh Instace;
 
     private NavMeshSurface meshSurface;
 
-    private void Start()
+    private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instace != null && Instace != this) { Destroy(gameObject); return; }
+        else Instace = this;
 
         meshSurface = GetComponent<NavMeshSurface>();
         UpdateNaveMeshSurface();

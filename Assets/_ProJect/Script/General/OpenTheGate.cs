@@ -94,7 +94,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         meshSecondGate.localRotation = destinationRotationSecondonGate;
 
         isMoving = false;
-        RegenerateNavMesh.Instance.UpdateNaveMeshSurface();
+        RegenerateNavMesh.Instace.UpdateNaveMeshSurface();
     }
 
     private IEnumerator ButtonAnimatioRoutine()

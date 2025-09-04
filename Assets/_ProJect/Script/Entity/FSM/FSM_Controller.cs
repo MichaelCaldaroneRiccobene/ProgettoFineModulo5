@@ -106,7 +106,6 @@ public class FSM_Controller : MonoBehaviour, I_Team
     public void SetAllied(Transform allied) => this.allied = allied;
     public void SetTarget(Transform target) 
     {
-        if (this.target != null) return;
         if (lastTarget != null) return;
 
         SetTargetForThis(target);
@@ -120,7 +119,6 @@ public class FSM_Controller : MonoBehaviour, I_Team
     public int GetTeamNumber() => teamNumber;
 
     public Transform GetAllied() => allied;
-
     public Transform GetTarget() => target;
     public Transform GetLastTarget() => lastTarget;
 

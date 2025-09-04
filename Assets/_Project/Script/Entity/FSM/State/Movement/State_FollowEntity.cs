@@ -17,6 +17,7 @@ public class State_FollowEntity : AbstractState
     [SerializeField] private float radiusForPosition;
     [SerializeField] private bool isOnRandomSpot;
 
+    private bool isFollowATarget;
     public override void StateEnter()
     {
         if (controller.CanSeeDebug) Debug.Log("Entrato in State FollowEntity");
@@ -38,55 +39,42 @@ public class State_FollowEntity : AbstractState
 
     private void SelectWhoFollow()
     {
+        isFollowATarget = false;
         switch (whoFollow)
         {
             case WhoFollow.None:
                 break;
             case WhoFollow.Allied:
                 controller.CanBeAFollowTarget = true;
-                StartCoroutine(GoOnAlliedRoutin());
+                StartCoroutine(GoOnEntityRoutin());
                 break;
             case WhoFollow.Enemy:
-                StartCoroutine(GoOnTaregetRoutin());
+                isFollowATarget = true;
+                StartCoroutine(GoOnEntityRoutin());
                 break;
         }
     }
 
-    // (Ho Creato 2 funzioni quasi identiche perchè se si cambiava target, Ai andava sempre sul vecchio).
-    private IEnumerator GoOnTaregetRoutin()
+    private IEnumerator GoOnEntityRoutin()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
         controller.Agent.stoppingDistance = stopDistanceToDestination;
         controller.Agent.ResetPath();
 
-        while (controller.GetTarget() != null)
+        while (true)
         {
-            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(controller.Agent, controller.GetTarget().position, radiusForPosition) : controller.GetTarget().position;
+            Transform followTarget = isFollowATarget ? controller.GetTarget() : controller.GetAllied();
+            if(followTarget == null) break;
+
+            Vector3 positionToFollow = isOnRandomSpot? Utility.RandomPoint(controller.Agent, followTarget.position, radiusForPosition) : followTarget.position;
             if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
 
             controller.Agent.SetDestination(positionToFollow);
             while (controller.Agent.pathPending) yield return null;
+
+            if(!isFollowATarget)  while (controller.Agent.remainingDistance > controller.Agent.stoppingDistance) yield return waitForSeconds; 
 
             yield return waitForSeconds;
-        }
-    }
-
-    private IEnumerator GoOnAlliedRoutin()
-    {
-        WaitForSeconds waitForSeconds = new WaitForSeconds(timeUpdateSightRoutine);
-        controller.Agent.stoppingDistance = stopDistanceToDestination;
-        controller.Agent.ResetPath();
-
-        while (controller.GetAllied() != null)
-        {
-            Vector3 positionToFollow = isOnRandomSpot ? Utility.RandomPoint(controller.Agent, controller.GetAllied().position, radiusForPosition) : controller.GetAllied().position;
-            if (NavMesh.SamplePosition(positionToFollow, out NavMeshHit hit, 2f, NavMesh.AllAreas)) positionToFollow = hit.position;
-
-            controller.Agent.SetDestination(positionToFollow);
-            while (controller.Agent.pathPending) yield return null;
-
-            while(controller.Agent.remainingDistance > controller.Agent.stoppingDistance) yield return waitForSeconds;
-            yield return null; 
         }
     }
 }

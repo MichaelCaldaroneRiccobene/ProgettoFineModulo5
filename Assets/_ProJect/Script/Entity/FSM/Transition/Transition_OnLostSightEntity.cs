@@ -98,12 +98,15 @@ public class Transition_OnLostSightEntity : AbstractTransition
         if (!onLostTarget) return false;
 
         // se target muore vado via
-        if (controller.GetTarget().TryGetComponent(out LifeSistem lifeSistem))
+        if(controller.HasTarget())
         {
-            if (lifeSistem.IsDead())
+            if (controller.GetTarget().TryGetComponent(out LifeSistem lifeSistem))
             {
-                OnLostTarget(controller);
-                return true;
+                if (lifeSistem.IsDead())
+                {
+                    OnLostTarget(controller);
+                    return true;
+                }
             }
         }
 
