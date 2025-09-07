@@ -55,7 +55,6 @@ public class Transition_OnSitToSitUp : AbstractTransition, I_Interection
         HideInteractable();
     }
 
-
     public void HideInteractable() { if (pannelInputToPress != null) pannelInputToPress.SetActive(false); }
     public void ShowInteractable()
     {

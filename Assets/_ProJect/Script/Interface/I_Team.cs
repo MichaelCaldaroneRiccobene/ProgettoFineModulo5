@@ -1,5 +1,5 @@
 using UnityEngine;
-public interface I_Team 
+public interface I_Team // (So che questa interfaccia e troppo grande, ma me ne sono reso conto troppo tardi, la prossima volta farò più attenzione)
 {
     public void ClearTarget();
     public void ClearLastTarget();

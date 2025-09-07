@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
 {
+    #region Setting
     [Header("Setting")]
     [SerializeField] private Transform button;
     [SerializeField] private GameObject pannelInputToPress;
@@ -35,6 +36,9 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
     private bool isOpen = false;
     private bool isMoving = false;
 
+    #endregion
+
+    #region Start
     private void Start()
     {
         if (pannelInputToPress != null)
@@ -58,6 +62,8 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         targetRotationSecondGate = startRotationFirstGate * Quaternion.Euler(openRotationSecondGate);
     }
 
+    #endregion
+
     [ContextMenu("Interact Gate")]
     public void Interact()
     {
@@ -70,6 +76,7 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         CameraShake.Instace.OnCameraShake(meshFirstGate.position, timeShakeCameraWhenOpenGate, intesityShakeCameraWhenOpenGate, maxDistanceShakeCameraWhenOpenGate);
     }
 
+    #region Animations
     private IEnumerator OpenCloseGateRoutine()
     {
         Quaternion currentRotationFirstGate = meshFirstGate.localRotation;
@@ -125,6 +132,9 @@ public class OpenTheGate : MonoBehaviour, I_Interection, I_Damageble
         pannelInputToPress.transform.localScale = targetScaleCanvas;
         button.localPosition = targetButtonPosition;
     }
+
+    #endregion
+
 
     public void ShowInteractable()
     {

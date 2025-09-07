@@ -2157,7 +2157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5537786579241343236}
-  - component: {fileID: 6059021859155338526}
+  - component: {fileID: 1092032815359310609}
   m_Layer: 6
   m_Name: OnShareTarget
   m_TagString: Untagged
@@ -2180,7 +2180,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 340494530512866941}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6059021859155338526
+--- !u!114 &1092032815359310609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2189,18 +2189,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4037687585976760379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c534af9b7842b42488849e06e47ae838, type: 3}
+  m_Script: {fileID: 11500000, guid: 14442409abfa19b40b88411e3835f884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timeUpdateRoutine: 0.2
-  shareTarget: 1
-  viewAngleForward: 60
-  viewAngleBack: 120
   angleShareTarget: 360
   sightDistance: 12
-  sightSenseDistance: 4
-  raySightToAdd: 70
-  raySenseToAdd: 30
   rayShareTarget: 100
   hight: 1
 --- !u!1 &4063877125175035628

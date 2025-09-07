@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-public enum PlayerAttacks
-{
-    None = 0, FireBall = 1, Earth = 2
-}
-
+public enum PlayerAttacks { None = 0, FireBall = 1, Earth = 2 }
 public class Player_Attack : MonoBehaviour
 {
     [Header("Setting")]

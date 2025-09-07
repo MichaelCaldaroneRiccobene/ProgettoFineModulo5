@@ -1,9 +1,6 @@
 using UnityEngine;
 
-public enum PanelMainMenu
-{
-    Menu = 0,Option = 1,Credit = 2
-}
+public enum PanelMainMenu { Menu = 0, Option = 1 }
 
 [System.Serializable]
 public class MenuPanel
@@ -31,7 +28,5 @@ public class UI_MainMenu : MonoBehaviour
 
     public void GoOnMenu() => SetUpPannel(PanelMainMenu.Menu);
     public void GoOnOption() => SetUpPannel(PanelMainMenu.Option);
-    public void GoOnCredit() => SetUpPannel(PanelMainMenu.Credit);
-
     public void QuitGame() => Application.Quit();
 }

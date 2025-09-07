@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Transition_Wait : AbstractTransition
+public class Transition_OnWait : AbstractTransition
 {
     [SerializeField] private float duration;
 
